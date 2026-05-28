@@ -27,6 +27,8 @@ ROOT = Path(__file__).parent
 RAW_DIR = ROOT / "raw" / "2022"
 PATCHES_DIR = ROOT / "patches"
 MANIFEST_PATH = ROOT / "manifest.csv"
+# Sidecar written by download_naip.py; mapping scene_id -> aoi.
+TILE_AOI_PATH = RAW_DIR / "tile_aoi.csv"
 
 PATCH_SIZE = 256
 STRIDE = 128
@@ -36,6 +38,17 @@ NATIVE_GSD_M = 0.6
 NODATA_THRESH = 0.05  # skip patch if >5% of pixels are border fill
 # NDVI is computed per patch and recorded in manifest.csv (column: mean_ndvi)
 # so downstream code can filter on it without re-running this script.
+
+
+def load_scene_to_aoi() -> dict[str, str]:
+    """Read the sidecar written by download_naip.py. Empty dict if missing —
+    callers will write blank AOIs and the user can run add_aoi_to_manifest.py."""
+    if not TILE_AOI_PATH.exists():
+        print(f"WARN: no AOI sidecar at {TILE_AOI_PATH}; manifest's aoi "
+              f"column will be blank. Run add_aoi_to_manifest.py to backfill.")
+        return {}
+    with open(TILE_AOI_PATH, newline="") as fh:
+        return {row["scene_id"]: row["aoi"] for row in csv.DictReader(fh)}
 
 
 def patch_origin_utm(src_transform: Affine, col: int, row: int,
@@ -78,9 +91,11 @@ def count_windows(tile_path: Path) -> int:
         return total
 
 
-def process_tile(tile_path: Path, writer: csv.DictWriter, pbar) -> dict[float, int]:
+def process_tile(tile_path: Path, writer: csv.DictWriter,
+                 scene_to_aoi: dict[str, str], pbar) -> dict[float, int]:
     """Process one NAIP scene at all resolutions. Returns {res_m: kept_patch_count}."""
     scene_id = tile_path.stem
+    aoi = scene_to_aoi.get(scene_id, "")
     counts: dict[float, int] = {r: 0 for r in RESOLUTIONS_M}
 
     with rasterio.open(tile_path) as src:
@@ -142,6 +157,7 @@ def process_tile(tile_path: Path, writer: csv.DictWriter, pbar) -> dict[float, i
                     writer.writerow({
                         "patch_id": f"{scene_id}__{res_dir_name}__y{row}_x{col}",
                         "scene_id": scene_id,
+                        "aoi": aoi,
                         "resolution_m": r_m,
                         "rgb_path": str(rgb_path.relative_to(ROOT)),
                         "nir_path": str(nir_path.relative_to(ROOT)),
@@ -168,11 +184,12 @@ def main():
 
     PATCHES_DIR.mkdir(exist_ok=True)
     fieldnames = [
-        "patch_id", "scene_id", "resolution_m",
+        "patch_id", "scene_id", "aoi", "resolution_m",
         "rgb_path", "nir_path",
         "row", "col", "utm_x_min", "utm_y_min",
         "ground_extent_m", "nodata_frac", "mean_ndvi",
     ]
+    scene_to_aoi = load_scene_to_aoi()
 
     print("Counting expected windows ...")
     total_windows = sum(count_windows(t) for t in tiles)
@@ -187,7 +204,7 @@ def main():
             pbar.saved = 0
             pbar.skipped_nodata = 0
             for tile in tiles:
-                counts = process_tile(tile, writer, pbar)
+                counts = process_tile(tile, writer, scene_to_aoi, pbar)
                 for r, n in counts.items():
                     totals[r] += n
                 tqdm.write(f"{tile.name}: " +
