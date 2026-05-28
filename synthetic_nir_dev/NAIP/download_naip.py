@@ -9,6 +9,7 @@ slice it later.
 Requires: pystac-client, planetary-computer, requests
 """
 
+import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
@@ -17,6 +18,9 @@ import requests
 from pystac_client import Client
 
 from aois import CA_FOREST_BBOXES
+
+# Set by main() on KeyboardInterrupt. Workers poll between download chunks.
+STOP = threading.Event()
 
 MPC_URL = "https://planetarycomputer.microsoft.com/api/stac/v1"
 COLLECTION = "naip"
@@ -45,6 +49,8 @@ def download_one(item, dest_dir: Path) -> tuple[str, str]:
     dest = dest_dir / f"{item.id}.tif"
     if dest.exists():
         return item.id, f"skip (exists, {dest.stat().st_size / 1e6:.1f} MB)"
+    if STOP.is_set():
+        return item.id, "cancelled (before start)"
     # Sign inside the worker — MPC signed URLs have ~1h TTL, so signing right
     # before the GET avoids expiry if the queue sits a while.
     signed = pc.sign(item)
@@ -55,8 +61,14 @@ def download_one(item, dest_dir: Path) -> tuple[str, str]:
             r.raise_for_status()
             with open(tmp, "wb") as fh:
                 for chunk in r.iter_content(1 << 16):
+                    if STOP.is_set():
+                        raise KeyboardInterrupt
                     fh.write(chunk)
         tmp.rename(dest)
+    except KeyboardInterrupt:
+        if tmp.exists():
+            tmp.unlink()
+        return item.id, "cancelled (mid-download)"
     except Exception as e:
         if tmp.exists():
             tmp.unlink()
@@ -93,11 +105,26 @@ def main():
     queue = collect_items()
     print(f"\nQueued {len(queue)} unique tiles; downloading with {MAX_WORKERS} workers ...\n")
 
-    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as pool:
-        futures = {pool.submit(download_one, it, RAW_DIR): it.id for it in queue}
+    pool = ThreadPoolExecutor(max_workers=MAX_WORKERS)
+    futures = {pool.submit(download_one, it, RAW_DIR): it.id for it in queue}
+    try:
         for fut in as_completed(futures):
             item_id, status = fut.result()
             print(f"  [{item_id}] {status}")
+    except KeyboardInterrupt:
+        print("\n^C received — cancelling pending downloads and stopping in-flight chunks ...")
+        STOP.set()
+        pool.shutdown(wait=False, cancel_futures=True)
+        # Drain whatever still completes so we report final status
+        for fut in as_completed(futures):
+            try:
+                item_id, status = fut.result()
+                print(f"  [{item_id}] {status}")
+            except Exception:
+                pass
+        raise
+    finally:
+        pool.shutdown(wait=False)
 
 
 if __name__ == "__main__":

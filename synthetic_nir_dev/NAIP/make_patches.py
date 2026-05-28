@@ -4,9 +4,9 @@ resolutions. Lower-res patches are built by reading a larger native window and
 resampling (Resampling.average) down to 256x256, so each scale gets distinct
 ground coverage but identical pixel dims.
 
-Output layout:
-  patches/<res>m/rgb/<scene_id>__y<row>_x<col>.png    (3-channel uint8)
-  patches/<res>m/nir/<scene_id>__y<row>_x<col>.png    (1-channel uint8)
+Output layout (sharded by scene_id to keep leaf-dir file counts manageable):
+  patches/<res>m/rgb/<scene_id>/y<row>_x<col>.png    (3-channel uint8)
+  patches/<res>m/nir/<scene_id>/y<row>_x<col>.png    (1-channel uint8)
   manifest.csv  (per-patch geographic metadata: UTM origin, ground extent, etc.)
 
 Requires: rasterio, numpy, tqdm, pillow
@@ -93,8 +93,8 @@ def process_tile(tile_path: Path, writer: csv.DictWriter, pbar) -> dict[float, i
             ground_extent_m = PATCH_SIZE * r_m
 
             res_dir_name = f"{r_m:g}m"
-            rgb_dir = PATCHES_DIR / res_dir_name / "rgb"
-            nir_dir = PATCHES_DIR / res_dir_name / "nir"
+            rgb_dir = PATCHES_DIR / res_dir_name / "rgb" / scene_id
+            nir_dir = PATCHES_DIR / res_dir_name / "nir" / scene_id
 
             max_col = src.width - src_window_px
             max_row = src.height - src_window_px
@@ -138,7 +138,7 @@ def process_tile(tile_path: Path, writer: csv.DictWriter, pbar) -> dict[float, i
                                          refresh=False)
                         continue
 
-                    name = f"{scene_id}__y{row}_x{col}.png"
+                    name = f"y{row}_x{col}.png"
                     rgb_path = rgb_dir / name
                     nir_path = nir_dir / name
                     write_png_rgb(rgb_path, rgb)
