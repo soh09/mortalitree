@@ -9,6 +9,7 @@ slice it later.
 Requires: pystac-client, planetary-computer, requests
 """
 
+import csv
 import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
@@ -30,6 +31,11 @@ MAX_WORKERS = 4
 
 RAW_DIR = Path(__file__).parent / "raw" / YEAR
 RAW_DIR.mkdir(parents=True, exist_ok=True)
+
+# Sidecar mapping scene_id -> aoi, written before downloads start. Lets
+# downstream code (make_patches.py, splitters, etc.) attribute each tile to
+# the AOI it came from without re-querying STAC.
+AOI_SIDECAR = RAW_DIR / "tile_aoi.csv"
 
 
 def search_aoi(catalog: Client, bbox: list[float], year: str) -> list:
@@ -76,13 +82,14 @@ def download_one(item, dest_dir: Path) -> tuple[str, str]:
     return item.id, f"done ({dest.stat().st_size / 1e6:.1f} MB)"
 
 
-def collect_items() -> list:
-    """Walk all AOIs, return deduped list of items to download."""
+def collect_items() -> tuple[list, dict[str, str]]:
+    """Walk all AOIs, return (deduped item queue, scene_id -> aoi map)."""
     catalog = Client.open(MPC_URL)
     print(f"Searching NAIP {YEAR} over {len(CA_FOREST_BBOXES)} CA forest AOIs ...")
 
     seen_ids: set[str] = set()
     queue: list = []
+    scene_to_aoi: dict[str, str] = {}
     for aoi in CA_FOREST_BBOXES:
         print(f"\n=== {aoi['name']}  bbox={aoi['bbox']} ===")
         items = search_aoi(catalog, aoi["bbox"], YEAR)
@@ -97,12 +104,24 @@ def collect_items() -> list:
                 print(f"  skip (already queued): {item.id}")
                 continue
             seen_ids.add(item.id)
+            scene_to_aoi[item.id] = aoi["name"]
             queue.append(item)
-    return queue
+    return queue, scene_to_aoi
+
+
+def write_aoi_sidecar(scene_to_aoi: dict[str, str]) -> None:
+    """Persist scene_id -> aoi so downstream tools don't have to re-query STAC."""
+    with open(AOI_SIDECAR, "w", newline="") as fh:
+        w = csv.writer(fh)
+        w.writerow(["scene_id", "aoi"])
+        for sid, aoi in scene_to_aoi.items():
+            w.writerow([sid, aoi])
+    print(f"Wrote AOI sidecar: {AOI_SIDECAR} ({len(scene_to_aoi)} scenes)")
 
 
 def main():
-    queue = collect_items()
+    queue, scene_to_aoi = collect_items()
+    write_aoi_sidecar(scene_to_aoi)
     print(f"\nQueued {len(queue)} unique tiles; downloading with {MAX_WORKERS} workers ...\n")
 
     pool = ThreadPoolExecutor(max_workers=MAX_WORKERS)
