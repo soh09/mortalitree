@@ -3,5 +3,7 @@ synthetic_nir_dev/NEON(BUST)/hyperspectral
 synthetic_nir_dev/NEON(BUST)/rgb
 synthetic_nir_dev/NAIP/raw
 synthetic_nir_dev/NAIP/patches
+synthetic_nir_dev/NAIP/debug
 synthetic_nir_dev/NAIP/manifest.csv
+synthetic_nir_dev/NAIP/splits.csv
 data/TreeBoxes_supervised_v0.13
