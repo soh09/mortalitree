@@ -5,11 +5,11 @@ resampling (Resampling.average) down to 256x256, so each scale gets distinct
 ground coverage but identical pixel dims.
 
 Output layout:
-  patches/<res>m/rgb/<scene_id>__y<row>_x<col>.tif    (3-band uint8)
-  patches/<res>m/nir/<scene_id>__y<row>_x<col>.tif    (1-band uint8)
-  manifest.csv
+  patches/<res>m/rgb/<scene_id>__y<row>_x<col>.png    (3-channel uint8)
+  patches/<res>m/nir/<scene_id>__y<row>_x<col>.png    (1-channel uint8)
+  manifest.csv  (per-patch geographic metadata: UTM origin, ground extent, etc.)
 
-Requires: rasterio, numpy, tqdm
+Requires: rasterio, numpy, tqdm, pillow
 """
 
 import csv
@@ -17,6 +17,7 @@ from pathlib import Path
 
 import numpy as np
 import rasterio
+from PIL import Image
 from rasterio.enums import Resampling
 from rasterio.transform import Affine
 from rasterio.windows import Window
@@ -36,32 +37,47 @@ NODATA_THRESH = 0.05  # skip patch if >5% of pixels are border fill
 MIN_NDVI = 0.1        # skip patch if mean NDVI below this (drops water/rock)
 
 
-def patch_transform(src_transform: Affine, col: int, row: int,
-                    src_window_px: int, out_size: int) -> Affine:
-    """Transform for a downsampled patch that originated from a native window."""
-    scale = src_window_px / out_size
-    return src_transform * Affine.translation(col, row) * Affine.scale(scale, scale)
+def patch_origin_utm(src_transform: Affine, col: int, row: int,
+                     src_window_px: int) -> tuple[float, float]:
+    """UTM (x_min, y_min) of the patch's lower-left corner in the source raster."""
+    tfm = src_transform * Affine.translation(col, row)
+    return tfm * (0, src_window_px)
 
 
-def write_geotiff(path: Path, array: np.ndarray, transform: Affine, crs) -> None:
+def write_png_rgb(path: Path, arr: np.ndarray) -> None:
+    # arr: (3, H, W) uint8 -> PIL expects (H, W, 3)
     path.parent.mkdir(parents=True, exist_ok=True)
-    bands, h, w = array.shape
-    with rasterio.open(
-        path, "w",
-        driver="GTiff",
-        height=h, width=w, count=bands,
-        dtype=array.dtype,
-        crs=crs,
-        transform=transform,
-        compress="deflate",
-        predictor=2,
-        tiled=True,
-        blockxsize=256, blockysize=256,
-    ) as dst:
-        dst.write(array)
+    img = Image.fromarray(np.transpose(arr, (1, 2, 0)), mode="RGB")
+    img.save(path, format="PNG", optimize=False, compress_level=6)
 
 
-def process_tile(tile_path: Path, writer: csv.DictWriter) -> dict[float, int]:
+def write_png_gray(path: Path, arr: np.ndarray) -> None:
+    # arr: (H, W) uint8
+    path.parent.mkdir(parents=True, exist_ok=True)
+    img = Image.fromarray(arr, mode="L")
+    img.save(path, format="PNG", optimize=False, compress_level=6)
+
+
+def count_windows(tile_path: Path) -> int:
+    """Theoretical max window count across all resolutions for one tile (header-only)."""
+    with rasterio.open(tile_path) as src:
+        if src.count < 4:
+            return 0
+        total = 0
+        for r_m in RESOLUTIONS_M:
+            src_window_px = int(round(PATCH_SIZE * r_m / NATIVE_GSD_M))
+            src_stride_px = int(round(STRIDE * r_m / NATIVE_GSD_M))
+            max_col = src.width - src_window_px
+            max_row = src.height - src_window_px
+            if max_col < 0 or max_row < 0:
+                continue
+            n_rows = len(range(0, max_row + 1, src_stride_px))
+            n_cols = len(range(0, max_col + 1, src_stride_px))
+            total += n_rows * n_cols
+        return total
+
+
+def process_tile(tile_path: Path, writer: csv.DictWriter, pbar) -> dict[float, int]:
     """Process one NAIP scene at all resolutions. Returns {res_m: kept_patch_count}."""
     scene_id = tile_path.stem
     counts: dict[float, int] = {r: 0 for r in RESOLUTIONS_M}
@@ -87,6 +103,7 @@ def process_tile(tile_path: Path, writer: csv.DictWriter) -> dict[float, int]:
 
             for row in range(0, max_row + 1, src_stride_px):
                 for col in range(0, max_col + 1, src_stride_px):
+                    pbar.update(1)
                     window = Window(col, row, src_window_px, src_window_px)
                     arr = src.read(
                         indexes=[1, 2, 3, 4],
@@ -96,30 +113,39 @@ def process_tile(tile_path: Path, writer: csv.DictWriter) -> dict[float, int]:
                     )
 
                     rgb = arr[:3]
-                    nir = arr[3:4]
+                    nir = arr[3]
 
                     # nodata: NAIP fills border with 0 across all RGB bands
                     nodata_mask = np.all(rgb == 0, axis=0)
                     nodata_frac = float(nodata_mask.mean())
                     if nodata_frac > NODATA_THRESH:
+                        pbar.skipped_nodata += 1
+                        pbar.set_postfix(saved=pbar.saved,
+                                         drop_nodata=pbar.skipped_nodata,
+                                         drop_ndvi=pbar.skipped_ndvi,
+                                         refresh=False)
                         continue
 
                     red_f = rgb[0].astype(np.float32)
-                    nir_f = nir[0].astype(np.float32)
+                    nir_f = nir.astype(np.float32)
                     ndvi = (nir_f - red_f) / (nir_f + red_f + 1e-6)
                     mean_ndvi = float(ndvi.mean())
                     if mean_ndvi < MIN_NDVI:
+                        pbar.skipped_ndvi += 1
+                        pbar.set_postfix(saved=pbar.saved,
+                                         drop_nodata=pbar.skipped_nodata,
+                                         drop_ndvi=pbar.skipped_ndvi,
+                                         refresh=False)
                         continue
 
-                    tfm = patch_transform(src.transform, col, row,
-                                          src_window_px, PATCH_SIZE)
-                    name = f"{scene_id}__y{row}_x{col}.tif"
+                    name = f"{scene_id}__y{row}_x{col}.png"
                     rgb_path = rgb_dir / name
                     nir_path = nir_dir / name
-                    write_geotiff(rgb_path, rgb, tfm, src.crs)
-                    write_geotiff(nir_path, nir, tfm, src.crs)
+                    write_png_rgb(rgb_path, rgb)
+                    write_png_gray(nir_path, nir)
 
-                    utm_x_min, utm_y_min = tfm * (0, PATCH_SIZE)
+                    utm_x_min, utm_y_min = patch_origin_utm(
+                        src.transform, col, row, src_window_px)
                     writer.writerow({
                         "patch_id": f"{scene_id}__{res_dir_name}__y{row}_x{col}",
                         "scene_id": scene_id,
@@ -135,6 +161,11 @@ def process_tile(tile_path: Path, writer: csv.DictWriter) -> dict[float, int]:
                         "mean_ndvi": round(mean_ndvi, 4),
                     })
                     counts[r_m] += 1
+                    pbar.saved += 1
+                    pbar.set_postfix(saved=pbar.saved,
+                                     drop_nodata=pbar.skipped_nodata,
+                                     drop_ndvi=pbar.skipped_ndvi,
+                                     refresh=False)
     return counts
 
 
@@ -151,16 +182,25 @@ def main():
         "ground_extent_m", "nodata_frac", "mean_ndvi",
     ]
 
+    print("Counting expected windows ...")
+    total_windows = sum(count_windows(t) for t in tiles)
+    print(f"  {total_windows} windows across {len(tiles)} tiles "
+          f"x {len(RESOLUTIONS_M)} resolutions\n")
+
     totals: dict[float, int] = {r: 0 for r in RESOLUTIONS_M}
     with open(MANIFEST_PATH, "w", newline="") as fh:
         writer = csv.DictWriter(fh, fieldnames=fieldnames)
         writer.writeheader()
-        for tile in tqdm(tiles, desc="tiles"):
-            counts = process_tile(tile, writer)
-            for r, n in counts.items():
-                totals[r] += n
-            tqdm.write(f"{tile.name}: " +
-                       ", ".join(f"{r:g}m={n}" for r, n in counts.items()))
+        with tqdm(total=total_windows, desc="patches", unit="win") as pbar:
+            pbar.saved = 0
+            pbar.skipped_nodata = 0
+            pbar.skipped_ndvi = 0
+            for tile in tiles:
+                counts = process_tile(tile, writer, pbar)
+                for r, n in counts.items():
+                    totals[r] += n
+                tqdm.write(f"{tile.name}: " +
+                           ", ".join(f"{r:g}m={n}" for r, n in counts.items()))
 
     print("\nDone. Patch counts per resolution:")
     for r in RESOLUTIONS_M:

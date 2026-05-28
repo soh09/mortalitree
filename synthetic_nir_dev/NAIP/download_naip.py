@@ -21,7 +21,7 @@ from aois import CA_FOREST_BBOXES
 MPC_URL = "https://planetarycomputer.microsoft.com/api/stac/v1"
 COLLECTION = "naip"
 YEAR = "2022"
-N_PER_AOI = 1
+N_PER_AOI: int | None = 1  # set to None to download every hit per AOI
 MAX_WORKERS = 4
 
 RAW_DIR = Path(__file__).parent / "raw" / YEAR
@@ -77,7 +77,8 @@ def collect_items() -> list:
         if not items:
             print("  no items found")
             continue
-        print(f"  {len(items)} items match, taking first {N_PER_AOI}")
+        take = len(items) if N_PER_AOI is None else N_PER_AOI
+        print(f"  {len(items)} items match, taking {take}")
 
         for item in items[:N_PER_AOI]:
             if item.id in seen_ids:
