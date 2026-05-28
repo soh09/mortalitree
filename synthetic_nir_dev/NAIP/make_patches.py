@@ -34,7 +34,8 @@ RESOLUTIONS_M = [0.6, 1.0, 1.5, 2.0]
 NATIVE_GSD_M = 0.6
 
 NODATA_THRESH = 0.05  # skip patch if >5% of pixels are border fill
-MIN_NDVI = 0.1        # skip patch if mean NDVI below this (drops water/rock)
+# NDVI is computed per patch and recorded in manifest.csv (column: mean_ndvi)
+# so downstream code can filter on it without re-running this script.
 
 
 def patch_origin_utm(src_transform: Affine, col: int, row: int,
@@ -122,7 +123,6 @@ def process_tile(tile_path: Path, writer: csv.DictWriter, pbar) -> dict[float, i
                         pbar.skipped_nodata += 1
                         pbar.set_postfix(saved=pbar.saved,
                                          drop_nodata=pbar.skipped_nodata,
-                                         drop_ndvi=pbar.skipped_ndvi,
                                          refresh=False)
                         continue
 
@@ -130,13 +130,6 @@ def process_tile(tile_path: Path, writer: csv.DictWriter, pbar) -> dict[float, i
                     nir_f = nir.astype(np.float32)
                     ndvi = (nir_f - red_f) / (nir_f + red_f + 1e-6)
                     mean_ndvi = float(ndvi.mean())
-                    if mean_ndvi < MIN_NDVI:
-                        pbar.skipped_ndvi += 1
-                        pbar.set_postfix(saved=pbar.saved,
-                                         drop_nodata=pbar.skipped_nodata,
-                                         drop_ndvi=pbar.skipped_ndvi,
-                                         refresh=False)
-                        continue
 
                     name = f"y{row}_x{col}.png"
                     rgb_path = rgb_dir / name
@@ -164,7 +157,6 @@ def process_tile(tile_path: Path, writer: csv.DictWriter, pbar) -> dict[float, i
                     pbar.saved += 1
                     pbar.set_postfix(saved=pbar.saved,
                                      drop_nodata=pbar.skipped_nodata,
-                                     drop_ndvi=pbar.skipped_ndvi,
                                      refresh=False)
     return counts
 
@@ -194,7 +186,6 @@ def main():
         with tqdm(total=total_windows, desc="patches", unit="win") as pbar:
             pbar.saved = 0
             pbar.skipped_nodata = 0
-            pbar.skipped_ndvi = 0
             for tile in tiles:
                 counts = process_tile(tile, writer, pbar)
                 for r, n in counts.items():
