@@ -25,7 +25,7 @@ STOP = threading.Event()
 MPC_URL = "https://planetarycomputer.microsoft.com/api/stac/v1"
 COLLECTION = "naip"
 YEAR = "2022"
-N_PER_AOI: int | None = 1  # set to None to download every hit per AOI
+N_PER_AOI = None   # set to None to download every hit per AOI
 MAX_WORKERS = 4
 
 RAW_DIR = Path(__file__).parent / "raw" / YEAR
