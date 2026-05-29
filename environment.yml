@@ -31,3 +31,4 @@ dependencies:
       - tensorboard
       - requests
       - python-dotenv
+      - segmentation-models-pytorch
