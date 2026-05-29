@@ -16,6 +16,7 @@ Requires: torch, segmentation-models-pytorch, pandas, tqdm, pillow, numpy
 """
 
 import csv
+import math
 import os
 import time
 from pathlib import Path
@@ -25,6 +26,7 @@ import pandas as pd
 import segmentation_models_pytorch as smp
 import torch
 import torch.nn as nn
+import wandb
 from PIL import Image
 from torch.utils.data import DataLoader, Dataset
 from tqdm import tqdm
@@ -33,18 +35,39 @@ ROOT = Path(__file__).parent
 MANIFEST_PATH = ROOT / "manifest.csv"
 SPLITS_PATH = ROOT / "splits.csv"
 CKPT_DIR = ROOT / "checkpoints"
-BEST_CKPT = CKPT_DIR / "best.pt"
-LOG_CSV = CKPT_DIR / "train_log.csv"
 
-# v1: train on native 0.6m only. Add 1.0/1.5/2.0 later as scale augmentation.
-RESOLUTIONS_M = [0.6]
-BATCH_SIZE = 32
-NUM_WORKERS = min(8, os.cpu_count() or 4)
+# Scale augmentation: train across all GSDs the patch builder generated. The
+# lower-res patches cover more ground per 256px tile, adding scale + content
+# diversity for free. Validate on native 0.6m so the metric stays comparable to
+# earlier runs and matches the deployment resolution.
+TRAIN_RESOLUTIONS_M = [0.6, 1.0, 1.5, 2.0]
+VAL_RESOLUTIONS_M = [0.6]
+BATCH_SIZE = 48
+# Per-epoch random subsample. make_patches.py slices patches at STRIDE=128 on
+# 256px windows (50% overlap => each pixel is covered ~4x), so the ~357k train
+# patches carry ~4x redundancy. Training is GPU-compute-bound, so drawing a
+# fresh random subset of this size each epoch cuts epoch time ~linearly while
+# still covering the full dataset across epochs. Set to None for the full set.
+SAMPLES_PER_EPOCH = 90_000
+# Windows spawns a fresh process per worker (each re-imports torch, ~0.5GB) for
+# BOTH the train and val loaders, so keep this modest on a 16GB box. 4 still
+# feeds the GPU since training is compute-bound under AMP.
+NUM_WORKERS = 4
 N_EPOCHS = 30
+WARMUP_EPOCHS = 2     # linear LR warmup before the cosine decay; steadies the
+                      # randomly-initialized decoder over the pretrained encoder.
 LR = 1e-4
 WEIGHT_DECAY = 1e-4
 NDVI_WEIGHT = 0.5
+NDVI_EPS = 0.1        # denominator floor for NDVI on [0,1] data. Was 1e-6, which let
+                      # dark/shadow pixels (tiny NIR+red) dominate the gradient.
+NDVI_MASK_MIN = 0.1   # skip the NDVI term where (target NIR + red) < this: too little
+                      # signal for NDVI to mean anything (mostly quantization noise).
 COLOR_JITTER_RANGE = 0.10  # +/-10% brightness/contrast on RGB only
+
+WANDB_PROJECT = "naip-rgb2nir"
+WANDB_ENTITY = 'sohirota-stanford-university'  # set to your team/user, or leave None to use default
+WANDB_MODE = os.environ.get("WANDB_MODE", "online")  # "online" | "offline" | "disabled"
 
 
 def pick_device() -> torch.device:
@@ -57,7 +80,11 @@ def pick_device() -> torch.device:
 
 class NaipPatchDataset(Dataset):
     def __init__(self, split: str, resolutions_m: list[float], augment: bool):
-        df = pd.read_csv(MANIFEST_PATH)
+        # Read only the columns we need: on Windows every DataLoader worker is a
+        # fresh process that gets its own pickled copy of this dataset, so holding
+        # the full manifest DataFrame would replicate ~hundreds of MB per worker.
+        df = pd.read_csv(MANIFEST_PATH,
+                         usecols=["scene_id", "resolution_m", "rgb_path", "nir_path"])
         splits = pd.read_csv(SPLITS_PATH)
         df = df.merge(splits, on="scene_id")
         df = df[df["split"] == split]
@@ -67,16 +94,18 @@ class NaipPatchDataset(Dataset):
                 f"No patches for split={split} at resolutions {resolutions_m}. "
                 f"Did make_splits.py run, and does the split actually exist?"
             )
-        self.df = df.reset_index(drop=True)
+        # Keep just the two path columns as plain lists and drop the DataFrame, so
+        # what gets pickled to each worker process stays small.
+        self.rgb_paths = df["rgb_path"].tolist()
+        self.nir_paths = df["nir_path"].tolist()
         self.augment = augment
 
     def __len__(self) -> int:
-        return len(self.df)
+        return len(self.rgb_paths)
 
     def __getitem__(self, idx: int) -> tuple[torch.Tensor, torch.Tensor]:
-        row = self.df.iloc[idx]
-        rgb = np.array(Image.open(ROOT / row["rgb_path"]).convert("RGB"))  # (H,W,3) u8
-        nir = np.array(Image.open(ROOT / row["nir_path"]).convert("L"))    # (H,W) u8
+        rgb = np.array(Image.open(ROOT / self.rgb_paths[idx]).convert("RGB"))  # (H,W,3) u8
+        nir = np.array(Image.open(ROOT / self.nir_paths[idx]).convert("L"))    # (H,W) u8
         rgb_t = torch.from_numpy(rgb).permute(2, 0, 1).float() / 255.0
         nir_t = torch.from_numpy(nir).unsqueeze(0).float() / 255.0
         if self.augment:
@@ -107,15 +136,27 @@ def augment_pair(rgb: torch.Tensor, nir: torch.Tensor) -> tuple[torch.Tensor, to
     return rgb, nir
 
 
-def ndvi(nir: torch.Tensor, red: torch.Tensor, eps: float = 1e-6) -> torch.Tensor:
+def ndvi(nir: torch.Tensor, red: torch.Tensor, eps: float = NDVI_EPS) -> torch.Tensor:
     return (nir - red) / (nir + red + eps)
+
+
+def ndvi_absdiff(pred: torch.Tensor, target: torch.Tensor, red: torch.Tensor
+                 ) -> tuple[torch.Tensor, torch.Tensor]:
+    """Per-pixel |NDVI(pred) - NDVI(target)| and a validity mask. The mask drops
+    low-signal pixels (target NIR + red < NDVI_MASK_MIN) where NDVI is dominated
+    by quantization noise; it keys off the *target*, so it doesn't move with the
+    prediction. The raw-NIR L1 term still supervises these pixels."""
+    ad = (ndvi(pred, red) - ndvi(target, red)).abs()
+    mask = (target + red) >= NDVI_MASK_MIN
+    return ad, mask
 
 
 def compute_loss(pred: torch.Tensor, target: torch.Tensor, rgb: torch.Tensor
                  ) -> tuple[torch.Tensor, float, float]:
     l1 = (pred - target).abs().mean()
     red = rgb[:, 0:1]
-    ndvi_l1 = (ndvi(pred, red) - ndvi(target, red)).abs().mean()
+    ad, mask = ndvi_absdiff(pred, target, red)
+    ndvi_l1 = ad[mask].mean() if mask.any() else ad.mean() * 0.0
     total = l1 + NDVI_WEIGHT * ndvi_l1
     return total, l1.item(), ndvi_l1.item()
 
@@ -150,16 +191,22 @@ def build_model() -> nn.Module:
 @torch.no_grad()
 def evaluate(model: nn.Module, loader: DataLoader, device: torch.device) -> dict[str, float]:
     model.eval()
+    use_amp = device.type == "cuda"
     nir_mae_sum = 0.0
     ndvi_mae_sum = 0.0
     n = 0
-    for rgb, nir_t in loader:
+    for rgb, nir_t in tqdm(loader, desc="  val", unit="batch", leave=False):
         rgb = rgb.to(device, non_blocking=True)
         nir_t = nir_t.to(device, non_blocking=True)
-        pred = model(rgb)
+        with torch.amp.autocast(device_type=device.type, dtype=torch.float16, enabled=use_amp):
+            pred = model(rgb)
+        pred = pred.float()  # metrics in fp32 so val numbers stay precise/comparable
         nir_mae_sum += (pred - nir_t).abs().mean(dim=(1, 2, 3)).sum().item()
         red = rgb[:, 0:1]
-        ndvi_mae_sum += (ndvi(pred, red) - ndvi(nir_t, red)).abs().mean(dim=(1, 2, 3)).sum().item()
+        ad, mask = ndvi_absdiff(pred, nir_t, red)
+        num = (ad * mask).sum(dim=(1, 2, 3))
+        den = mask.sum(dim=(1, 2, 3)).clamp(min=1)
+        ndvi_mae_sum += (num / den).sum().item()
         n += rgb.shape[0]
     return {"nir_mae": nir_mae_sum / n, "ndvi_mae": ndvi_mae_sum / n}
 
@@ -169,13 +216,55 @@ def main():
     device = pick_device()
     print(f"device: {device}")
 
-    train_ds = NaipPatchDataset("train", RESOLUTIONS_M, augment=True)
-    val_ds = NaipPatchDataset("val", RESOLUTIONS_M, augment=False)
+    wandb.init(
+        project=WANDB_PROJECT,
+        entity=WANDB_ENTITY,
+        mode=WANDB_MODE,
+        config={
+            "encoder": "resnet34",
+            "train_resolutions_m": TRAIN_RESOLUTIONS_M,
+            "val_resolutions_m": VAL_RESOLUTIONS_M,
+            "batch_size": BATCH_SIZE,
+            "samples_per_epoch": SAMPLES_PER_EPOCH,
+            "n_epochs": N_EPOCHS,
+            "warmup_epochs": WARMUP_EPOCHS,
+            "lr": LR,
+            "weight_decay": WEIGHT_DECAY,
+            "ndvi_weight": NDVI_WEIGHT,
+            "ndvi_eps": NDVI_EPS,
+            "ndvi_mask_min": NDVI_MASK_MIN,
+            "color_jitter_range": COLOR_JITTER_RANGE,
+            "device": device.type,
+            "amp_fp16": device.type == "cuda",
+        },
+    )
+
+    run_id = wandb.run.id if wandb.run is not None else "norun"
+    run_name = f"{time.strftime('%Y%m%d_%H%M%S')}_{run_id}"
+    run_dir = CKPT_DIR / run_name
+    run_dir.mkdir(parents=True, exist_ok=False)
+    best_ckpt = run_dir / "best.pt"
+    log_csv = run_dir / "train_log.csv"
+    print(f"run dir: {run_dir}")
+    wandb.config.update({"run_dir": str(run_dir)})
+
+    train_ds = NaipPatchDataset("train", TRAIN_RESOLUTIONS_M, augment=True)
+    val_ds = NaipPatchDataset("val", VAL_RESOLUTIONS_M, augment=False)
     print(f"train: {len(train_ds)} patches, val: {len(val_ds)} patches")
+    wandb.config.update({"train_patches": len(train_ds), "val_patches": len(val_ds)})
 
     pin = device.type == "cuda"
+    # Subsample a fresh random subset each epoch (no replacement) so we skip the
+    # ~4x patch-overlap redundancy without losing dataset coverage over a run.
+    if SAMPLES_PER_EPOCH is not None and SAMPLES_PER_EPOCH < len(train_ds):
+        train_sampler = torch.utils.data.RandomSampler(
+            train_ds, replacement=False, num_samples=SAMPLES_PER_EPOCH)
+        print(f"sampling {SAMPLES_PER_EPOCH}/{len(train_ds)} train patches per epoch")
+    else:
+        train_sampler = None
     train_loader = DataLoader(
-        train_ds, batch_size=BATCH_SIZE, shuffle=True,
+        train_ds, batch_size=BATCH_SIZE,
+        shuffle=train_sampler is None, sampler=train_sampler,
         num_workers=NUM_WORKERS, pin_memory=pin,
         persistent_workers=NUM_WORKERS > 0,
     )
@@ -186,17 +275,36 @@ def main():
     )
 
     model = build_model().to(device)
+    # AMP (fp16 on the Turing tensor cores) ~= 1.6x here, identical math. NOTE:
+    # channels_last benchmarked ~4x SLOWER on this smp U-Net (its upsample/concat
+    # path doesn't propagate the layout, so every conv pays a transpose), so it is
+    # deliberately not used. cudnn autotuning is neutral but harmless on fixed sizes.
+    use_amp = device.type == "cuda"
+    if use_amp:
+        torch.backends.cudnn.benchmark = True  # fixed 256x256 inputs
+    scaler = torch.amp.GradScaler(device.type, enabled=use_amp)
     optimizer = torch.optim.AdamW(model.parameters(), lr=LR, weight_decay=WEIGHT_DECAY)
-    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=N_EPOCHS)
+    # Per-step LR: linear warmup for WARMUP_EPOCHS, then cosine decay to ~0 over
+    # the rest of the run. Stepped once per batch (see the training loop).
+    steps_per_epoch = len(train_loader)
+    total_steps = N_EPOCHS * steps_per_epoch
+    warmup_steps = WARMUP_EPOCHS * steps_per_epoch
 
-    log_exists = LOG_CSV.exists()
-    log_fh = open(LOG_CSV, "a", newline="")
+    def lr_factor(step: int) -> float:
+        if step < warmup_steps:
+            return (step + 1) / max(1, warmup_steps)
+        progress = (step - warmup_steps) / max(1, total_steps - warmup_steps)
+        return 0.5 * (1.0 + math.cos(math.pi * progress))
+
+    scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_factor)
+    wandb.watch(model, log="gradients", log_freq=200)
+
+    log_fh = open(log_csv, "w", newline="")
     log_writer = csv.writer(log_fh)
-    if not log_exists:
-        log_writer.writerow([
-            "epoch", "train_loss", "train_l1", "train_ndvi_l1",
-            "val_nir_mae", "val_ndvi_mae", "lr", "epoch_secs",
-        ])
+    log_writer.writerow([
+        "epoch", "train_loss", "train_l1", "train_ndvi_l1",
+        "val_nir_mae", "val_ndvi_mae", "lr", "epoch_secs",
+    ])
 
     best_val_mae = float("inf")
     try:
@@ -209,11 +317,14 @@ def main():
             for rgb, nir_t in pbar:
                 rgb = rgb.to(device, non_blocking=True)
                 nir_t = nir_t.to(device, non_blocking=True)
-                pred = model(rgb)
-                loss, l1_val, ndvi_val = compute_loss(pred, nir_t, rgb)
                 optimizer.zero_grad()
-                loss.backward()
-                optimizer.step()
+                with torch.amp.autocast(device_type=device.type, dtype=torch.float16, enabled=use_amp):
+                    pred = model(rgb)
+                    loss, l1_val, ndvi_val = compute_loss(pred, nir_t, rgb)
+                scaler.scale(loss).backward()
+                scaler.step(optimizer)
+                scaler.update()
+                scheduler.step()
                 loss_sum += loss.item()
                 l1_sum += l1_val
                 ndvi_sum += ndvi_val
@@ -222,7 +333,6 @@ def main():
                                  l1=f"{l1_val:.4f}",
                                  ndvi=f"{ndvi_val:.4f}",
                                  refresh=False)
-            scheduler.step()
 
             val_metrics = evaluate(model, val_loader, device)
             epoch_secs = time.time() - t0
@@ -244,6 +354,17 @@ def main():
             ])
             log_fh.flush()
 
+            wandb.log({
+                "epoch": epoch,
+                "train/loss": loss_sum / steps,
+                "train/l1": l1_sum / steps,
+                "train/ndvi_l1": ndvi_sum / steps,
+                "val/nir_mae": val_metrics["nir_mae"],
+                "val/ndvi_mae": val_metrics["ndvi_mae"],
+                "lr": optimizer.param_groups[0]["lr"],
+                "epoch_secs": epoch_secs,
+            })
+
             if val_metrics["nir_mae"] < best_val_mae:
                 best_val_mae = val_metrics["nir_mae"]
                 torch.save({
@@ -252,15 +373,18 @@ def main():
                     "val_metrics": val_metrics,
                     "config": {
                         "encoder": "resnet34",
-                        "resolutions_m": RESOLUTIONS_M,
+                        "train_resolutions_m": TRAIN_RESOLUTIONS_M,
                         "ndvi_weight": NDVI_WEIGHT,
                         "batch_size": BATCH_SIZE,
                         "lr": LR,
                     },
-                }, BEST_CKPT)
-                print(f"  -> new best, saved {BEST_CKPT}")
+                }, best_ckpt)
+                print(f"  -> new best, saved {best_ckpt}")
+                wandb.summary["best_val_nir_mae"] = best_val_mae
+                wandb.summary["best_epoch"] = epoch
     finally:
         log_fh.close()
+        wandb.finish()
 
 
 if __name__ == "__main__":
