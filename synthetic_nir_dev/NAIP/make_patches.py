@@ -31,7 +31,7 @@ MANIFEST_PATH = ROOT / "manifest.csv"
 TILE_AOI_PATH = RAW_DIR / "tile_aoi.csv"
 
 PATCH_SIZE = 256
-STRIDE = 128
+STRIDE = 256
 RESOLUTIONS_M = [0.6, 1.0, 1.5, 2.0]
 NATIVE_GSD_M = 0.6
 

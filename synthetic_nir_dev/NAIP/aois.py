@@ -55,4 +55,9 @@ CA_FOREST_BBOXES: list[dict] = [
         # Los Padres NF, Big Sur backcountry
         "bbox": [-121.640, 36.190, -121.540, 36.270],
     },
+    {
+        "name": "czu_big_basin",
+        # Big Basin Redwoods SP, core of the 2020 CZU Lightning Complex burn scar
+        "bbox": [-122.260, 37.150, -122.160, 37.220],
+    },
 ]
