@@ -8,5 +8,10 @@ synthetic_nir_dev/NAIP/manifest.csv
 synthetic_nir_dev/NAIP/splits.csv
 synthetic_nir_dev/NAIP/__pycache__
 milliontrees/TreeBoxes_supervised_v0.13
+milliontrees/TreeBoxes_v0.13
 *.pt
 synthetic_nir_dev/NAIP/wandb
+.claude/
+*/__pycache__
+sodev/2019_*
+*/.DS_Store
