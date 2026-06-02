@@ -1,8 +1,11 @@
 """
-Slice raw NAIP COGs into 256x256 paired RGB+NIR patches at several effective
-resolutions. Lower-res patches are built by reading a larger native window and
-resampling (Resampling.average) down to 256x256, so each scale gets distinct
-ground coverage but identical pixel dims.
+Slice raw NAIP COGs into paired RGB+NIR patches at several effective
+resolutions. Patches are STORED at STORE_SIZE (>256) and sliced WITHOUT overlap
+(STRIDE == STORE_SIZE); train.py random-crops the 256px model input at train
+time and center-crops for val, so we get translational augmentation without any
+on-disk patch overlap. Lower-res patches are built by reading a larger native
+window and resampling (Resampling.average) down to STORE_SIZE, so each scale
+gets distinct ground coverage but identical pixel dims.
 
 Output layout (sharded by scene_id to keep leaf-dir file counts manageable):
   patches/<res>m/rgb/<scene_id>/y<row>_x<col>.png    (3-channel uint8)
@@ -30,8 +33,13 @@ MANIFEST_PATH = ROOT / "manifest.csv"
 # Sidecar written by download_naip.py; mapping scene_id -> aoi.
 TILE_AOI_PATH = RAW_DIR / "tile_aoi.csv"
 
-PATCH_SIZE = 256
-STRIDE = 256
+# Patches are stored larger than the model's 256px input and sliced WITHOUT
+# overlap (STRIDE == STORE_SIZE). train.py random-crops 256 at train time
+# (translational augmentation) and center-crops 256 for val. STORE_SIZE-256 is
+# the max crop jitter: 320 -> +/-64px (~25%). Bump to 384 for +/-128px if you
+# want more, at the cost of larger PNGs / fewer patches per tile.
+STORE_SIZE = 320
+STRIDE = STORE_SIZE
 RESOLUTIONS_M = [0.6, 1.0, 1.5, 2.0]
 NATIVE_GSD_M = 0.6
 
@@ -79,7 +87,7 @@ def count_windows(tile_path: Path) -> int:
             return 0
         total = 0
         for r_m in RESOLUTIONS_M:
-            src_window_px = int(round(PATCH_SIZE * r_m / NATIVE_GSD_M))
+            src_window_px = int(round(STORE_SIZE * r_m / NATIVE_GSD_M))
             src_stride_px = int(round(STRIDE * r_m / NATIVE_GSD_M))
             max_col = src.width - src_window_px
             max_row = src.height - src_window_px
@@ -104,9 +112,9 @@ def process_tile(tile_path: Path, writer: csv.DictWriter,
             return counts
 
         for r_m in RESOLUTIONS_M:
-            src_window_px = int(round(PATCH_SIZE * r_m / NATIVE_GSD_M))
+            src_window_px = int(round(STORE_SIZE * r_m / NATIVE_GSD_M))
             src_stride_px = int(round(STRIDE * r_m / NATIVE_GSD_M))
-            ground_extent_m = PATCH_SIZE * r_m
+            ground_extent_m = STORE_SIZE * r_m
 
             res_dir_name = f"{r_m:g}m"
             rgb_dir = PATCHES_DIR / res_dir_name / "rgb" / scene_id
@@ -124,7 +132,7 @@ def process_tile(tile_path: Path, writer: csv.DictWriter,
                     arr = src.read(
                         indexes=[1, 2, 3, 4],
                         window=window,
-                        out_shape=(4, PATCH_SIZE, PATCH_SIZE),
+                        out_shape=(4, STORE_SIZE, STORE_SIZE),
                         resampling=Resampling.average,
                     )
 

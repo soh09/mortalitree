@@ -40,7 +40,7 @@ def main():
     print(f"cpu_count={os.cpu_count()}  torch={torch.__version__}  "
           f"cuda={torch.cuda.is_available()}  NUM_WORKERS={train.NUM_WORKERS}")
 
-    ds = train.NaipPatchDataset("train", train.RESOLUTIONS_M, augment=True)
+    ds = train.NaipPatchDataset("train", train.TRAIN_RESOLUTIONS_M, augment=True)
     print(f"train dataset: {len(ds)} patches\n")
 
     rng = np.random.default_rng(0)
