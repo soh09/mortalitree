@@ -11,23 +11,69 @@ import torch.nn as nn
 from einops import rearrange, repeat
 
 
+# Encoder dims per Clay model size (from claymodel.model.clay_mae_*).
+_CLAY_SIZE_ARGS = {
+    "tiny":  dict(dim=192,  depth=6,  heads=4,  dim_head=48, mlp_ratio=2),
+    "small": dict(dim=384,  depth=6,  heads=6,  dim_head=64, mlp_ratio=2),
+    "base":  dict(dim=768,  depth=12, heads=12, dim_head=64, mlp_ratio=4),
+    "large": dict(dim=1024, depth=24, heads=16, dim_head=64, mlp_ratio=4),
+}
+
+
 def load_clay_encoder(checkpoint_path: str, strict: bool = False) -> nn.Module:
-    """Load Clay v1.5 from a Lightning checkpoint and return the encoder."""
+    """Load Clay v1.5's encoder from a Lightning checkpoint.
+
+    Builds *only* the Encoder and copies the encoder weights out of the
+    checkpoint's state_dict, rather than reconstructing the full ClayMAE module.
+    This skips instantiating the DINOv2 teacher (a ~1 GB timm pretrained download
+    that is never used at inference/finetuning time). Mask/shuffle are disabled so
+    the encoder returns all patch tokens in their original spatial order.
+    """
     try:
-        from claymodel.module import ClayMAEModule
+        from claymodel.model import Encoder
     except ImportError as e:
         raise ImportError(
             "claymodel not found. Install from https://github.com/Clay-foundation/model"
         ) from e
 
-    clay = ClayMAEModule.load_from_checkpoint(checkpoint_path, strict=strict)
-    encoder = clay.model.encoder
-    # Disable masking *and* shuffling so the encoder returns all patch tokens in
-    # their original spatial (row-major) order. The wrapper below also bypasses
-    # mask_out entirely, but we set these defensively in case anything calls the
-    # base Encoder.forward.
-    encoder.mask_ratio = 0.0
-    encoder.shuffle = False
+    ckpt = torch.load(checkpoint_path, map_location="cpu", weights_only=False)
+    hparams = ckpt.get("hyper_parameters", {}) or {}
+    model_size = hparams.get("model_size", "large")   # released v1.5.0 is large
+    patch_size = hparams.get("patch_size", 8)
+    if model_size not in _CLAY_SIZE_ARGS:
+        raise ValueError(f"Unknown Clay model_size '{model_size}'")
+
+    encoder = Encoder(
+        mask_ratio=0.0,
+        patch_size=patch_size,
+        shuffle=False,
+        **_CLAY_SIZE_ARGS[model_size],
+    )
+
+    # Pull the encoder weights out of the full-model state dict (keys are prefixed
+    # "model.encoder."). Fall back to other layouts if that prefix isn't present.
+    state_dict = ckpt.get("state_dict", ckpt)
+    enc_state = {
+        k[len("model.encoder."):]: v
+        for k, v in state_dict.items()
+        if k.startswith("model.encoder.")
+    }
+    if not enc_state:
+        enc_state = {
+            k[len("encoder."):]: v
+            for k, v in state_dict.items()
+            if k.startswith("encoder.")
+        }
+    if not enc_state:
+        enc_state = state_dict  # assume it is already an encoder-only state dict
+
+    missing, _ = encoder.load_state_dict(enc_state, strict=strict)
+    if "cls_token" in missing:
+        raise RuntimeError(
+            "Encoder weights not found in checkpoint (cls_token missing) — the "
+            "encoder would be randomly initialized. Check the checkpoint format."
+        )
+
     encoder.eval()
     for p in encoder.parameters():
         p.requires_grad = False
