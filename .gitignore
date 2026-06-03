@@ -15,3 +15,9 @@ synthetic_nir_dev/NAIP/wandb
 */__pycache__
 sodev/2019_*
 */.DS_Store
+so_images/
+dataset_dev/2020weinstein_labels
+dataset_dev/hyperspectral
+dataset_dev/rgb
+dataset_dev/teak_patches
+.DS_Store

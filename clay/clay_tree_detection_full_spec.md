@@ -53,14 +53,14 @@ Clay v1.5 dynamic embedding block
         │
         ▼
 Clay ViT encoder    (~311M params, large variant, frozen → late-unfrozen)
-   output: (B, 784, 1024)    28×28 patches × 1024-dim
+   output: (B, 1024, 1024)    32×32 patches × 1024-dim
         │
         ▼  reshape tokens → spatial map
-   (B, 1024, 28, 28)    stride 8
+   (B, 1024, 32, 32)    stride 8
         │
         ▼
 Stripped ViTDet neck    (~1M params, from scratch)
-   single 2× deconv → P3: (B, 128, 56, 56)    stride 4
+   single 2× deconv → P3: (B, 128, 64, 64)    stride 4
         │
         ▼
 DETR-style box detection head    (~2M params, from scratch)
@@ -94,7 +94,7 @@ batch = {
 }
 ```
 
-Default tile size: `H = W = 224`. Clay v1.5 uses patch size 8; 224 is a multiple of 8 and gives a 28×28 token grid. Other multiples of 8 work too.
+Default tile size: `H = W = 256`. This matches NAIP's native 256×256 tile size, so no resampling is needed at inference. Clay v1.5 uses patch size 8 with dynamic (GSD-aware) positional encoding, so any multiple of 8 works; 256 → 32×32 token grid (1024 tokens). Stage B (RGB pretraining) and Stage C (NAIP finetuning) should both use 256×256 to avoid a train/test grid mismatch and to keep the normalized box-size prior consistent across stages. The encoder dim is also 1024, so the token tensor is `(B, 1024_tokens, 1024_dim)` — the two 1024s are coincidental, not the same axis.
 
 **Channel order matters.** Clay's NAIP config uses **R, G, B, NIR** order (`configs/metadata.yaml` → `naip.band_order = [red, green, blue, nir]`; do not assume B,G,R or generic RGB). Match the dataloader's wavelength order and normalization stats to this band order. Native NAIP GeoTIFFs are already R,G,B,NIR, so reading bands in file order is correct.
 
@@ -142,16 +142,17 @@ patches, _ = encoder.to_patch_embed(batch["pixels"], batch["wavelengths"])
 patches = encoder.add_encodings(patches, batch["time"], batch["latlon"], gsd_scalar)
 cls = encoder.cls_token.expand(B, -1, -1)
 patches = encoder.transformer(torch.cat([cls, patches], dim=1))[:, 1:, :]  # drop cls
-# patches: (B, 784, 1024)
+# patches: (B, 1024, 1024)   # N_tokens = 1024 (32×32), D = 1024
 ```
 
-Reshape the 784 patch tokens to spatial form (read the dims off the encoder rather
-than hardcoding them):
+Reshape the patch tokens to spatial form (read the dims off the encoder rather
+than hardcoding them — never hardcode 1024 here, since both the token count and
+the encoder dim happen to be 1024 at tile size 256 and they are not the same axis):
 
 ```python
-B, N, D = patches.shape                 # N = 784, D = encoder.dim = 1024
-H_p = W_p = H // encoder.patch_size      # 224 // 8 = 28
-spatial = patches.transpose(1, 2).reshape(B, D, H_p, W_p)   # (B, 1024, 28, 28)
+B, N, D = patches.shape                 # N = 1024, D = encoder.dim = 1024
+H_p = W_p = H // encoder.patch_size      # 256 // 8 = 32
+spatial = patches.transpose(1, 2).reshape(B, D, H_p, W_p)   # (B, 1024, 32, 32)
 ```
 
 ### 3.3 Stripped ViTDet neck
@@ -200,11 +201,11 @@ class StrippedViTDetNeck(nn.Module):
                 deconv.bias.zero_()
 
     def forward(self, x):
-        # x: (B, 1024, 28, 28)    stride 8
-        x = self.proj(x)          # (B, 128, 28, 28)
-        x = self.up(x)            # (B, 128, 56, 56)    stride 4
+        # x: (B, 1024, 32, 32)    stride 8
+        x = self.proj(x)          # (B, 128, 32, 32)
+        x = self.up(x)            # (B, 128, 64, 64)    stride 4
         x = F.relu(self.norm(x))
-        x = self.refine(x)        # (B, 128, 56, 56)
+        x = self.refine(x)        # (B, 128, 64, 64)
         return x
 ```
 
@@ -393,7 +394,7 @@ Two stages. Stage A (your own MAE pretraining) is *not* part of this design — 
 ## 5. Data handling
 
 ### 5.1 Tiling
-Extract 224×224 windows (134 m × 134 m at 60 cm). Use overlapping windows at training (stride ≈ 112) for ~4× sample multiplication. Use non-overlapping for evaluation.
+Extract 256×256 windows (154 m × 154 m at 60 cm). For NAIP this matches the native tile size — no resampling needed. For NEON (10 cm native, 1000×1000), downsample to ~60 cm GSD first so physical crown scale matches NAIP, then crop 256×256. Use overlapping windows at training (stride ≈ 128) for ~4× sample multiplication. Use non-overlapping for evaluation.
 
 ### 5.2 Metadata generation
 For each tile, compute:
@@ -412,7 +413,7 @@ For each tile, build an `annotated_mask` of shape `(H, W)` marking regions where
 | Horizontal/vertical flip | all 4 bands identically | Free |
 | Brightness/contrast jitter | uniform across bands | Don't desync RGB from NIR |
 | Per-band gain (±5%) | independently per band, small | Simulates inter-year radiometric drift |
-| Random crop within tile | all 4 bands identically | Useful if tiles are larger than 224 |
+| Random crop within tile | all 4 bands identically | Useful if tiles are larger than 256 |
 
 Skip: anything that desyncs bands more than mildly. Skip Gaussian blur (NAIP is already at sensor resolution). Skip cutout/erasing initially — try only if overfitting.
 
@@ -422,7 +423,7 @@ Skip: anything that desyncs bands more than mildly. Skip Gaussian blur (NAIP is 
 
 | Hyperparameter | Default | Notes |
 |---|---|---|
-| Tile size | 224×224 | Multiple of Clay's patch size (8) → 28×28 tokens |
+| Tile size | 256×256 | Matches NAIP native tile size; multiple of Clay's patch size (8) → 32×32 tokens. Use same dim across Stage B, Stage C, and inference. |
 | Clay variant | v1.5 (large, dim 1024, depth 24, patch 8, ~311M params) | The released v1.5.0 checkpoint |
 | Neck input channels | 1024 | = Clay v1.5 encoder dim |
 | Neck output channels | 128 | Halved from typical FPN 256 to stay trainable |
