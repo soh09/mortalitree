@@ -1,0 +1,35 @@
+# Stage C: NAIP finetuning with late encoder unfreezing
+model:
+  neck_in_channels: 1024     # Clay v1.5 large embedding dim
+  neck_out_channels: 128
+  num_queries: 124           # >= max trees per tile (spec gotcha #12)
+  hidden: 128
+  n_heads: 4
+  n_decoder_layers: 3
+  dropout: 0.1
+
+training:
+  total_epochs: 80
+  frozen_epochs: 30          # epochs before unfreezing encoder blocks
+  unfreeze_n_blocks: 2       # number of Clay transformer blocks to unfreeze
+  batch_size: 8
+  neck_head_lr: 5.0e-4
+  encoder_lr: 1.0e-5
+  weight_decay: 0.05
+  warmup_epochs: 5
+  num_workers: 4
+
+loss:
+  lam_cls: 1.0
+  lam_l1: 5.0
+  lam_giou: 2.0
+
+eval:
+  conf_thresh: 0.5           # starting threshold; sweep on val for best F1
+  iou_thresh: 0.5
+
+data:
+  tile_size: 224
+  augment: true
+  # Geographic split: provide separate train/val/test annotation JSONs
+  norm_stats_path: configs/naip_normalization.yaml
