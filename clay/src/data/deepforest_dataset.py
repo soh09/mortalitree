@@ -8,6 +8,7 @@ import torch
 from torch.utils.data import Dataset
 
 from .augmentation import NAIPAugmentation
+from .clay_meta import encode_latlon, encode_time
 
 # RGB wavelengths only (μm), in R, G, B order (matches GeoTIFF bands 1,2,3).
 RGB_WAVELENGTHS = torch.tensor([0.665, 0.560, 0.493])
@@ -79,8 +80,8 @@ class DeepForestDataset(Dataset):
             "pixels":      pixels,
             "wavelengths": RGB_WAVELENGTHS,
             "gsd":         torch.tensor([NAIP_GSD], dtype=torch.float32),
-            "time":        torch.tensor([week / 52.0, hour / 24.0], dtype=torch.float32),
-            "latlon":      torch.tensor([lat, lon], dtype=torch.float32),
+            "time":        encode_time(week, hour),
+            "latlon":      encode_latlon(lat, lon),
             "boxes":       boxes,
             "exhaustive":  bool(item.get("exhaustive", True)),
             "tile_path":   item["tile_path"],

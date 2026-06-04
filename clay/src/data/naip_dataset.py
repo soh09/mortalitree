@@ -8,6 +8,7 @@ import torch
 from torch.utils.data import Dataset
 
 from .augmentation import NAIPAugmentation
+from .clay_meta import encode_latlon, encode_time
 
 # NAIP wavelengths (μm) in Clay's band order: R, G, B, NIR
 # (from configs/metadata.yaml -> naip.band_order = [red, green, blue, nir]).
@@ -107,8 +108,8 @@ class NAIPTileDataset(Dataset):
             "pixels":     pixels,
             "wavelengths": NAIP_WAVELENGTHS,
             "gsd":        torch.tensor([NAIP_GSD], dtype=torch.float32),
-            "time":       torch.tensor([week / 52.0, hour / 24.0], dtype=torch.float32),
-            "latlon":     torch.tensor([lat, lon], dtype=torch.float32),
+            "time":       encode_time(week, hour),
+            "latlon":     encode_latlon(lat, lon),
             "boxes":      boxes,
             "exhaustive": bool(item.get("exhaustive", True)),
             "tile_path":  item["tile_path"],
