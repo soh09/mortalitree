@@ -2,7 +2,7 @@
 model:
   neck_in_channels: 1024     # Clay v1.5 large embedding dim
   neck_out_channels: 128
-  num_queries: 150           # >= max trees per tile; matches pipeline --max-trees 150 (gotcha #12)
+  num_queries: 500           # must match Stage B (checkpoint query-embedding shape)
   hidden: 128
   n_heads: 4
   n_decoder_layers: 3

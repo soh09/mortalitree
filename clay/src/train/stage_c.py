@@ -60,6 +60,7 @@ def run_stage_c(
     viz_every: int = 5,
     n_viz_tiles: int = 4,
     viz_conf_thresh: float = 0.5,
+    on_checkpoint=None,
 ):
     if device is None:
         device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -128,6 +129,9 @@ def run_stage_c(
                 {"epoch": epoch, "model": model.state_dict(), "val_f1": val_f1},
                 ckpt_dir / "stage_c_best.pt",
             )
+            # Persist immediately so a later crash/timeout can't lose the best model.
+            if on_checkpoint is not None:
+                on_checkpoint()
         else:
             patience_counter += 1
 
@@ -144,13 +148,16 @@ def run_stage_c(
 
         # Periodic visual check, merged into this epoch's single log call.
         if viz_every and ((epoch + 1) % viz_every == 0 or epoch == 0):
-            from ..eval.visualize import make_prediction_panels
-            panels = make_prediction_panels(
-                model, val_loader, device=device,
-                conf_thresh=viz_conf_thresh, n_tiles=n_viz_tiles,
-            )
-            log_dict.update(_wandb_images("stage_c/predictions", panels))
-            print(f"[Stage C] Logged {len(panels)} prediction visuals at epoch {epoch+1}")
+            try:
+                from ..eval.visualize import make_prediction_panels
+                panels = make_prediction_panels(
+                    model, val_loader, device=device,
+                    conf_thresh=viz_conf_thresh, n_tiles=n_viz_tiles,
+                )
+                log_dict.update(_wandb_images("stage_c/predictions", panels))
+                print(f"[Stage C] Logged {len(panels)} prediction visuals at epoch {epoch+1}")
+            except Exception as exc:
+                print(f"[Stage C] WARNING: prediction viz failed at epoch {epoch+1}: {exc}")
 
         _wandb_log(log_dict)
 

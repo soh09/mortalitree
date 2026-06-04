@@ -10,8 +10,11 @@ def rotate90(pixels: torch.Tensor, boxes: torch.Tensor, k: int) -> tuple[torch.T
     if boxes.shape[0] == 0:
         return pixels, boxes
     cx, cy, w, h = boxes.unbind(-1)
+    # torch.rot90 on dims [H, W] rotates each 90° step so a point (x, y) maps to
+    # (y, 1 - x) in normalized coords; the box w/h swap each step. (The previous
+    # `1 - cy, cx` was the inverse rotation — boxes turned opposite the image.)
     for _ in range(k % 4):
-        cx, cy, w, h = 1.0 - cy, cx, h, w
+        cx, cy, w, h = cy, 1.0 - cx, h, w
     boxes = torch.stack([cx, cy, w, h], dim=-1)
     return pixels, boxes
 

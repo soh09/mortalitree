@@ -1,4 +1,5 @@
 """Stage B: RGB tree-dataset pretraining. Encoder frozen; only neck + head trained."""
+import copy
 import time
 from pathlib import Path
 from typing import Optional
@@ -85,6 +86,7 @@ def run_stage_b(
     viz_every: int = 5,
     n_viz_tiles: int = 4,
     viz_conf_thresh: float = 0.5,
+    on_checkpoint=None,
 ):
     if device is None:
         device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -100,6 +102,15 @@ def run_stage_b(
         collate_fn = deepforest_collate_fn
 
     train_ds, val_ds = _split_train_val(dataset, val_fraction, seed=42)
+
+    # Augment train only: random_split gives two Subsets over the SAME dataset,
+    # so repoint the val subset at a shallow copy with augmentation off. The copy
+    # shares the parsed items/data (no re-read) — only `augment` differs. This
+    # keeps the val loss a clean, deterministic signal.
+    if getattr(dataset, "augment", None) is not None:
+        val_clean = copy.copy(dataset)
+        val_clean.augment = None
+        val_ds.dataset = val_clean
 
     train_loader = DataLoader(
         train_ds, batch_size=batch_size, shuffle=True,
@@ -145,6 +156,9 @@ def run_stage_b(
                 {"epoch": epoch, "model": model.state_dict(), "val_loss": val_loss},
                 ckpt_dir / "stage_b_best.pt",
             )
+            # Persist immediately so a later crash/timeout can't lose the best model.
+            if on_checkpoint is not None:
+                on_checkpoint()
         else:
             patience_counter += 1
 
@@ -160,13 +174,16 @@ def run_stage_b(
         # Periodic visual check: a few val tiles with predicted vs GT boxes,
         # merged into this epoch's single log call so the media actually shows.
         if viz_every and ((epoch + 1) % viz_every == 0 or epoch == 0):
-            from ..eval.visualize import make_prediction_panels
-            panels = make_prediction_panels(
-                model, val_loader, device=device,
-                conf_thresh=viz_conf_thresh, n_tiles=n_viz_tiles,
-            )
-            log_dict.update(_wandb_images("stage_b/predictions", panels))
-            print(f"[Stage B] Logged {len(panels)} prediction visuals at epoch {epoch+1}")
+            try:
+                from ..eval.visualize import make_prediction_panels
+                panels = make_prediction_panels(
+                    model, val_loader, device=device,
+                    conf_thresh=viz_conf_thresh, n_tiles=n_viz_tiles,
+                )
+                log_dict.update(_wandb_images("stage_b/predictions", panels))
+                print(f"[Stage B] Logged {len(panels)} prediction visuals at epoch {epoch+1}")
+            except Exception as exc:
+                print(f"[Stage B] WARNING: prediction viz failed at epoch {epoch+1}: {exc}")
 
         _wandb_log(log_dict)
 

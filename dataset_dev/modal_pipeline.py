@@ -21,11 +21,16 @@ locally). Patches with more than --max-trees alive boxes are dropped (default
 Requires the matching imagery already on the volume (run modal_neon_dl.py first
 for the same --sites).
 
+Output goes to /data/{out_tag}/ on the volume (default out_tag="patches"). Use a
+distinct tag per config so different thresholds / site sets stay isolated and
+reproducible; the shared imagery and label chunks are reused either way.
+
 Usage:
     modal run modal_pipeline.py --sites SERC               # one site, max 150 trees/patch
     modal run modal_pipeline.py --sites SERC,TEAK,SOAP     # several
     modal run modal_pipeline.py --sites SERC --max-trees 200
     modal run modal_pipeline.py --sites SERC --max-trees 0 # no density filter
+    modal run modal_pipeline.py --max-trees 500 --out-tag patches_q500
     modal run modal_pipeline.py --sites SERC --dry-run     # plan only
 """
 from __future__ import annotations
@@ -99,7 +104,7 @@ vol = modal.Volume.from_name(VOLUME_NAME, create_if_missing=True)
 )
 def process_tile(
     site: str, year: str, month: str, east: int, north: int,
-    max_trees: int = 0,
+    max_trees: int = 0, out_root: str = "/data/patches",
 ) -> dict:
     """Process one 1 km source tile, write patches + label chunk to the volume,
     return a small ack dict (so we never trigger Modal's blob result path).
@@ -134,9 +139,9 @@ def process_tile(
         ack["status"] = "missing_pair"; return ack
     rgb_path, hsi_path = rgb_glob[0], hsi_glob[0]
 
-    out_dir = Path(f"/data/patches/{site}")
+    out_dir = Path(out_root) / site
     out_dir.mkdir(parents=True, exist_ok=True)
-    chunk_dir = Path(f"/data/patches/_chunks/{site}")
+    chunk_dir = Path(out_root) / "_chunks" / site
     chunk_dir.mkdir(parents=True, exist_ok=True)
 
     # --- Load HSI: mean NIR and NDVI at 1 m ----------------------------------
@@ -158,8 +163,14 @@ def process_tile(
 
     nir_stack[nir_stack == nodata] = np.nan
     red_stack[red_stack == nodata] = np.nan
-    nir = np.nanmean(nir_stack, axis=2) / scale
-    red = np.nanmean(red_stack, axis=2) / scale
+    # All-NaN slices (nodata pixels on partial/edge tiles) make nanmean warn
+    # "Mean of empty slice" and return NaN — which is exactly what we want
+    # (NaN -> dropped by NDVI checks / zeroed in the NIR patch). Silence the noise.
+    import warnings
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", category=RuntimeWarning)
+        nir = np.nanmean(nir_stack, axis=2) / scale
+        red = np.nanmean(red_stack, axis=2) / scale
     ndvi = (nir - red) / (nir + red + 1e-8)
 
     parts = [p.strip() for p in map_info.split(",")]
@@ -236,18 +247,26 @@ def process_tile(
                 lon, lat = to_wgs84.transform(patch_cx_utm, patch_cy_utm)
 
                 # --- RGB area-average from 0.1 m to 0.6 m --------------------
-                cl, rt = (~rgb_src.transform) * (patch_left, patch_top)
-                cr, rb = (~rgb_src.transform) * (patch_right, patch_bottom)
-                cc0, cc1 = int(min(cl, cr)), int(max(cl, cr))
-                rr0, rr1 = int(min(rt, rb)), int(max(rt, rb))
-                win = rasterio.windows.Window(cc0, rr0, cc1 - cc0, rr1 - rr0)
+                # from_bounds gives the exact (possibly fractional / out-of-range)
+                # window for this patch's UTM box. boundless=True is REQUIRED: on
+                # partial/edge tiles the window runs past the raster, and without
+                # it rasterio stretches the in-bounds slice across the whole 256,
+                # sliding the image out from under the (correctly placed) boxes.
+                win = rasterio.windows.from_bounds(
+                    patch_left, patch_bottom, patch_right, patch_top,
+                    rgb_src.transform,
+                )
                 rgb = rgb_src.read(
                     [1, 2, 3], window=win,
                     out_shape=(3, PATCH_PX, PATCH_PX),
                     resampling=Resampling.average,
+                    boundless=True, fill_value=0,
                 )
 
                 # --- HSI NIR crop + bilinear upsample to 0.6 m ---------------
+                # Same edge-tile hazard as RGB: place the in-bounds NIR into a
+                # full-size frame at the correct offset and zero-pad the rest,
+                # then upsample — so a clipped crop is not stretched to fill 256.
                 c0f = (patch_left  - x0_hsi) / px_hsi
                 c1f = (patch_right - x0_hsi) / px_hsi
                 r0f = (y0_hsi - patch_top)   / px_hsi
@@ -256,11 +275,16 @@ def process_tile(
                 cmx = int(np.ceil(max(c0f, c1f)))
                 rmn = int(np.floor(min(r0f, r1f)))
                 rmx = int(np.ceil(max(r0f, r1f)))
-                nir_crop = nir[rmn:rmx, cmn:cmx]
+                Hh, Ww = nir.shape
+                full = np.zeros((max(1, rmx - rmn), max(1, cmx - cmn)), dtype=np.float32)
+                cs, ce = max(0, cmn), min(Ww, cmx)
+                rs, re = max(0, rmn), min(Hh, rmx)
+                if ce > cs and re > rs:
+                    full[rs - rmn:re - rmn, cs - cmn:ce - cmn] = np.nan_to_num(
+                        nir[rs:re, cs:ce], nan=0.0)
                 nir_up = zoom(
-                    nir_crop,
-                    zoom=(PATCH_PX / nir_crop.shape[0],
-                          PATCH_PX / nir_crop.shape[1]),
+                    full,
+                    zoom=(PATCH_PX / full.shape[0], PATCH_PX / full.shape[1]),
                     order=1,
                 )
                 nir_q = np.clip(nir_up * 255.0, 0, 255).astype(np.uint8)
@@ -318,14 +342,14 @@ def process_tile(
     return ack
 
 
-@app.function(image=image, volumes={"/data": vol}, timeout=600)
-def write_csvs() -> dict:
-    """Read per-tile chunks under /data/patches/_chunks/{SITE}/labels_*.csv,
-    concatenate into /data/patches/labels_{SITE}.csv and /data/patches/labels.csv.
+@app.function(image=image, volumes={"/data": vol}, timeout=6000)
+def write_csvs(out_root: str = "/data/patches") -> dict:
+    """Read per-tile chunks under {out_root}/_chunks/{SITE}/labels_*.csv,
+    concatenate into {out_root}/labels_{SITE}.csv and {out_root}/labels.csv.
     """
     import pandas as pd
 
-    out_dir = Path("/data/patches")
+    out_dir = Path(out_root)
     out_dir.mkdir(parents=True, exist_ok=True)
     chunks_root = out_dir / "_chunks"
     if not chunks_root.exists():
@@ -423,13 +447,19 @@ def main(
     year: str = "2019",
     dry_run: bool = False,
     max_trees: int = 150,
+    out_tag: str = "patches",
 ):
     """Process every site in --sites (comma-separated NEON codes). Each site's
     CSV is fetched from Zenodo to the volume and chunked server-side, so nothing
     is read locally.
 
     max_trees: drop patches with more than this many alive boxes (0 = keep all).
-    Set it to your detector's num_queries so no patch exceeds the query budget."""
+    Set it to your detector's num_queries so no patch exceeds the query budget.
+
+    out_tag: output folder name under /data on the volume (default "patches").
+    Use a distinct tag per config (e.g. patches_q500) so different thresholds /
+    site sets don't overwrite each other; shared imagery + label chunks are
+    reused regardless. Point training at /neon/{out_tag}/labels.csv."""
     from rich.console import Console
     from rich.progress import (
         BarColumn, MofNCompleteColumn, Progress, SpinnerColumn,
@@ -458,8 +488,9 @@ def main(
         return out
 
     # --- Plan: intersect annotated tiles (CSV) with paired tiles (volume) ---
+    out_root = f"/data/{out_tag}"
     filt = f"max {max_trees} trees/patch" if max_trees else "no density filter"
-    console.rule(f"[bold cyan]Patch pipeline for {site_list}  ({filt})")
+    console.rule(f"[bold cyan]Patch pipeline for {site_list}  ({filt}) -> {out_root}")
     jobs: list[tuple] = []
     plan = Table(show_header=True, header_style="bold")
     plan.add_column("site"); plan.add_column("annotated")
@@ -475,7 +506,7 @@ def main(
         target_utms = sorted({tuple(g.split("_")) for g in target_geo})
 
         for east, north in target_utms:
-            jobs.append((site, year, month, int(east), int(north), max_trees))
+            jobs.append((site, year, month, int(east), int(north), max_trees, out_root))
         plan.add_row(site, str(len(annotated)), str(len(vol_paired)),
                      str(len(target_utms)))
 
@@ -530,7 +561,7 @@ def main(
 
     # --- Concat per-tile chunks into per-site + combined CSVs on the volume --
     console.rule("[bold cyan]Writing CSVs")
-    summary = write_csvs.remote()
+    summary = write_csvs.remote(out_root)
     tbl = Table(show_header=True, header_style="bold")
     tbl.add_column("site"); tbl.add_column("rows")
     for k, v in summary.items():
