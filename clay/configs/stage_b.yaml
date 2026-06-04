@@ -2,14 +2,14 @@
 model:
   neck_in_channels: 1024     # Clay v1.5 large embedding dim
   neck_out_channels: 128
-  num_queries: 150           # >= max trees per tile; matches pipeline --max-trees 150 (gotcha #12)
+  num_queries: 500           # >= max trees per tile; matches pipeline --max-trees 500 (gotcha #12)
   hidden: 128
   n_heads: 4
   n_decoder_layers: 3
   dropout: 0.1
 
 training:
-  total_epochs: 1
+  total_epochs: 50
   batch_size: 16
   lr: 1.0e-3
   weight_decay: 0.05

@@ -1,4 +1,5 @@
 """Stage B: RGB tree-dataset pretraining. Encoder frozen; only neck + head trained."""
+import copy
 import time
 from pathlib import Path
 from typing import Optional
@@ -59,6 +60,7 @@ def run_stage_b(
     viz_every: int = 5,
     n_viz_tiles: int = 4,
     viz_conf_thresh: float = 0.5,
+    on_checkpoint=None,
 ):
     if device is None:
         device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -76,6 +78,15 @@ def run_stage_b(
     n_val = max(1, int(len(dataset) * val_fraction))
     n_train = len(dataset) - n_val
     train_ds, val_ds = random_split(dataset, [n_train, n_val])
+
+    # Augment train only: random_split gives two Subsets over the SAME dataset,
+    # so repoint the val subset at a shallow copy with augmentation off. The copy
+    # shares the parsed items/data (no re-read) — only `augment` differs. This
+    # keeps the val loss a clean, deterministic signal.
+    if getattr(dataset, "augment", None) is not None:
+        val_clean = copy.copy(dataset)
+        val_clean.augment = None
+        val_ds.dataset = val_clean
 
     train_loader = DataLoader(
         train_ds, batch_size=batch_size, shuffle=True,
@@ -121,6 +132,9 @@ def run_stage_b(
                 {"epoch": epoch, "model": model.state_dict(), "val_loss": val_loss},
                 ckpt_dir / "stage_b_best.pt",
             )
+            # Persist immediately so a later crash/timeout can't lose the best model.
+            if on_checkpoint is not None:
+                on_checkpoint()
         else:
             patience_counter += 1
 

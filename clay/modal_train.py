@@ -93,7 +93,7 @@ except Exception:
 
 COMMON = dict(
     gpu="A10G",
-    timeout=60 * 60 * 6,       # 6 hours max
+    timeout=60 * 60 * 24,       # 6 hours max
     volumes={DATA_DIR: data_vol, CKPT_DIR: ckpt_vol, NEON_DIR: neon_vol},
     secrets=_wandb_secret,
 )
@@ -227,6 +227,7 @@ def stage_b(
             lam_giou=l["lam_giou"],
             device="cuda",
             num_workers=t["num_workers"],
+            on_checkpoint=ckpt_vol.commit,   # persist each new best immediately
         )
     finally:
         if run is not None:
@@ -279,6 +280,7 @@ def stage_c(
             device="cuda",
             num_workers=t["num_workers"],
             stage_b_checkpoint=stage_b_checkpoint,
+            on_checkpoint=ckpt_vol.commit,   # persist each new best immediately
         )
     finally:
         if run is not None:
