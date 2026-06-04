@@ -150,13 +150,16 @@ def run_stage_b(
         # Periodic visual check: a few val tiles with predicted vs GT boxes,
         # merged into this epoch's single log call so the media actually shows.
         if viz_every and ((epoch + 1) % viz_every == 0 or epoch == 0):
-            from ..eval.visualize import make_prediction_panels
-            panels = make_prediction_panels(
-                model, val_loader, device=device,
-                conf_thresh=viz_conf_thresh, n_tiles=n_viz_tiles,
-            )
-            log_dict.update(_wandb_images("stage_b/predictions", panels))
-            print(f"[Stage B] Logged {len(panels)} prediction visuals at epoch {epoch+1}")
+            try:
+                from ..eval.visualize import make_prediction_panels
+                panels = make_prediction_panels(
+                    model, val_loader, device=device,
+                    conf_thresh=viz_conf_thresh, n_tiles=n_viz_tiles,
+                )
+                log_dict.update(_wandb_images("stage_b/predictions", panels))
+                print(f"[Stage B] Logged {len(panels)} prediction visuals at epoch {epoch+1}")
+            except Exception as exc:
+                print(f"[Stage B] WARNING: prediction viz failed at epoch {epoch+1}: {exc}")
 
         _wandb_log(log_dict)
 

@@ -141,8 +141,11 @@ def fetch_clay_ckpt():
     _ensure_clay_ckpt()
 
 
-def _setup(config_path: str):
-    """Container-side setup: put src on the path, seed, load config + model."""
+def _setup(config_path: str, num_queries: int = 0):
+    """Container-side setup: put src on the path, seed, load config + model.
+
+    num_queries > 0 overrides model.num_queries from the YAML (so you can match
+    it to a dataset's --max-trees from the CLI without editing the config)."""
     import sys
 
     import torch
@@ -156,6 +159,10 @@ def _setup(config_path: str):
 
     with open(config_path) as f:
         cfg = yaml.safe_load(f)
+
+    if num_queries:
+        print(f"[setup] num_queries override: {cfg['model']['num_queries']} -> {num_queries}")
+        cfg["model"]["num_queries"] = num_queries
 
     m = cfg["model"]
     encoder = load_clay_encoder(CLAY_CKPT)
@@ -178,16 +185,25 @@ def _setup(config_path: str):
 @app.function(**COMMON)
 def stage_b(
     data_source: str = "neon",
+    out_tag: str = "patches",
+    num_queries: int = 0,
+    labels_csv: str = "",
+    patches_root: str = "",
     stage_b_annotations: str = "/data/deepforest.json",
-    labels_csv: str = "/neon/patches/labels.csv",
-    patches_root: str = "/neon/patches",
     config: str = "/root/configs/stage_b.yaml",
 ):
+    """out_tag: which pipeline output dir on the `mot` volume to train on
+    (mounted at /neon/{out_tag}); mirrors modal_pipeline.py --out-tag.
+    num_queries: override model.num_queries (set it to that run's --max-trees)."""
     _ensure_clay_ckpt()
-    model, cfg = _setup(config)
+    model, cfg = _setup(config, num_queries)
     from src.train.stage_b import run_stage_b
 
     t, l, d = cfg["training"], cfg["loss"], cfg.get("data", {})
+
+    # Derive the data paths from out_tag unless explicitly overridden.
+    labels_csv = labels_csv or f"/neon/{out_tag}/labels.csv"
+    patches_root = patches_root or f"/neon/{out_tag}"
 
     # Default: 4-band NEON patches (mot volume) produced by modal_pipeline.py.
     # Pass data_source="deepforest" to fall back to the RGB JSON on clay-data.
@@ -203,6 +219,17 @@ def stage_b(
         )
         collate_fn = deepforest_collate_fn
         print(f"[Stage B] NEON dataset: {len(dataset)} patches from {labels_csv}")
+
+        # Q must be >= the densest patch or Hungarian matching silently drops GT
+        # (spec gotcha #12). Warn loudly if the data outgrew num_queries.
+        q = cfg["model"]["num_queries"]
+        max_boxes = max((len(it["boxes"]) for it in dataset.items), default=0)
+        if max_boxes > q:
+            print(f"[Stage B] *** WARNING: densest patch has {max_boxes} boxes > "
+                  f"num_queries={q}; GT will be dropped. Re-run with "
+                  f"--num-queries {max_boxes} (and match Stage C). ***")
+        else:
+            print(f"[Stage B] densest patch = {max_boxes} boxes <= num_queries={q} (ok)")
 
     run = _wandb_init(
         "stage_b", cfg,
@@ -244,10 +271,13 @@ def stage_c(
     train_annotations: str = "/data/naip_train.json",
     val_annotations:   str = "/data/naip_val.json",
     stage_b_checkpoint: str = "/checkpoints/stage_b_best.pt",
+    num_queries: int = 0,
     config: str = "/root/configs/stage_c.yaml",
 ):
+    """num_queries must MATCH the Stage B run (the query embedding is part of the
+    checkpoint being loaded), so pass the same value you used for Stage B."""
     _ensure_clay_ckpt()
-    model, cfg = _setup(config)
+    model, cfg = _setup(config, num_queries)
     from src.train.stage_c import run_stage_c
 
     t, l = cfg["training"], cfg["loss"]
@@ -296,14 +326,20 @@ def stage_c(
 def main(
     stage: str = "both",
     data_source: str = "neon",
+    out_tag: str = "patches",
+    num_queries: int = 0,
     stage_b_annotations: str = "/data/deepforest.json",
     train_annotations:   str = "/data/naip_train.json",
     val_annotations:     str = "/data/naip_val.json",
 ):
+    """out_tag selects the Stage B data dir (/neon/{out_tag}); num_queries
+    overrides model.num_queries for BOTH stages (keep them equal)."""
     if stage in ("b", "both"):
-        print(f"Launching Stage B (data_source={data_source})...")
+        print(f"Launching Stage B (data_source={data_source}, out_tag={out_tag})...")
         stage_b.remote(
             data_source=data_source,
+            out_tag=out_tag,
+            num_queries=num_queries,
             stage_b_annotations=stage_b_annotations,
         )
 
@@ -312,4 +348,5 @@ def main(
         stage_c.remote(
             train_annotations=train_annotations,
             val_annotations=val_annotations,
+            num_queries=num_queries,
         )

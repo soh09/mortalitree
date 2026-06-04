@@ -163,8 +163,14 @@ def process_tile(
 
     nir_stack[nir_stack == nodata] = np.nan
     red_stack[red_stack == nodata] = np.nan
-    nir = np.nanmean(nir_stack, axis=2) / scale
-    red = np.nanmean(red_stack, axis=2) / scale
+    # All-NaN slices (nodata pixels on partial/edge tiles) make nanmean warn
+    # "Mean of empty slice" and return NaN — which is exactly what we want
+    # (NaN -> dropped by NDVI checks / zeroed in the NIR patch). Silence the noise.
+    import warnings
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", category=RuntimeWarning)
+        nir = np.nanmean(nir_stack, axis=2) / scale
+        red = np.nanmean(red_stack, axis=2) / scale
     ndvi = (nir - red) / (nir + red + 1e-8)
 
     parts = [p.strip() for p in map_info.split(",")]
@@ -241,18 +247,26 @@ def process_tile(
                 lon, lat = to_wgs84.transform(patch_cx_utm, patch_cy_utm)
 
                 # --- RGB area-average from 0.1 m to 0.6 m --------------------
-                cl, rt = (~rgb_src.transform) * (patch_left, patch_top)
-                cr, rb = (~rgb_src.transform) * (patch_right, patch_bottom)
-                cc0, cc1 = int(min(cl, cr)), int(max(cl, cr))
-                rr0, rr1 = int(min(rt, rb)), int(max(rt, rb))
-                win = rasterio.windows.Window(cc0, rr0, cc1 - cc0, rr1 - rr0)
+                # from_bounds gives the exact (possibly fractional / out-of-range)
+                # window for this patch's UTM box. boundless=True is REQUIRED: on
+                # partial/edge tiles the window runs past the raster, and without
+                # it rasterio stretches the in-bounds slice across the whole 256,
+                # sliding the image out from under the (correctly placed) boxes.
+                win = rasterio.windows.from_bounds(
+                    patch_left, patch_bottom, patch_right, patch_top,
+                    rgb_src.transform,
+                )
                 rgb = rgb_src.read(
                     [1, 2, 3], window=win,
                     out_shape=(3, PATCH_PX, PATCH_PX),
                     resampling=Resampling.average,
+                    boundless=True, fill_value=0,
                 )
 
                 # --- HSI NIR crop + bilinear upsample to 0.6 m ---------------
+                # Same edge-tile hazard as RGB: place the in-bounds NIR into a
+                # full-size frame at the correct offset and zero-pad the rest,
+                # then upsample — so a clipped crop is not stretched to fill 256.
                 c0f = (patch_left  - x0_hsi) / px_hsi
                 c1f = (patch_right - x0_hsi) / px_hsi
                 r0f = (y0_hsi - patch_top)   / px_hsi
@@ -261,11 +275,16 @@ def process_tile(
                 cmx = int(np.ceil(max(c0f, c1f)))
                 rmn = int(np.floor(min(r0f, r1f)))
                 rmx = int(np.ceil(max(r0f, r1f)))
-                nir_crop = nir[rmn:rmx, cmn:cmx]
+                Hh, Ww = nir.shape
+                full = np.zeros((max(1, rmx - rmn), max(1, cmx - cmn)), dtype=np.float32)
+                cs, ce = max(0, cmn), min(Ww, cmx)
+                rs, re = max(0, rmn), min(Hh, rmx)
+                if ce > cs and re > rs:
+                    full[rs - rmn:re - rmn, cs - cmn:ce - cmn] = np.nan_to_num(
+                        nir[rs:re, cs:ce], nan=0.0)
                 nir_up = zoom(
-                    nir_crop,
-                    zoom=(PATCH_PX / nir_crop.shape[0],
-                          PATCH_PX / nir_crop.shape[1]),
+                    full,
+                    zoom=(PATCH_PX / full.shape[0], PATCH_PX / full.shape[1]),
                     order=1,
                 )
                 nir_q = np.clip(nir_up * 255.0, 0, 255).astype(np.uint8)
