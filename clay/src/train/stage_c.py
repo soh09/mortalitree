@@ -12,6 +12,28 @@ from ..train.schedulers import build_stage_b_optimizer_and_scheduler, build_stag
 from ..eval.metrics import compute_f1_at_iou
 
 
+def _wandb_log(metrics: dict, step: Optional[int] = None) -> None:
+    """Log to W&B only if a run is active (no-op otherwise)."""
+    try:
+        import wandb
+        if wandb.run is not None:
+            wandb.log(metrics, step=step)
+    except ImportError:
+        pass
+
+
+def _wandb_log_images(key: str, images: list, step: Optional[int] = None) -> None:
+    """Log a list of (H,W,3) uint8 arrays as a W&B image panel (no-op if no run)."""
+    if not images:
+        return
+    try:
+        import wandb
+        if wandb.run is not None:
+            wandb.log({key: [wandb.Image(im) for im in images]}, step=step)
+    except ImportError:
+        pass
+
+
 def run_stage_c(
     model: TreeDetector,
     train_annotations_path: str,
@@ -32,6 +54,9 @@ def run_stage_c(
     device: Optional[str] = None,
     num_workers: int = 4,
     stage_b_checkpoint: Optional[str] = None,
+    viz_every: int = 5,
+    n_viz_tiles: int = 4,
+    viz_conf_thresh: float = 0.5,
 ):
     if device is None:
         device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -85,11 +110,12 @@ def run_stage_c(
 
         train_loss = _run_epoch(model, train_loader, optimizer, device, lam_cls, lam_l1, lam_giou, train=True)
         val_f1, val_loss = _val_epoch(model, val_loader, device, lam_cls, lam_l1, lam_giou)
+        lr = optimizer.param_groups[0]["lr"]
         scheduler.step()
 
         print(
             f"[Stage C] Epoch {epoch+1}/{total_epochs}  "
-            f"train_loss={train_loss:.4f}  val_loss={val_loss:.4f}  val_f1={val_f1:.4f}"
+            f"train_loss={train_loss:.4f}  val_loss={val_loss:.4f}  val_f1={val_f1:.4f}  lr={lr:.2e}"
         )
 
         if val_f1 > best_val_f1:
@@ -101,9 +127,31 @@ def run_stage_c(
             )
         else:
             patience_counter += 1
-            if patience_counter >= patience:
-                print(f"[Stage C] Early stopping at epoch {epoch+1}")
-                break
+
+        _wandb_log({
+            "stage_c/epoch": epoch + 1,
+            "stage_c/train_loss": train_loss,
+            "stage_c/val_loss": val_loss,
+            "stage_c/val_f1": val_f1,
+            "stage_c/best_val_f1": best_val_f1,
+            "stage_c/lr": lr,
+            "stage_c/encoder_unfrozen": int(epoch >= frozen_epochs),
+            "stage_c/patience_counter": patience_counter,
+        }, step=epoch)
+
+        # Periodic visual check: a few val tiles with predicted vs GT boxes.
+        if viz_every and ((epoch + 1) % viz_every == 0 or epoch == 0):
+            from ..eval.visualize import make_prediction_panels
+            panels = make_prediction_panels(
+                model, val_loader, device=device,
+                conf_thresh=viz_conf_thresh, n_tiles=n_viz_tiles,
+            )
+            _wandb_log_images("stage_c/predictions", panels, step=epoch)
+            print(f"[Stage C] Logged {len(panels)} prediction visuals at epoch {epoch+1}")
+
+        if patience_counter >= patience:
+            print(f"[Stage C] Early stopping at epoch {epoch+1}")
+            break
 
     torch.save({"epoch": epoch, "model": model.state_dict()}, ckpt_dir / "stage_c_final.pt")
     print(f"[Stage C] Done. Best val F1: {best_val_f1:.4f}")

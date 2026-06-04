@@ -1,17 +1,20 @@
 """Download NEON paired (HSI, RGB) AOP tiles to a Modal volume.
 
 Restricted to tiles that have Weinstein 2020 annotations (so we don't pull
-hundreds of GB of pixels we have no labels for).
+hundreds of GB of pixels we have no labels for). The annotation CSVs are
+fetched from Zenodo straight to the volume server-side, so they never have to
+be downloaded locally.
 
 Usage:
-    modal run modal_neon_dl.py                      # TEAK 2019, default CSV
-    modal run modal_neon_dl.py --dry-run            # just print the plan
-    modal run modal_neon_dl.py --max-tiles 3        # smoke-test with 3 paired tiles
-    modal run modal_neon_dl.py --site SOAP
+    modal run modal_neon_dl.py --sites SERC                 # one site
+    modal run modal_neon_dl.py --sites SERC,TEAK,SOAP       # several
+    modal run modal_neon_dl.py --sites SERC --dry-run       # just print the plan
+    modal run modal_neon_dl.py --sites SERC --max-tiles 3   # smoke-test 3 tiles
 
-Layout on the volume (name: neon-aop):
+Layout on the volume (name: mot):
+    /labels/{SITE}_{YEAR}.csv
     /{SITE}/hyperspectral/NEON_*_reflectance.h5
-    /{SITE}/rgb/2019_{SITE}_*_image.tif
+    /{SITE}/rgb/{YEAR}_{SITE}_*_image.tif
 """
 from __future__ import annotations
 
@@ -24,6 +27,9 @@ API = "https://data.neonscience.org/api/v0"
 HSI_DPID = "DP3.30006.001"
 RGB_DPID = "DP3.30010.001"
 UTM_RE = re.compile(r"(\d{6})_(\d{7})")
+
+# Weinstein 2020 prediction CSVs live in this Zenodo record as {SITE}_{YEAR}.csv.
+ZENODO_CSV_URL = "https://zenodo.org/records/3765872/files/{name}?download=1"
 
 VOLUME_NAME = "mot"
 APP_NAME = "momrtalitree"
@@ -93,16 +99,51 @@ def download_one(url: str, dest_rel: str, expected_size: int) -> tuple[str, int,
     return dest.name, dest.stat().st_size, False
 
 
+@app.function(image=image, volumes={"/data": vol}, timeout=3600, retries=2)
+def fetch_csv(site: str, year: str) -> list[str]:
+    """Download {SITE}_{YEAR}.csv from Zenodo to the volume (skip if present),
+    and return the unique annotated geo_index values. Runs server-side so the
+    (large) CSV never has to touch the local machine."""
+    import pandas as pd
+    import requests
+
+    name = f"{site}_{year}.csv"
+    dest = Path("/data/labels") / name
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    if not dest.exists():
+        url = ZENODO_CSV_URL.format(name=name)
+        tmp = dest.with_suffix(".part")
+        with requests.get(url, stream=True, timeout=600) as r:
+            r.raise_for_status()
+            with open(tmp, "wb") as fh:
+                for chunk in r.iter_content(1 << 20):
+                    fh.write(chunk)
+        tmp.rename(dest)
+    geo = pd.read_csv(dest, usecols=["geo_index"])["geo_index"].astype(str).unique()
+    return sorted(geo.tolist())
+
+
 @app.local_entrypoint()
 def main(
-    site: str = "SOAP",
+    # sites: str = "BART, BLAN, BONA, CLBJ, DEJU, DELA, HARV, LENO, MLBS, NIWO, OSBS, RMNP, SERC, SJER, SOAP, TALL, TEAK, WREF, YELL",
+    sites: str = "BART, BLAN, BONA, CLBJ, DEJU, SJER, SOAP, TALL, TEAK, WREF, YELL",
     year: str = "2019",
-    csv_path: str = "",
     dry_run: bool = False,
     max_tiles: int = 0,
 ):
-    import pandas as pd
     from rich.console import Console
+
+    console = Console()
+    site_list = [s.strip().upper() for s in sites.split(",") if s.strip()]
+    if not site_list:
+        console.print("[red]pass --sites SITE1,SITE2,...  "
+                      "(CSVs are auto-fetched from Zenodo to the volume)[/red]")
+        return
+    for site in site_list:
+        _download_site(console, site, year, dry_run, max_tiles)
+
+
+def _download_site(console, site: str, year: str, dry_run: bool, max_tiles: int):
     from rich.progress import (
         BarColumn,
         MofNCompleteColumn,
@@ -114,14 +155,10 @@ def main(
     )
     from rich.table import Table
 
-    console = Console()
-    csv_default = Path(__file__).parent / "2020weinstein_labels" / f"{site}_{year}.csv"
-    csv_p = Path(csv_path) if csv_path else csv_default
-
-    # ---- 1. Annotated tiles from CSV --------------------------------------
+    # ---- 1. Annotated tiles from CSV (fetched to volume from Zenodo) -------
     console.rule(f"[bold cyan]NEON {site} {year} — planning")
-    console.print(f"reading [yellow]{csv_p}[/yellow] ...")
-    annotated = set(pd.read_csv(csv_p, usecols=["geo_index"])["geo_index"].unique())
+    console.print("fetching CSV from Zenodo to volume ...")
+    annotated = set(fetch_csv.remote(site, year))
     console.print(f"  {len(annotated):>5} annotated tiles in CSV")
 
     # ---- 2. Available files from NEON -------------------------------------

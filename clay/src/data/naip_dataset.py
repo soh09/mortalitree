@@ -61,7 +61,7 @@ class NAIPTileDataset(Dataset):
         annotations_path: str,
         norm_stats_path: Optional[str] = None,
         augment: bool = True,
-        tile_size: int = 224,
+        tile_size: int = 256,
     ):
         with open(annotations_path) as f:
             self.items = json.load(f)

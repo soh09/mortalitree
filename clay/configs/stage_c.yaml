@@ -2,7 +2,7 @@
 model:
   neck_in_channels: 1024     # Clay v1.5 large embedding dim
   neck_out_channels: 128
-  num_queries: 124           # >= max trees per tile (spec gotcha #12)
+  num_queries: 150           # >= max trees per tile; matches pipeline --max-trees 150 (gotcha #12)
   hidden: 128
   n_heads: 4
   n_decoder_layers: 3
@@ -29,7 +29,7 @@ eval:
   iou_thresh: 0.5
 
 data:
-  tile_size: 224
+  tile_size: 256
   augment: true
   # Geographic split: provide separate train/val/test annotation JSONs
   norm_stats_path: configs/naip_normalization.yaml

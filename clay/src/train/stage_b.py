@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Optional
 
 import torch
-from torch.utils.data import DataLoader, random_split
+from torch.utils.data import DataLoader, Dataset, random_split
 
 from ..data.deepforest_dataset import DeepForestDataset, deepforest_collate_fn
 from ..model.detector import TreeDetector
@@ -12,10 +12,33 @@ from ..train.losses import batch_matching_loss
 from ..train.schedulers import build_stage_b_optimizer_and_scheduler
 
 
+def _wandb_log(metrics: dict, step: Optional[int] = None) -> None:
+    """Log to Weights & Biases if (and only if) a run is active. No-op otherwise,
+    so src stays decoupled from the Modal/wandb setup."""
+    try:
+        import wandb
+        if wandb.run is not None:
+            wandb.log(metrics, step=step)
+    except ImportError:
+        pass
+
+
+def _wandb_log_images(key: str, images: list, step: Optional[int] = None) -> None:
+    """Log a list of (H,W,3) uint8 arrays as a W&B image panel (no-op if no run)."""
+    if not images:
+        return
+    try:
+        import wandb
+        if wandb.run is not None:
+            wandb.log({key: [wandb.Image(im) for im in images]}, step=step)
+    except ImportError:
+        pass
+
+
 def run_stage_b(
     model: TreeDetector,
-    annotations_path: str,
-    checkpoint_dir: str,
+    annotations_path: Optional[str] = None,
+    checkpoint_dir: str = "checkpoints",
     total_epochs: int = 50,
     batch_size: int = 16,
     lr: float = 1e-3,
@@ -27,23 +50,36 @@ def run_stage_b(
     lam_giou: float = 2.0,
     device: Optional[str] = None,
     num_workers: int = 4,
+    dataset: Optional[Dataset] = None,
+    collate_fn=None,
+    viz_every: int = 5,
+    n_viz_tiles: int = 4,
+    viz_conf_thresh: float = 0.5,
 ):
     if device is None:
         device = "cuda" if torch.cuda.is_available() else "cpu"
     model = model.to(device)
 
-    dataset = DeepForestDataset(annotations_path, augment=True)
+    # Default to the DeepForest RGB JSON; callers may pass a pre-built dataset
+    # (e.g. NeonPatchDataset for 4-band NEON patches) and matching collate_fn.
+    if dataset is None:
+        if annotations_path is None:
+            raise ValueError("Provide either `dataset` or `annotations_path`.")
+        dataset = DeepForestDataset(annotations_path, augment=True)
+    if collate_fn is None:
+        collate_fn = deepforest_collate_fn
+
     n_val = max(1, int(len(dataset) * val_fraction))
     n_train = len(dataset) - n_val
     train_ds, val_ds = random_split(dataset, [n_train, n_val])
 
     train_loader = DataLoader(
         train_ds, batch_size=batch_size, shuffle=True,
-        collate_fn=deepforest_collate_fn, num_workers=num_workers, pin_memory=True,
+        collate_fn=collate_fn, num_workers=num_workers, pin_memory=True,
     )
     val_loader = DataLoader(
         val_ds, batch_size=batch_size, shuffle=False,
-        collate_fn=deepforest_collate_fn, num_workers=num_workers,
+        collate_fn=collate_fn, num_workers=num_workers,
     )
 
     optimizer, scheduler = build_stage_b_optimizer_and_scheduler(
@@ -66,11 +102,13 @@ def run_stage_b(
 
         train_loss = _run_epoch(model, train_loader, optimizer, device, lam_cls, lam_l1, lam_giou, train=True)
         val_loss   = _run_epoch(model, val_loader, None, device, lam_cls, lam_l1, lam_giou, train=False)
+        lr = optimizer.param_groups[0]["lr"]
         scheduler.step()
 
-        print(f"[Stage B] Epoch {epoch+1}/{total_epochs}  train={train_loss:.4f}  val={val_loss:.4f}")
+        print(f"[Stage B] Epoch {epoch+1}/{total_epochs}  train={train_loss:.4f}  val={val_loss:.4f}  lr={lr:.2e}")
 
-        if val_loss < best_val_loss:
+        is_best = val_loss < best_val_loss
+        if is_best:
             best_val_loss = val_loss
             patience_counter = 0
             torch.save(
@@ -79,9 +117,29 @@ def run_stage_b(
             )
         else:
             patience_counter += 1
-            if patience_counter >= patience:
-                print(f"[Stage B] Early stopping at epoch {epoch+1}")
-                break
+
+        _wandb_log({
+            "stage_b/epoch": epoch + 1,
+            "stage_b/train_loss": train_loss,
+            "stage_b/val_loss": val_loss,
+            "stage_b/best_val_loss": best_val_loss,
+            "stage_b/lr": lr,
+            "stage_b/patience_counter": patience_counter,
+        }, step=epoch)
+
+        # Periodic visual check: a few val tiles with predicted vs GT boxes.
+        if viz_every and ((epoch + 1) % viz_every == 0 or epoch == 0):
+            from ..eval.visualize import make_prediction_panels
+            panels = make_prediction_panels(
+                model, val_loader, device=device,
+                conf_thresh=viz_conf_thresh, n_tiles=n_viz_tiles,
+            )
+            _wandb_log_images("stage_b/predictions", panels, step=epoch)
+            print(f"[Stage B] Logged {len(panels)} prediction visuals at epoch {epoch+1}")
+
+        if patience_counter >= patience:
+            print(f"[Stage B] Early stopping at epoch {epoch+1}")
+            break
 
     # Save final checkpoint
     torch.save({"epoch": epoch, "model": model.state_dict()}, ckpt_dir / "stage_b_final.pt")

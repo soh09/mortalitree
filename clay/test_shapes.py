@@ -5,30 +5,31 @@ from src.model.head import BoxDetectionHead, SinCos2DPositionalEncoding
 from src.train.losses import matching_loss, batch_matching_loss
 
 B, Q = 2, 124
-# Clay v1.5 large: dim=1024, patch_size=8 -> 224/8 = 28x28 stride-8 tokens.
+# Clay v1.5 large: dim=1024, patch_size=8 -> 256/8 = 32x32 stride-8 tokens.
 CLAY_DIM = 1024
-GRID = 28        # 224 // 8
+GRID = 32        # 256 // 8
+NECK_GRID = GRID * 2   # neck upsamples 2x to stride 4 -> 64x64
 device = "cpu"
 
 
 def test_positional_encoding():
     pe = SinCos2DPositionalEncoding(128)
-    out = pe(56, 56, device)   # neck output grid (stride 4)
-    assert out.shape == (56 * 56, 128), f"PE shape wrong: {out.shape}"
+    out = pe(NECK_GRID, NECK_GRID, device)   # neck output grid (stride 4)
+    assert out.shape == (NECK_GRID * NECK_GRID, 128), f"PE shape wrong: {out.shape}"
     print("  SinCos2DPositionalEncoding: OK")
 
 
 def test_neck():
     neck = StrippedViTDetNeck(in_channels=CLAY_DIM, out_channels=128)
-    x = torch.randn(B, CLAY_DIM, GRID, GRID)          # (B, 1024, 28, 28) stride 8
+    x = torch.randn(B, CLAY_DIM, GRID, GRID)          # (B, 1024, 32, 32) stride 8
     out = neck(x)
-    assert out.shape == (B, 128, 56, 56), f"Neck output shape wrong: {out.shape}"  # stride 4
+    assert out.shape == (B, 128, NECK_GRID, NECK_GRID), f"Neck output shape wrong: {out.shape}"  # stride 4
     print("  StrippedViTDetNeck: OK")
 
 
 def test_head():
     head = BoxDetectionHead(feat_channels=128, num_queries=Q, hidden=128, n_heads=4, n_decoder_layers=3)
-    feat = torch.randn(B, 128, 56, 56)
+    feat = torch.randn(B, 128, NECK_GRID, NECK_GRID)
     cls_logits, boxes = head(feat)
     assert cls_logits.shape == (B, Q),    f"cls_logits shape wrong: {cls_logits.shape}"
     assert boxes.shape      == (B, Q, 4), f"boxes shape wrong: {boxes.shape}"
@@ -86,10 +87,10 @@ def test_batch_matching_loss():
 def test_augmentation():
     from src.data.augmentation import NAIPAugmentation
     aug = NAIPAugmentation()
-    pixels = torch.rand(4, 224, 224)
+    pixels = torch.rand(4, 256, 256)
     boxes  = torch.tensor([[0.5, 0.5, 0.1, 0.1], [0.2, 0.3, 0.08, 0.08]])
     out_pixels, out_boxes = aug(pixels, boxes)
-    assert out_pixels.shape == (4, 224, 224)
+    assert out_pixels.shape == (4, 256, 256)
     assert out_boxes.shape  == (2, 4)
     assert out_boxes[:, :2].min() >= 0 and out_boxes[:, :2].max() <= 1
     print("  NAIPAugmentation: OK")

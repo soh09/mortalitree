@@ -7,8 +7,8 @@ import torch.nn.functional as F
 class StrippedViTDetNeck(nn.Module):
     """Single-scale neck: 2x upsample, 1024 -> 128 channels.
 
-    Clay v1.5 already emits stride-8 tokens (28x28 for a 224 input), so the
-    single 2x deconv here takes that to stride 4 (56x56) -- finer than the
+    Clay v1.5 already emits stride-8 tokens (32x32 for a 256 input), so the
+    single 2x deconv here takes that to stride 4 (64x64) -- finer than the
     original spec's stride-8 target, to better resolve small crowns at 60 cm.
     """
 
@@ -42,9 +42,9 @@ class StrippedViTDetNeck(nn.Module):
                 deconv.bias.zero_()
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        # x: (B, 1024, 28, 28)  stride 8
-        x = self.proj(x)          # (B, 128, 28, 28)
-        x = self.up(x)            # (B, 128, 56, 56)  stride 4
+        # x: (B, 1024, 32, 32)  stride 8
+        x = self.proj(x)          # (B, 128, 32, 32)
+        x = self.up(x)            # (B, 128, 64, 64)  stride 4
         x = F.relu(self.norm(x))
-        x = self.refine(x)        # (B, 128, 56, 56)
+        x = self.refine(x)        # (B, 128, 64, 64)
         return x

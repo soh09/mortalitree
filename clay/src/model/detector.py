@@ -41,8 +41,8 @@ class TreeDetector(nn.Module):
             cls_logits: (B, Q) raw objectness scores
             boxes:      (B, Q, 4) (cx,cy,w,h) in [0,1]
         """
-        spatial = self.encoder(batch)           # (B, 1024, 28, 28)  stride 8
-        p3 = self.neck(spatial)                 # (B, 128, 56, 56)   stride 4
+        spatial = self.encoder(batch)           # (B, 1024, 32, 32)  stride 8
+        p3 = self.neck(spatial)                 # (B, 128, 64, 64)   stride 4
         cls_logits, boxes = self.head(p3)
         return cls_logits, boxes
 

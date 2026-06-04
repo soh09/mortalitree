@@ -70,3 +70,6 @@ class BoxDetectionHead(nn.Module):
         cls_logits = self.cls_head(decoded).squeeze(-1) # (B, Q)
         boxes = self.box_head(decoded).sigmoid()        # (B, Q, 4) in [0, 1]
         return cls_logits, boxes
+
+
+# soap teak sjer deju

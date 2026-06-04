@@ -53,6 +53,49 @@ def draw_boxes(
     return img
 
 
+def make_prediction_panels(
+    model,
+    loader,
+    device: str = "cpu",
+    conf_thresh: float = 0.5,
+    n_tiles: int = 4,
+) -> list:
+    """Run `model` on up to n_tiles from `loader` and return a list of
+    (H, W, 3) uint8 images with predicted boxes (green + score) drawn over
+    ground-truth boxes (blue). Used for periodic visual training checks.
+
+    Works for both Stage B and Stage C batches (reads `pixels` + `boxes` from
+    the collated dict). Restores the model's prior train/eval state on exit.
+    """
+    was_training = model.training
+    model.eval()
+    panels: list = []
+    with torch.no_grad():
+        for batch in loader:
+            batch_gpu = {
+                k: v.to(device) if isinstance(v, torch.Tensor) else v
+                for k, v in batch.items()
+                if k not in ("boxes", "exhaustive", "tile_paths")
+            }
+            cls_logits, pred_boxes = model(batch_gpu)
+            scores = cls_logits.sigmoid()
+            for i in range(pred_boxes.shape[0]):
+                rgb = tile_to_rgb(batch["pixels"][i])
+                keep = scores[i] >= conf_thresh
+                pb = pred_boxes[i][keep].cpu().numpy()
+                ps = scores[i][keep].cpu().numpy()
+                gt_i = batch["boxes"][i]
+                gt = gt_i.cpu().numpy() if len(gt_i) > 0 else None
+                panels.append(draw_boxes(rgb, pb, ps, gt_boxes=gt))
+                if len(panels) >= n_tiles:
+                    break
+            if len(panels) >= n_tiles:
+                break
+    if was_training:
+        model.train()
+    return panels
+
+
 def visualize_predictions(
     model,
     dataset,

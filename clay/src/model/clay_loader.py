@@ -1,8 +1,8 @@
 """Load Clay v1.5 encoder and wrap it for batch-dict forward pass.
 
 Clay v1.5 (the released v1.5.0 checkpoint) is the *large* MAE: dim=1024,
-depth=24, patch_size=8. For a 224x224 input that yields a 28x28 grid of
-1024-dim patch tokens at stride 8 (not the 14x14 / 768-dim / stride-16 grid a
+depth=24, patch_size=8. For a 256x256 input that yields a 32x32 grid of
+1024-dim patch tokens at stride 8 (not the 16x16 / 768-dim / stride-16 grid a
 patch-16 base model would give). The wrapper below reads these dimensions off
 the encoder at runtime instead of hardcoding them.
 """

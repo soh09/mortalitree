@@ -158,6 +158,7 @@ def compute_crown_area_metrics(
     iou_thresh: float = 0.5,
     conf_thresh: float = 0.5,
     pixel_size_m: float = 0.6,
+    tile_size_px: int = 256,
 ) -> dict:
     """Predicted vs. true crown area R² and rRMSE on matched pairs."""
     pred_areas, gt_areas = [], []
@@ -175,10 +176,10 @@ def compute_crown_area_metrics(
             best_iou, best_j = iou_mat[i].max(dim=0)
             if best_iou >= iou_thresh and not gt_matched[best_j]:
                 gt_matched[best_j] = True
-                # Area in m² (boxes are normalized fractions of 224-pixel tile)
+                # Area in m² (boxes are normalized fractions of the tile)
                 pred_w, pred_h = pb[i, 2].item(), pb[i, 3].item()
                 gt_w,   gt_h   = gt_b[best_j, 2].item(), gt_b[best_j, 3].item()
-                scale = 224 * pixel_size_m
+                scale = tile_size_px * pixel_size_m
                 pred_areas.append(pred_w * pred_h * scale ** 2)
                 gt_areas.append(gt_w   * gt_h   * scale ** 2)
 
@@ -200,7 +201,7 @@ def aggregate_to_hectare(
     gt_boxes_list: list[torch.Tensor],
     tile_latlons: list[tuple[float, float]],
     conf_thresh: float = 0.5,
-    tile_size_m: float = 134.4,   # 224 * 0.6
+    tile_size_m: float = 153.6,   # 256 * 0.6
     cell_size_m: float = 100.0,
 ) -> dict:
     """Per-100m² cell count MAE and RMSE (trees/ha)."""
