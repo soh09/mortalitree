@@ -104,8 +104,10 @@ def run_stage_b(
         for p in model.encoder.encoder.parameters():
             p.requires_grad = False
 
-        train_loss = _run_epoch(model, train_loader, optimizer, device, lam_cls, lam_l1, lam_giou, train=True)
-        val_loss   = _run_epoch(model, val_loader, None, device, lam_cls, lam_l1, lam_giou, train=False)
+        train_loss = _run_epoch(model, train_loader, optimizer, device, lam_cls, lam_l1, lam_giou, train=True,
+                                desc=f"epoch {epoch+1}/{total_epochs} train")
+        val_loss   = _run_epoch(model, val_loader, None, device, lam_cls, lam_l1, lam_giou, train=False,
+                                desc=f"epoch {epoch+1}/{total_epochs} val")
         lr = optimizer.param_groups[0]["lr"]
         scheduler.step()
 
@@ -153,12 +155,15 @@ def run_stage_b(
     print(f"[Stage B] Done. Best val loss: {best_val_loss:.4f}")
 
 
-def _run_epoch(model, loader, optimizer, device, lam_cls, lam_l1, lam_giou, train: bool) -> float:
+def _run_epoch(model, loader, optimizer, device, lam_cls, lam_l1, lam_giou, train: bool,
+               desc: str = "", log_every: int = 20) -> float:
     total_loss = 0.0
     n_batches = 0
+    n_total = len(loader)
+    t0 = time.time()
     context = torch.enable_grad() if train else torch.no_grad()
     with context:
-        for batch in loader:
+        for i, batch in enumerate(loader):
             batch_gpu = {
                 k: v.to(device) if isinstance(v, torch.Tensor) else v
                 for k, v in batch.items()
@@ -178,4 +183,9 @@ def _run_epoch(model, loader, optimizer, device, lam_cls, lam_l1, lam_giou, trai
                 optimizer.step()
             total_loss += loss.item()
             n_batches += 1
+            if log_every and (i % log_every == 0 or i == n_total - 1):
+                rate = (i + 1) / max(1e-9, time.time() - t0)
+                print(f"[Stage B] {desc}  batch {i+1}/{n_total}  "
+                      f"loss={loss.item():.4f}  avg={total_loss/n_batches:.4f}  "
+                      f"{rate:.2f} it/s", flush=True)
     return total_loss / max(1, n_batches)

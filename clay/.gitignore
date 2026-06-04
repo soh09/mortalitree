@@ -44,8 +44,10 @@ venv.bak/
 *.bin
 *.h5
 *.hdf5
-data/
-datasets/
+# Anchored to clay/ root so these only ignore top-level data dirs, NOT the
+# clay/src/data source package (an unanchored `data/` matched it at any depth).
+/data/
+/datasets/
 checkpoints/
 outputs/
 runs/

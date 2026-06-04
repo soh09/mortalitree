@@ -55,6 +55,10 @@ image = (
     .pip_install("git+https://github.com/Clay-foundation/model.git")
     # Reassert the CUDA torch build in case the Clay install pulled a CPU wheel.
     .pip_install("torch==2.3.0", "torchvision==0.18.0", index_url=TORCH_INDEX)
+    # Stream prints live: without this CPython block-buffers stdout on Modal
+    # (stdout is a pipe, not a TTY), so per-epoch/per-batch prints don't appear
+    # until the buffer fills or the process exits.
+    .env({"PYTHONUNBUFFERED": "1"})
     # Ship local source + configs with the image (modern replacement for Mounts).
     .add_local_dir(HERE / "src", remote_path="/root/src")
     .add_local_dir(HERE / "configs", remote_path="/root/configs")
