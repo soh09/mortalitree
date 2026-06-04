@@ -12,27 +12,31 @@ from ..train.losses import batch_matching_loss
 from ..train.schedulers import build_stage_b_optimizer_and_scheduler
 
 
-def _wandb_log(metrics: dict, step: Optional[int] = None) -> None:
-    """Log to Weights & Biases if (and only if) a run is active. No-op otherwise,
-    so src stays decoupled from the Modal/wandb setup."""
+def _wandb_log(metrics: dict) -> None:
+    """Log one history row to W&B if (and only if) a run is active. No explicit
+    step — wandb auto-increments, one row per call, so call it once per epoch.
+    Keeps src decoupled from the Modal/wandb setup."""
     try:
         import wandb
         if wandb.run is not None:
-            wandb.log(metrics, step=step)
+            wandb.log(metrics)
     except ImportError:
         pass
 
 
-def _wandb_log_images(key: str, images: list, step: Optional[int] = None) -> None:
-    """Log a list of (H,W,3) uint8 arrays as a W&B image panel (no-op if no run)."""
+def _wandb_images(key: str, images: list) -> dict:
+    """Return {key: [wandb.Image, ...]} to merge into an epoch's log dict, so the
+    images land in the same wandb.log call (same step) as that epoch's scalars.
+    Empty dict if there's no active run or no images."""
     if not images:
-        return
+        return {}
     try:
         import wandb
         if wandb.run is not None:
-            wandb.log({key: [wandb.Image(im) for im in images]}, step=step)
+            return {key: [wandb.Image(im) for im in images]}
     except ImportError:
         pass
+    return {}
 
 
 def run_stage_b(
@@ -118,24 +122,27 @@ def run_stage_b(
         else:
             patience_counter += 1
 
-        _wandb_log({
+        log_dict = {
             "stage_b/epoch": epoch + 1,
             "stage_b/train_loss": train_loss,
             "stage_b/val_loss": val_loss,
             "stage_b/best_val_loss": best_val_loss,
             "stage_b/lr": lr,
             "stage_b/patience_counter": patience_counter,
-        }, step=epoch)
+        }
 
-        # Periodic visual check: a few val tiles with predicted vs GT boxes.
+        # Periodic visual check: a few val tiles with predicted vs GT boxes,
+        # merged into this epoch's single log call so the media actually shows.
         if viz_every and ((epoch + 1) % viz_every == 0 or epoch == 0):
             from ..eval.visualize import make_prediction_panels
             panels = make_prediction_panels(
                 model, val_loader, device=device,
                 conf_thresh=viz_conf_thresh, n_tiles=n_viz_tiles,
             )
-            _wandb_log_images("stage_b/predictions", panels, step=epoch)
+            log_dict.update(_wandb_images("stage_b/predictions", panels))
             print(f"[Stage B] Logged {len(panels)} prediction visuals at epoch {epoch+1}")
+
+        _wandb_log(log_dict)
 
         if patience_counter >= patience:
             print(f"[Stage B] Early stopping at epoch {epoch+1}")

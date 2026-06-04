@@ -89,9 +89,24 @@ batch = {
     "pixels":      Tensor (B, 4, H, W),    # R, G, B, NIR  — note Clay's channel order
     "wavelengths": Tensor (4,),            # [0.665, 0.560, 0.493, 0.842] in μm for NAIP
     "gsd":         Tensor (B,),            # 1.0 (Clay's NAIP pretraining GSD)
-    "time":        Tensor (B, 2),          # (week_of_year, hour_of_day), normalized
-    "latlon":      Tensor (B, 2),          # (lat, lon) in degrees
+    "time":        Tensor (B, 4),          # [sin(week), cos(week), sin(hour), cos(hour)]
+    "latlon":      Tensor (B, 4),          # [sin(lat), cos(lat), sin(lon), cos(lon)]
 }
+```
+
+**`time` and `latlon` are 4-dim sin/cos encodings, not raw values.** Clay's
+`add_encodings` builds its positional encoding at width `dim - 8` and reserves
+the trailing 8 dims for `hstack((time, latlon))`, so each must be a 4-element
+cyclic encoding (total 8). Passing raw 2-dim `(week, hour)` / `(lat, lon)` makes
+the metadata 4 wide, the encoding comes out at `dim - 4`, and it fails to add to
+the `dim`-wide patch tokens. The exact transforms (from Clay's datamodule /
+wall-to-wall tutorial), with `week` in 1..52, `hour` in 0..24, `lat`/`lon` in degrees:
+
+```python
+week_a = week * 2*pi/52;  hour_a = hour * 2*pi/24
+time   = [sin(week_a), cos(week_a), sin(hour_a), cos(hour_a)]
+lat_r  = lat * pi/180;    lon_r  = lon * pi/180
+latlon = [sin(lat_r), cos(lat_r), sin(lon_r), cos(lon_r)]
 ```
 
 Default tile size: `H = W = 256`. This matches NAIP's native 256×256 tile size, so no resampling is needed at inference. Clay v1.5 uses patch size 8 with dynamic (GSD-aware) positional encoding, so any multiple of 8 works; 256 → 32×32 token grid (1024 tokens). Stage B (RGB pretraining) and Stage C (NAIP finetuning) should both use 256×256 to avoid a train/test grid mismatch and to keep the normalized box-size prior consistent across stages. The encoder dim is also 1024, so the token tensor is `(B, 1024_tokens, 1024_dim)` — the two 1024s are coincidental, not the same axis.
@@ -399,8 +414,8 @@ Extract 256×256 windows (154 m × 154 m at 60 cm). For NAIP this matches the na
 ### 5.2 Metadata generation
 For each tile, compute:
 - `gsd = 1.0` (Clay's NAIP pretraining GSD; see §3.1 — distinct from the 60 cm physical resolution used for crown-area/per-hectare metrics)
-- `latlon` from tile bounding box center (transform from native CRS to WGS84)
-- `time` from NAIP acquisition date: `(week_of_year / 52, hour_of_day / 24)`
+- `latlon` from tile bounding box center (transform from native CRS to WGS84), then sin/cos-encode to 4 dims (see §3.1)
+- `time` from NAIP acquisition date, sin/cos-encoded to 4 dims: `[sin(week·2π/52), cos(week·2π/52), sin(hour·2π/24), cos(hour·2π/24)]` (see §3.1)
 - `wavelengths` is fixed for NAIP — store as a constant
 
 ### 5.3 Annotation mask

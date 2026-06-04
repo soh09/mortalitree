@@ -12,26 +12,29 @@ from ..train.schedulers import build_stage_b_optimizer_and_scheduler, build_stag
 from ..eval.metrics import compute_f1_at_iou
 
 
-def _wandb_log(metrics: dict, step: Optional[int] = None) -> None:
-    """Log to W&B only if a run is active (no-op otherwise)."""
+def _wandb_log(metrics: dict) -> None:
+    """Log one history row to W&B if a run is active. No explicit step — wandb
+    auto-increments, one row per call, so call it once per epoch."""
     try:
         import wandb
         if wandb.run is not None:
-            wandb.log(metrics, step=step)
+            wandb.log(metrics)
     except ImportError:
         pass
 
 
-def _wandb_log_images(key: str, images: list, step: Optional[int] = None) -> None:
-    """Log a list of (H,W,3) uint8 arrays as a W&B image panel (no-op if no run)."""
+def _wandb_images(key: str, images: list) -> dict:
+    """Return {key: [wandb.Image, ...]} to merge into an epoch's log dict (empty
+    if no active run or no images)."""
     if not images:
-        return
+        return {}
     try:
         import wandb
         if wandb.run is not None:
-            wandb.log({key: [wandb.Image(im) for im in images]}, step=step)
+            return {key: [wandb.Image(im) for im in images]}
     except ImportError:
         pass
+    return {}
 
 
 def run_stage_c(
@@ -128,7 +131,7 @@ def run_stage_c(
         else:
             patience_counter += 1
 
-        _wandb_log({
+        log_dict = {
             "stage_c/epoch": epoch + 1,
             "stage_c/train_loss": train_loss,
             "stage_c/val_loss": val_loss,
@@ -137,17 +140,19 @@ def run_stage_c(
             "stage_c/lr": lr,
             "stage_c/encoder_unfrozen": int(epoch >= frozen_epochs),
             "stage_c/patience_counter": patience_counter,
-        }, step=epoch)
+        }
 
-        # Periodic visual check: a few val tiles with predicted vs GT boxes.
+        # Periodic visual check, merged into this epoch's single log call.
         if viz_every and ((epoch + 1) % viz_every == 0 or epoch == 0):
             from ..eval.visualize import make_prediction_panels
             panels = make_prediction_panels(
                 model, val_loader, device=device,
                 conf_thresh=viz_conf_thresh, n_tiles=n_viz_tiles,
             )
-            _wandb_log_images("stage_c/predictions", panels, step=epoch)
+            log_dict.update(_wandb_images("stage_c/predictions", panels))
             print(f"[Stage C] Logged {len(panels)} prediction visuals at epoch {epoch+1}")
+
+        _wandb_log(log_dict)
 
         if patience_counter >= patience:
             print(f"[Stage C] Early stopping at epoch {epoch+1}")

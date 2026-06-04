@@ -7,7 +7,9 @@ def cosine_with_warmup(optimizer, warmup_epochs: int, total_epochs: int):
     """Linear warmup then cosine decay."""
     def lr_lambda(epoch):
         if epoch < warmup_epochs:
-            return epoch / max(1, warmup_epochs)
+            # Warm up from a nonzero fraction so epoch 0 actually trains
+            # (epoch/warmup would give lr=0 on the first epoch).
+            return (epoch + 1) / max(1, warmup_epochs)
         progress = (epoch - warmup_epochs) / max(1, total_epochs - warmup_epochs)
         return 0.5 * (1.0 + math.cos(math.pi * progress))
 
