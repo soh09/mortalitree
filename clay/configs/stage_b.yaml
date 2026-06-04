@@ -23,5 +23,12 @@ loss:
   lam_giou: 2.0
 
 data:
-  tile_size: 256
+  tile_size: 256       # source patch size on disk
   augment: true
+  # Quartering experiment: split each 256 patch into n_split x n_split tiles
+  # (2 -> 128 px) so trees-per-tile stays within the query budget Q while the
+  # dense-forest patches a per-256 max_trees filter would drop are recovered.
+  # Set quarter: false for the un-quartered 256 baseline (head-to-head).
+  quarter: true
+  n_split: 2           # 2 -> 128 px tiles (Q=150); try 4 -> 64 px (Q~40)
+  max_trees: 150       # drop tiles over the query budget (0 = keep all)

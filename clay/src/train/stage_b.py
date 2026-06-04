@@ -3,8 +3,10 @@ import time
 from pathlib import Path
 from typing import Optional
 
+import random
+
 import torch
-from torch.utils.data import DataLoader, Dataset, random_split
+from torch.utils.data import DataLoader, Dataset, Subset, random_split
 
 from ..data.deepforest_dataset import DeepForestDataset, deepforest_collate_fn
 from ..model.detector import TreeDetector
@@ -37,6 +39,30 @@ def _wandb_images(key: str, images: list) -> dict:
     except ImportError:
         pass
     return {}
+
+
+def _split_train_val(dataset: Dataset, val_fraction: float, seed: int = 42):
+    """Split into train/val. If the dataset exposes `group_keys` (e.g. a quartered
+    NeonPatchDataset, where one parent tile yields several samples), split at the
+    *group* level so all of a parent's quarters land in the same split — otherwise
+    quarters of one tile leak across train/val and inflate val performance. Falls
+    back to a plain per-sample random split when no group keys are available."""
+    keys = getattr(dataset, "group_keys", None)
+    if keys is None:
+        n_val = max(1, int(len(dataset) * val_fraction))
+        return random_split(dataset, [len(dataset) - n_val, n_val])
+
+    groups: dict[str, list[int]] = {}
+    for i, k in enumerate(keys):
+        groups.setdefault(k, []).append(i)
+    parents = list(groups)
+    random.Random(seed).shuffle(parents)
+    n_val_p = max(1, int(len(parents) * val_fraction))
+    val_parents = set(parents[:n_val_p])
+    train_idx, val_idx = [], []
+    for k, idxs in groups.items():
+        (val_idx if k in val_parents else train_idx).extend(idxs)
+    return Subset(dataset, train_idx), Subset(dataset, val_idx)
 
 
 def run_stage_b(
@@ -73,9 +99,7 @@ def run_stage_b(
     if collate_fn is None:
         collate_fn = deepforest_collate_fn
 
-    n_val = max(1, int(len(dataset) * val_fraction))
-    n_train = len(dataset) - n_val
-    train_ds, val_ds = random_split(dataset, [n_train, n_val])
+    train_ds, val_ds = _split_train_val(dataset, val_fraction, seed=42)
 
     train_loader = DataLoader(
         train_ds, batch_size=batch_size, shuffle=True,

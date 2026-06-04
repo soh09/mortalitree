@@ -200,6 +200,9 @@ def stage_b(
             patches_root=patches_root,
             tile_size=d.get("tile_size", 256),
             augment=d.get("augment", True),
+            quarter=d.get("quarter", False),
+            n_split=d.get("n_split", 2),
+            max_trees=d.get("max_trees", 0),
         )
         collate_fn = deepforest_collate_fn
         print(f"[Stage B] NEON dataset: {len(dataset)} patches from {labels_csv}")
@@ -233,6 +236,66 @@ def stage_b(
             run.finish()
     ckpt_vol.commit()
     print("Stage B complete. Checkpoints written to clay-checkpoints volume.")
+
+
+# ---------------------------------------------------------------------------
+# Stage B evaluation — stitch quarter predictions back to the parent (256) frame
+# ---------------------------------------------------------------------------
+@app.function(**COMMON)
+def eval_stage_b(
+    checkpoint: str = "/checkpoints/stage_b_best.pt",
+    labels_csv: str = "/neon/patches/labels.csv",
+    patches_root: str = "/neon/patches",
+    config: str = "/root/configs/stage_b.yaml",
+    split: str = "val",            # "val" (held-out parents) or "all"
+    conf_thresh: float = 0.5,
+    nms_iou: float = 0.6,
+):
+    """Parent-level (256-frame) metrics for a trained Stage-B model. Runs the
+    model on quarter tiles, stitches predictions back into the parent frame,
+    and scores against the full 256 GT — directly comparable to an un-quartered
+    baseline. Reads quartering settings (quarter/n_split/tile_size) from the
+    config, and evaluates on the same held-out val parents the training used.
+
+    For a rigorous held-out number, point --labels-csv at a separate test CSV
+    and pass --split all."""
+    import json
+
+    import torch
+
+    model, cfg = _setup(config)
+    state = torch.load(checkpoint, map_location="cuda")
+    model.load_state_dict(state["model"])
+    model = model.to("cuda")
+
+    from src.data.neon_dataset import NeonPatchDataset
+    from src.eval.stitch import stitch_eval
+    from src.train.stage_b import _split_train_val
+
+    d = cfg.get("data", {})
+    # max_trees=0: evaluate every tile incl. dense ones (the Q-cap undercounting
+    # them is a real, measured limitation, not something to filter away here).
+    dataset = NeonPatchDataset(
+        labels_csv=labels_csv, patches_root=patches_root,
+        tile_size=d.get("tile_size", 256), augment=False,
+        quarter=d.get("quarter", False), n_split=d.get("n_split", 2),
+        max_trees=0,
+    )
+    if split == "val":
+        _, val = _split_train_val(dataset, cfg["training"]["val_fraction"], seed=42)
+        val_parents = {dataset.samples[i]["parent"] for i in val.indices}
+        dataset.samples = [s for s in dataset.samples if s["parent"] in val_parents]
+
+    n_parents = len({s["parent"] for s in dataset.samples})
+    print(f"[eval/{split}] {len(dataset)} tiles over {n_parents} parents")
+    res = stitch_eval(
+        model, dataset, device="cuda",
+        batch_size=cfg["training"]["batch_size"],
+        num_workers=cfg["training"]["num_workers"],
+        conf_thresh=conf_thresh, nms_iou=nms_iou,
+    )
+    print("[eval] parent-level metrics:\n" + json.dumps(res, indent=2, default=float))
+    return res
 
 
 # ---------------------------------------------------------------------------
