@@ -12,7 +12,7 @@ milliontrees/TreeBoxes_v0.13
 *.pt
 synthetic_nir_dev/NAIP/wandb
 .claude/
-*/__pycache__
+__pycache__/
 sodev/2019_*
 */.DS_Store
 so_images/
@@ -21,3 +21,4 @@ dataset_dev/hyperspectral
 dataset_dev/rgb
 dataset_dev/teak_patches
 .DS_Store
+stace_labels/tiles

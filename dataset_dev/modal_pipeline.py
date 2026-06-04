@@ -516,7 +516,7 @@ def main(
 
     tot_patches = kept_patches + drop_patches
     tot_boxes   = kept_boxes + drop_boxes
-    pct_p = 100 * kept_patches / tot_patches if tot_patches else 0.0
+    pct_p = 100 * kept_patches / ok if tot_patches else 0.0
     pct_b = 100 * kept_boxes / tot_boxes if tot_boxes else 0.0
     cap = f"max {max_trees} trees/patch" if max_trees else "no filter"
     console.rule(f"[bold cyan]Kept after filtering ({cap})")
