@@ -135,6 +135,42 @@ def _ensure_clay_ckpt():
     print(f"[clay] checkpoint ready ({os.path.getsize(CLAY_CKPT) / 1e9:.2f} GB)")
 
 
+def _build_neon_dataset(cfg, data_source, out_tag, labels_csv, patches_root, tag):
+    """Build the Stage-B training dataset from the `mot` volume.
+
+    Returns (dataset, collate_fn) — both None when data_source != "neon" (the
+    caller then falls back to the RGB DeepForest JSON via annotations_path).
+    `tag` is just the log prefix (e.g. "Stage B" / "Stage B FT")."""
+    d = cfg.get("data", {})
+    labels_csv = labels_csv or f"/neon/{out_tag}/labels.csv"
+    patches_root = patches_root or f"/neon/{out_tag}"
+
+    if data_source != "neon":
+        return None, None
+
+    from src.data.neon_dataset import NeonPatchDataset
+    from src.data.deepforest_dataset import deepforest_collate_fn
+    dataset = NeonPatchDataset(
+        labels_csv=labels_csv,
+        patches_root=patches_root,
+        tile_size=d.get("tile_size", 256),
+        augment=d.get("augment", True),
+    )
+    print(f"[{tag}] NEON dataset: {len(dataset)} patches from {labels_csv}")
+
+    # Q must be >= the densest patch or Hungarian matching silently drops GT
+    # (spec gotcha #12). Warn loudly if the data outgrew num_queries.
+    q = cfg["model"]["num_queries"]
+    max_boxes = max((len(it["boxes"]) for it in dataset.items), default=0)
+    if max_boxes > q:
+        print(f"[{tag}] *** WARNING: densest patch has {max_boxes} boxes > "
+              f"num_queries={q}; GT will be dropped. Re-run with "
+              f"--num-queries {max_boxes}. ***")
+    else:
+        print(f"[{tag}] densest patch = {max_boxes} boxes <= num_queries={q} (ok)")
+    return dataset, deepforest_collate_fn
+
+
 @app.function(image=image, volumes={CKPT_DIR: ckpt_vol}, timeout=60 * 60)
 def fetch_clay_ckpt():
     """Standalone: pull the Clay checkpoint to the volume (run once if you like)."""
@@ -199,37 +235,13 @@ def stage_b(
     model, cfg = _setup(config, num_queries)
     from src.train.stage_b import run_stage_b
 
-    t, l, d = cfg["training"], cfg["loss"], cfg.get("data", {})
-
-    # Derive the data paths from out_tag unless explicitly overridden.
-    labels_csv = labels_csv or f"/neon/{out_tag}/labels.csv"
-    patches_root = patches_root or f"/neon/{out_tag}"
+    t, l = cfg["training"], cfg["loss"]
 
     # Default: 4-band NEON patches (mot volume) produced by modal_pipeline.py.
     # Pass data_source="deepforest" to fall back to the RGB JSON on clay-data.
-    dataset = collate_fn = None
-    if data_source == "neon":
-        from src.data.neon_dataset import NeonPatchDataset
-        from src.data.deepforest_dataset import deepforest_collate_fn
-        dataset = NeonPatchDataset(
-            labels_csv=labels_csv,
-            patches_root=patches_root,
-            tile_size=d.get("tile_size", 256),
-            augment=d.get("augment", True),
-        )
-        collate_fn = deepforest_collate_fn
-        print(f"[Stage B] NEON dataset: {len(dataset)} patches from {labels_csv}")
-
-        # Q must be >= the densest patch or Hungarian matching silently drops GT
-        # (spec gotcha #12). Warn loudly if the data outgrew num_queries.
-        q = cfg["model"]["num_queries"]
-        max_boxes = max((len(it["boxes"]) for it in dataset.items), default=0)
-        if max_boxes > q:
-            print(f"[Stage B] *** WARNING: densest patch has {max_boxes} boxes > "
-                  f"num_queries={q}; GT will be dropped. Re-run with "
-                  f"--num-queries {max_boxes} (and match Stage C). ***")
-        else:
-            print(f"[Stage B] densest patch = {max_boxes} boxes <= num_queries={q} (ok)")
+    dataset, collate_fn = _build_neon_dataset(
+        cfg, data_source, out_tag, labels_csv, patches_root, "Stage B"
+    )
 
     run = _wandb_init(
         "stage_b", cfg,
@@ -261,6 +273,71 @@ def stage_b(
             run.finish()
     ckpt_vol.commit()
     print("Stage B complete. Checkpoints written to clay-checkpoints volume.")
+
+
+# ---------------------------------------------------------------------------
+# Stage B fine-tune: continue from a checkpoint at a flat LR
+# ---------------------------------------------------------------------------
+@app.function(**COMMON)
+def stage_b_finetune(
+    stage_b_checkpoint: str = "/checkpoints/stage_b_best.pt",
+    epochs: int = 10,
+    lr: float = 5e-4,
+    data_source: str = "neon",
+    out_tag: str = "patches",
+    num_queries: int = 0,
+    labels_csv: str = "",
+    patches_root: str = "",
+    out_prefix: str = "stage_b_ft",
+    config: str = "/root/configs/stage_b.yaml",
+):
+    """Continue Stage B from `stage_b_checkpoint` for `epochs` more epochs at a
+    constant learning rate `lr` (default 5e-4) — no warmup, no decay. Writes
+    {out_prefix}_best.pt / {out_prefix}_final.pt to the checkpoints volume so the
+    original Stage B run is preserved. num_queries must match that run."""
+    _ensure_clay_ckpt()
+    model, cfg = _setup(config, num_queries)
+    from src.train.stage_b import run_stage_b_finetune
+
+    t, l = cfg["training"], cfg["loss"]
+    dataset, collate_fn = _build_neon_dataset(
+        cfg, data_source, out_tag, labels_csv, patches_root, "Stage B FT"
+    )
+    if dataset is None:
+        raise ValueError("stage_b_finetune currently supports data_source='neon' only.")
+
+    run = _wandb_init(
+        "stage_b_finetune", cfg,
+        extra={"stage": "B-ft", "data_source": data_source, "lr": lr,
+               "epochs": epochs, "resume_from": stage_b_checkpoint,
+               "n_patches": len(dataset)},
+    )
+    try:
+        run_stage_b_finetune(
+            model=model,
+            checkpoint_path=stage_b_checkpoint,
+            dataset=dataset,
+            collate_fn=collate_fn,
+            checkpoint_dir=CKPT_DIR,
+            epochs=epochs,
+            batch_size=t["batch_size"],
+            lr=lr,
+            weight_decay=t["weight_decay"],
+            val_fraction=t["val_fraction"],
+            lam_cls=l["lam_cls"],
+            lam_l1=l["lam_l1"],
+            lam_giou=l["lam_giou"],
+            device="cuda",
+            num_workers=t["num_workers"],
+            out_prefix=out_prefix,
+            on_checkpoint=ckpt_vol.commit,   # persist each new best immediately
+        )
+    finally:
+        if run is not None:
+            run.finish()
+    ckpt_vol.commit()
+    print(f"Stage B fine-tune complete. Wrote {out_prefix}_best.pt / "
+          f"{out_prefix}_final.pt to clay-checkpoints volume.")
 
 
 # ---------------------------------------------------------------------------
