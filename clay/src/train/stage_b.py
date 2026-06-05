@@ -103,6 +103,9 @@ def run_stage_b(
     viz_conf_thresh: float = 0.5,
     ckpt_every: int = 0,
     resume_from: Optional[str] = None,
+    init_weights_from: Optional[str] = None,
+    flat_lr: bool = False,
+    ckpt_prefix: str = "stage_b",
     on_checkpoint=None,
 ):
     if device is None:
@@ -149,12 +152,36 @@ def run_stage_b(
         model, lr, weight_decay, total_epochs, warmup_epochs
     )
 
+    # Flat-LR finetune: replace cosine+warmup with a constant multiplier so the
+    # LR is held at `lr` for every epoch (the per-epoch `scheduler.step()` and the
+    # `stage_b/lr` log then just keep reading back `lr`).
+    if flat_lr:
+        from torch.optim.lr_scheduler import LambdaLR
+        scheduler = LambdaLR(optimizer, lr_lambda=lambda _e: 1.0)
+        print(f"[Stage B] Flat-LR mode: holding lr={lr:.2e} for all {total_epochs} "
+              f"epochs (no warmup, no decay).")
+
     ckpt_dir = Path(checkpoint_dir)
     ckpt_dir.mkdir(parents=True, exist_ok=True)
 
     best_val_loss = float("inf")
     patience = 10
     patience_counter = 0
+
+    # Warm-start the trainable weights from a prior run WITHOUT restoring optimizer
+    # state or epoch bookkeeping — used by the flat-LR finetune entrypoint, which
+    # starts a fresh short schedule from a finished Stage B checkpoint. (Distinct
+    # from `resume_from` below, which restores everything for an exact resume.)
+    if init_weights_from is not None and Path(init_weights_from).exists():
+        wckpt = torch.load(init_weights_from, map_location=device)
+        wstate = wckpt.get("model", wckpt) if isinstance(wckpt, dict) else wckpt
+        _, unexpected = model.load_state_dict(wstate, strict=False)
+        if unexpected:
+            print(f"[Stage B] WARNING: unexpected keys in init ckpt: {unexpected[:5]}...")
+        print(f"[Stage B] Initialised weights from {init_weights_from} "
+              f"(fresh optimizer + epoch schedule).")
+    elif init_weights_from is not None:
+        print(f"[Stage B] init_weights_from='{init_weights_from}' not found — starting fresh.")
 
     # Resume: restore weights + optimizer + scheduler + bookkeeping and continue
     # from the next epoch. The CGFE phase and LR are derived from the epoch each
@@ -222,7 +249,7 @@ def run_stage_b(
         if is_best:
             best_val_loss = val_loss
             patience_counter = 0
-            _save_ckpt(ckpt_dir / "stage_b_best.pt", model, optimizer, scheduler,
+            _save_ckpt(ckpt_dir / f"{ckpt_prefix}_best.pt", model, optimizer, scheduler,
                        epoch, best_val_loss, patience_counter, extra={"val_loss": val_loss})
             # Persist immediately so a later crash/timeout can't lose the best model.
             if on_checkpoint is not None:
@@ -233,11 +260,11 @@ def run_stage_b(
         # Periodic full-state checkpoint (rolling) for resuming an interrupted run.
         # Written after patience_counter is updated so the resumed state is exact.
         if ckpt_every and (epoch + 1) % ckpt_every == 0:
-            _save_ckpt(ckpt_dir / "stage_b_last.pt", model, optimizer, scheduler,
+            _save_ckpt(ckpt_dir / f"{ckpt_prefix}_last.pt", model, optimizer, scheduler,
                        epoch, best_val_loss, patience_counter, extra={"val_loss": val_loss})
             if on_checkpoint is not None:
                 on_checkpoint()
-            print(f"[Stage B] Wrote resume checkpoint stage_b_last.pt at epoch {epoch+1}")
+            print(f"[Stage B] Wrote resume checkpoint {ckpt_prefix}_last.pt at epoch {epoch+1}")
 
         # Per-epoch scalar curves. Each is logged twice: once under the global
         # `stage_b/...` key (continuous across the whole run) and once under a
@@ -309,7 +336,7 @@ def run_stage_b(
             break
 
     # Save final checkpoint
-    _save_ckpt(ckpt_dir / "stage_b_final.pt", model, optimizer, scheduler,
+    _save_ckpt(ckpt_dir / f"{ckpt_prefix}_final.pt", model, optimizer, scheduler,
                epoch, best_val_loss, patience_counter)
     print(f"[Stage B] Done. Best val loss: {best_val_loss:.4f}")
 

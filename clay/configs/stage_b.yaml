@@ -13,14 +13,14 @@ model:
   anchor_size: 0.05                      # default proposal box size (normalized)
 
 training:
-  total_epochs: 50
+  total_epochs: 70
   batch_size: 16
   lr: 1.0e-3
   weight_decay: 0.05
   warmup_epochs: 5
   val_fraction: 0.1
   num_workers: 4
-  cgfe_start_epoch: 25       # DQ-DETR phase: CGFE off (Stage 1) then on (Stage 2)
+  cgfe_start_epoch: 30       # DQ-DETR phase: CGFE off (Stage 1) then on (Stage 2)
 
 loss:
   lam_cls: 1.0

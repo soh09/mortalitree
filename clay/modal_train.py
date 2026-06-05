@@ -75,7 +75,7 @@ ckpt_vol = modal.Volume.from_name("clay-checkpoints", create_if_missing=True)
 neon_vol = modal.Volume.from_name("mot",              create_if_missing=True)
 
 DATA_DIR  = "/data"
-CKPT_DIR  = "/checkpoints"
+CKPT_DIR  = "/checkpoints/150"
 NEON_DIR  = "/neon"
 CLAY_CKPT = "/checkpoints/clay-v1.5.ckpt"
 # Public HF download URL (resolve/, not blob/ which is the web view).
@@ -93,7 +93,7 @@ except Exception:
 
 COMMON = dict(
     gpu="A10G",
-    timeout=60 * 60 * 24,       # 6 hours max
+    timeout=60 * 60 * 24,       # 24 hours max
     volumes={DATA_DIR: data_vol, CKPT_DIR: ckpt_vol, NEON_DIR: neon_vol},
     secrets=_wandb_secret,
 )
@@ -298,6 +298,115 @@ def stage_b(
             run.finish()
     ckpt_vol.commit()
     print("Stage B complete. Checkpoints written to clay-checkpoints volume.")
+
+
+# ---------------------------------------------------------------------------
+# Stage B fine-tune: continue from a checkpoint at a flat LR
+# ---------------------------------------------------------------------------
+@app.function(**COMMON)
+def stage_b_finetune(
+    stage_b_checkpoint: str = "/checkpoints/stage_b_best.pt",
+    epochs: int = 10,
+    lr: float = 5e-4,
+    data_source: str = "neon",
+    out_tag: str = "patches",
+    labels_csv: str = "",
+    patches_root: str = "",
+    ckpt_prefix: str = "stage_b_ft",
+    config: str = "/root/configs/stage_b.yaml",
+    cgfe_start_epoch: int = 0,
+    viz_every: int = 5,
+    n_viz_tiles: int = 8,
+    viz_conf_thresh: float = 0.5,
+    ckpt_every: int = 5,
+):
+    """Warm-start from `stage_b_checkpoint` and train `epochs` more at a CONSTANT
+    learning rate `lr` (default 5e-4) — no warmup, no decay, fresh optimizer.
+
+    This routes through `run_stage_b`, so it logs exactly the same W&B metrics as
+    a normal Stage B run (det/enc/ccm losses, f1/precision/recall/mAP, count
+    mae/rmse/r2, phase namespaces, prediction + density panels). Checkpoints are
+    written under `ckpt_prefix` ({ckpt_prefix}_best/_last/_final.pt) so the
+    original Stage B checkpoints are preserved.
+
+    cgfe_start_epoch defaults to 0 here (CGFE on from the first finetune epoch),
+    since the checkpoint comes from the end of Stage B where CGFE was already on —
+    we don't want it switched back off for the first half. Raise it to delay CGFE."""
+    _ensure_clay_ckpt()
+    model, cfg = _setup(config)
+    from src.train.stage_b import run_stage_b
+
+    t, l, d = cfg["training"], cfg["loss"], cfg.get("data", {})
+
+    # Derive the data paths from out_tag unless explicitly overridden.
+    labels_csv = labels_csv or f"/neon/{out_tag}/labels.csv"
+    patches_root = patches_root or f"/neon/{out_tag}"
+
+    if data_source != "neon":
+        raise ValueError("stage_b_finetune currently supports data_source='neon' only.")
+    from src.data.neon_dataset import NeonPatchDataset
+    from src.data.deepforest_dataset import deepforest_collate_fn
+    dataset = NeonPatchDataset(
+        labels_csv=labels_csv,
+        patches_root=patches_root,
+        tile_size=d.get("tile_size", 256),
+        augment=d.get("augment", True),
+    )
+    collate_fn = deepforest_collate_fn
+    print(f"[Stage B FT] NEON dataset: {len(dataset)} patches from {labels_csv}")
+
+    # Same DQS sanity check as Stage B (gotcha #12).
+    q = max(cfg["model"].get("dynamic_query_list", (600,)))
+    max_boxes = max((len(it["boxes"]) for it in dataset.items), default=0)
+    if max_boxes > q:
+        print(f"[Stage B FT] *** WARNING: densest patch has {max_boxes} boxes > "
+              f"max(dynamic_query_list)={q}; GT will be dropped. Raise the top "
+              f"dynamic_query_list bin to >= {max_boxes} in the config. ***")
+    else:
+        print(f"[Stage B FT] densest patch = {max_boxes} boxes <= "
+              f"max(dynamic_query_list)={q} (ok)")
+
+    run = _wandb_init(
+        "stage_b_finetune", cfg,
+        extra={"stage": "B-ft", "data_source": data_source, "lr": lr,
+               "epochs": epochs, "init_weights_from": stage_b_checkpoint,
+               "cgfe_start_epoch": cgfe_start_epoch, "n_patches": len(dataset)},
+    )
+    try:
+        run_stage_b(
+            model=model,
+            dataset=dataset,
+            collate_fn=collate_fn,
+            checkpoint_dir=CKPT_DIR,
+            total_epochs=epochs,
+            batch_size=t["batch_size"],
+            lr=lr,
+            weight_decay=t["weight_decay"],
+            warmup_epochs=0,
+            val_fraction=t["val_fraction"],
+            lam_cls=l["lam_cls"],
+            lam_l1=l["lam_l1"],
+            lam_giou=l["lam_giou"],
+            lam_ccm=l.get("lam_ccm", 1.0),
+            lam_enc=l.get("lam_enc", 1.0),
+            cgfe_start_epoch=cgfe_start_epoch,
+            viz_every=viz_every,
+            n_viz_tiles=n_viz_tiles,
+            viz_conf_thresh=viz_conf_thresh,
+            ckpt_every=ckpt_every,
+            init_weights_from=stage_b_checkpoint,
+            flat_lr=True,
+            ckpt_prefix=ckpt_prefix,
+            device="cuda",
+            num_workers=t["num_workers"],
+            on_checkpoint=ckpt_vol.commit,   # persist each new best / rolling ckpt
+        )
+    finally:
+        if run is not None:
+            run.finish()
+    ckpt_vol.commit()
+    print(f"Stage B fine-tune complete. Wrote {ckpt_prefix}_best/_last/_final.pt "
+          f"to clay-checkpoints volume.")
 
 
 # ---------------------------------------------------------------------------
