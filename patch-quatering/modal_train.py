@@ -75,7 +75,7 @@ ckpt_vol = modal.Volume.from_name("clay-checkpoints", create_if_missing=True)
 neon_vol = modal.Volume.from_name("mot",              create_if_missing=True)
 
 DATA_DIR  = "/data"
-CKPT_BASE = "/checkpoints"
+CKPT_DIR  = "/checkpoints"
 NEON_DIR  = "/neon"
 CLAY_CKPT = "/checkpoints/clay-v1.5.ckpt"
 # Public HF download URL (resolve/, not blob/ which is the web view).
@@ -93,8 +93,9 @@ except Exception:
 
 COMMON = dict(
     gpu="A10G",
-    timeout=60 * 60 * 24,       # 6 hours max
-    volumes={DATA_DIR: data_vol, CKPT_BASE: ckpt_vol, NEON_DIR: neon_vol},
+    cpu=8.0,                    # feed the 16 dataloader workers (I/O-bound on the volume)
+    timeout=60 * 60 * 24,
+    volumes={DATA_DIR: data_vol, CKPT_DIR: ckpt_vol, NEON_DIR: neon_vol},
     secrets=_wandb_secret,
 )
 
@@ -135,46 +136,32 @@ def _ensure_clay_ckpt():
     print(f"[clay] checkpoint ready ({os.path.getsize(CLAY_CKPT) / 1e9:.2f} GB)")
 
 
-def _build_neon_dataset(cfg, data_source, out_tag, labels_csv, patches_root, tag):
-    """Build the Stage-B training dataset from the `mot` volume.
-
-    Returns (dataset, collate_fn) — both None when data_source != "neon" (the
-    caller then falls back to the RGB DeepForest JSON via annotations_path).
-    `tag` is just the log prefix (e.g. "Stage B" / "Stage B FT")."""
-    d = cfg.get("data", {})
-    labels_csv = labels_csv or f"/neon/{out_tag}/labels.csv"
-    patches_root = patches_root or f"/neon/{out_tag}"
-
-    if data_source != "neon":
-        return None, None
-
-    from src.data.neon_dataset import NeonPatchDataset
-    from src.data.deepforest_dataset import deepforest_collate_fn
-    dataset = NeonPatchDataset(
-        labels_csv=labels_csv,
-        patches_root=patches_root,
-        tile_size=d.get("tile_size", 256),
-        augment=d.get("augment", True),
-    )
-    print(f"[{tag}] NEON dataset: {len(dataset)} patches from {labels_csv}")
-
-    # Q must be >= the densest patch or Hungarian matching silently drops GT
-    # (spec gotcha #12). Warn loudly if the data outgrew num_queries.
-    q = cfg["model"]["num_queries"]
-    max_boxes = max((len(it["boxes"]) for it in dataset.items), default=0)
-    if max_boxes > q:
-        print(f"[{tag}] *** WARNING: densest patch has {max_boxes} boxes > "
-              f"num_queries={q}; GT will be dropped. Re-run with "
-              f"--num-queries {max_boxes}. ***")
-    else:
-        print(f"[{tag}] densest patch = {max_boxes} boxes <= num_queries={q} (ok)")
-    return dataset, deepforest_collate_fn
-
-
-@app.function(image=image, volumes={CKPT_BASE: ckpt_vol}, timeout=60 * 60)
+@app.function(image=image, volumes={CKPT_DIR: ckpt_vol}, timeout=60 * 60)
 def fetch_clay_ckpt():
     """Standalone: pull the Clay checkpoint to the volume (run once if you like)."""
     _ensure_clay_ckpt()
+
+
+def _localize_packed(packed_dir):
+    """Copy packed {SITE}.npy + packed_index.csv from the network volume to local
+    container disk. Training shuffles, so reads are random-access; from the volume
+    that means a network page-fault per access (GPU starves at ~50% even after
+    packing). Copying once up front (sequential, fast) makes every epoch's reads
+    hit local SSD / page cache instead — the difference between data-bound and
+    GPU-bound. Returns the local dir (or the input unchanged if packed_dir is None)."""
+    import os
+    import shutil
+    if not packed_dir:
+        return packed_dir
+    local = "/tmp/packed"
+    os.makedirs(local, exist_ok=True)
+    files = [f for f in sorted(os.listdir(packed_dir)) if f.endswith((".npy", ".csv"))]
+    for f in files:
+        dst = os.path.join(local, f)
+        if not os.path.exists(dst):
+            shutil.copy(os.path.join(packed_dir, f), dst)
+    print(f"[setup] localized {len(files)} packed files {packed_dir} -> {local}", flush=True)
+    return local
 
 
 def _setup(config_path: str, num_queries: int = 0):
@@ -235,14 +222,54 @@ def stage_b(
     model, cfg = _setup(config, num_queries)
     from src.train.stage_b import run_stage_b
 
-    t, l = cfg["training"], cfg["loss"]
-    ckpt_dir = f"{CKPT_BASE}/q{cfg['model']['num_queries']}"
+    t, l, d = cfg["training"], cfg["loss"], cfg.get("data", {})
+
+    # Derive the data paths from out_tag unless explicitly overridden. In
+    # prequartered mode the pipeline writes labels_quarter.csv (128 tiles) +
+    # labels_parent.csv (full 256 GT for stitched eval).
+    prequartered = d.get("prequartered", False)
+    if prequartered:
+        labels_csv = labels_csv or f"/neon/{out_tag}/labels_quarter.csv"
+        parent_labels_csv = f"/neon/{out_tag}/labels_parent.csv"
+    else:
+        labels_csv = labels_csv or f"/neon/{out_tag}/labels.csv"
+        parent_labels_csv = None
+    patches_root = patches_root or f"/neon/{out_tag}"
 
     # Default: 4-band NEON patches (mot volume) produced by modal_pipeline.py.
     # Pass data_source="deepforest" to fall back to the RGB JSON on clay-data.
-    dataset, collate_fn = _build_neon_dataset(
-        cfg, data_source, out_tag, labels_csv, patches_root, "Stage B"
-    )
+    dataset = collate_fn = None
+    if data_source == "neon":
+        from src.data.neon_dataset import NeonPatchDataset
+        from src.data.deepforest_dataset import deepforest_collate_fn
+        packed_dir = f"/neon/{out_tag}/packed" if (prequartered and d.get("packed", False)) else None
+        packed_dir = _localize_packed(packed_dir)   # copy to local disk -> fast random reads
+        dataset = NeonPatchDataset(
+            labels_csv=labels_csv,
+            patches_root=patches_root,
+            tile_size=d.get("tile_size", 256),
+            augment=d.get("augment", True),
+            quarter=d.get("quarter", False),
+            n_split=d.get("n_split", 2),
+            max_trees=d.get("max_trees", 0),
+            parent_labels_csv=parent_labels_csv,
+            parent_size=d.get("parent_size", 256),
+            packed_dir=packed_dir,
+        )
+        collate_fn = deepforest_collate_fn
+        print(f"[Stage B] NEON dataset: {len(dataset)} tiles from {labels_csv}"
+              + (f" (packed: {packed_dir})" if packed_dir else ""))
+
+        # Q must be >= the densest tile or Hungarian matching silently drops GT
+        # (spec gotcha #12). Warn loudly if the data outgrew num_queries.
+        q = cfg["model"]["num_queries"]
+        max_boxes = max((len(s["boxes"]) for s in dataset.samples), default=0)
+        if max_boxes > q:
+            print(f"[Stage B] *** WARNING: densest tile has {max_boxes} boxes > "
+                  f"num_queries={q}; GT will be dropped. Re-run with "
+                  f"--num-queries {max_boxes} (and match Stage C). ***")
+        else:
+            print(f"[Stage B] densest tile = {max_boxes} boxes <= num_queries={q} (ok)")
 
     run = _wandb_init(
         "stage_b", cfg,
@@ -255,7 +282,7 @@ def stage_b(
             annotations_path=stage_b_annotations,
             dataset=dataset,
             collate_fn=collate_fn,
-            checkpoint_dir=ckpt_dir,
+            checkpoint_dir=CKPT_DIR,
             total_epochs=t["total_epochs"],
             batch_size=t["batch_size"],
             lr=t["lr"],
@@ -277,69 +304,77 @@ def stage_b(
 
 
 # ---------------------------------------------------------------------------
-# Stage B fine-tune: continue from a checkpoint at a flat LR
+# Stage B evaluation — stitch quarter predictions back to the parent (256) frame
 # ---------------------------------------------------------------------------
 @app.function(**COMMON)
-def stage_b_finetune(
-    stage_b_checkpoint: str = "/checkpoints/stage_b_best.pt",
-    epochs: int = 10,
-    lr: float = 5e-4,
-    data_source: str = "neon",
-    out_tag: str = "patches",
+def eval_stage_b(
+    checkpoint: str = "/checkpoints/stage_b_best.pt",
+    out_tag: str = "patches_quarter",
     num_queries: int = 0,
     labels_csv: str = "",
     patches_root: str = "",
-    out_prefix: str = "stage_b_ft",
     config: str = "/root/configs/stage_b.yaml",
+    split: str = "val",            # "val" (held-out parents) or "all"
+    conf_thresh: float = 0.5,
+    nms_iou: float = 0.6,
 ):
-    """Continue Stage B from `stage_b_checkpoint` for `epochs` more epochs at a
-    constant learning rate `lr` (default 5e-4) — no warmup, no decay. Writes
-    {out_prefix}_best.pt / {out_prefix}_final.pt to the checkpoints volume so the
-    original Stage B run is preserved. num_queries must match that run."""
-    _ensure_clay_ckpt()
+    """Parent-level (256-frame) metrics for a trained Stage-B model. Runs the
+    model on quarter tiles, stitches predictions back into the parent frame,
+    and scores against the full 256 GT — directly comparable to an un-quartered
+    baseline. Reads quartering settings (prequartered/tile_size) from the config,
+    and evaluates on the same held-out val parents the training used.
+
+    For a rigorous held-out number, point --labels-csv at a separate test CSV
+    and pass --split all. num_queries must match the trained checkpoint."""
+    import json
+
+    import torch
+
     model, cfg = _setup(config, num_queries)
-    from src.train.stage_b import run_stage_b_finetune
+    state = torch.load(checkpoint, map_location="cuda")
+    model.load_state_dict(state["model"])
+    model = model.to("cuda")
 
-    t, l = cfg["training"], cfg["loss"]
-    ckpt_dir = f"{CKPT_BASE}/q{cfg['model']['num_queries']}"
-    dataset, collate_fn = _build_neon_dataset(
-        cfg, data_source, out_tag, labels_csv, patches_root, "Stage B FT"
-    )
-    if dataset is None:
-        raise ValueError("stage_b_finetune currently supports data_source='neon' only.")
+    from src.data.neon_dataset import NeonPatchDataset
+    from src.eval.stitch import stitch_eval
+    from src.train.stage_b import _split_train_val
 
-    run = _wandb_init(
-        "stage_b_finetune", cfg,
-        extra={"stage": "B-ft", "data_source": data_source, "lr": lr,
-               "epochs": epochs, "resume_from": stage_b_checkpoint,
-               "n_patches": len(dataset)},
+    d = cfg.get("data", {})
+    prequartered = d.get("prequartered", False)
+    if prequartered:
+        labels_csv = labels_csv or f"/neon/{out_tag}/labels_quarter.csv"
+        parent_labels_csv = f"/neon/{out_tag}/labels_parent.csv"
+    else:
+        labels_csv = labels_csv or f"/neon/{out_tag}/labels.csv"
+        parent_labels_csv = None
+    patches_root = patches_root or f"/neon/{out_tag}"
+
+    # max_trees=0: score every available tile (quarters were already capped at
+    # write time, so dense quarters' GT counts as misses against the full 256 GT).
+    packed_dir = f"/neon/{out_tag}/packed" if (prequartered and d.get("packed", False)) else None
+    packed_dir = _localize_packed(packed_dir)
+    dataset = NeonPatchDataset(
+        labels_csv=labels_csv, patches_root=patches_root,
+        tile_size=d.get("tile_size", 256), augment=False,
+        quarter=d.get("quarter", False), n_split=d.get("n_split", 2),
+        max_trees=0, parent_labels_csv=parent_labels_csv,
+        parent_size=d.get("parent_size", 256), packed_dir=packed_dir,
     )
-    try:
-        run_stage_b_finetune(
-            model=model,
-            checkpoint_path=stage_b_checkpoint,
-            dataset=dataset,
-            collate_fn=collate_fn,
-            checkpoint_dir=ckpt_dir,
-            epochs=epochs,
-            batch_size=t["batch_size"],
-            lr=lr,
-            weight_decay=t["weight_decay"],
-            val_fraction=t["val_fraction"],
-            lam_cls=l["lam_cls"],
-            lam_l1=l["lam_l1"],
-            lam_giou=l["lam_giou"],
-            device="cuda",
-            num_workers=t["num_workers"],
-            out_prefix=out_prefix,
-            on_checkpoint=ckpt_vol.commit,   # persist each new best immediately
-        )
-    finally:
-        if run is not None:
-            run.finish()
-    ckpt_vol.commit()
-    print(f"Stage B fine-tune complete. Wrote {out_prefix}_best.pt / "
-          f"{out_prefix}_final.pt to clay-checkpoints volume.")
+    if split == "val":
+        _, val = _split_train_val(dataset, cfg["training"]["val_fraction"], seed=42)
+        val_parents = {dataset.samples[i]["parent"] for i in val.indices}
+        dataset.samples = [s for s in dataset.samples if s["parent"] in val_parents]
+
+    n_parents = len({s["parent"] for s in dataset.samples})
+    print(f"[eval/{split}] {len(dataset)} tiles over {n_parents} parents")
+    res = stitch_eval(
+        model, dataset, device="cuda",
+        batch_size=cfg["training"]["batch_size"],
+        num_workers=cfg["training"]["num_workers"],
+        conf_thresh=conf_thresh, nms_iou=nms_iou,
+    )
+    print("[eval] parent-level metrics:\n" + json.dumps(res, indent=2, default=float))
+    return res
 
 
 # ---------------------------------------------------------------------------
@@ -360,7 +395,6 @@ def stage_c(
     from src.train.stage_c import run_stage_c
 
     t, l = cfg["training"], cfg["loss"]
-    ckpt_dir = f"{CKPT_BASE}/q{cfg['model']['num_queries']}"
     # configs store a repo-relative norm-stats path; map it to the mounted location.
     norm_stats = cfg.get("data", {}).get(
         "norm_stats_path", "configs/naip_normalization.yaml"
@@ -374,7 +408,7 @@ def stage_c(
             model=model,
             train_annotations_path=train_annotations,
             val_annotations_path=val_annotations,
-            checkpoint_dir=ckpt_dir,
+            checkpoint_dir=CKPT_DIR,
             norm_stats_path=norm_stats,
             total_epochs=t["total_epochs"],
             frozen_epochs=t["frozen_epochs"],

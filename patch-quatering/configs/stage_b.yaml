@@ -1,0 +1,38 @@
+# Stage B: NEON pretraining (pre-quartered 128-px tiles)
+model:
+  neck_in_channels: 1024     # Clay v1.5 large embedding dim
+  neck_out_channels: 128
+  num_queries: 150           # MUST match the pipeline per-quarter --max-trees (gotcha #12)
+  hidden: 128
+  n_heads: 4
+  n_decoder_layers: 3
+  dropout: 0.1
+
+training:
+  total_epochs: 50
+  batch_size: 128
+  lr: 1.0e-3
+  weight_decay: 0.05
+  warmup_epochs: 5
+  val_fraction: 0.1
+  num_workers: 16      # data-loading bound on ~116k small tifs; parallelize reads
+
+loss:
+  lam_cls: 1.0
+  lam_l1: 5.0
+  lam_giou: 2.0
+
+data:
+  # Pre-quartered output from dataset_dev/modal_pipeline.py --quarter:
+  # 128-px tifs + labels_quarter.csv (training) + labels_parent.csv (full 256 GT
+  # for stitched, parent-level eval — head-to-head with the 256 baseline). See
+  # clay/experiment.md.
+  prequartered: true
+  packed: true         # read pixels from per-site memmaps (pipeline --pack); no per-tile GeoTIFF opens
+  tile_size: 128       # quarter tif size ON DISK
+  parent_size: 256     # parent frame used for stitching + GT
+  max_trees: 0         # quarters already capped at write time (pipeline --max-trees)
+  augment: true
+  # On-the-fly fallback (unused when prequartered): split a 256 labels.csv at read.
+  quarter: false
+  n_split: 2

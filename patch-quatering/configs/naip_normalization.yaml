@@ -1,0 +1,8 @@
+# Clay NAIP per-band normalization stats (R, G, B, NIR order)
+# Source: Clay v1.5 configs/metadata.yaml -> naip.band_order = [red, green, blue, nir]
+
+metadata:
+  naip:
+    mean: [110.16, 115.41, 98.15, 139.04]   # red, green, blue, nir
+    std:  [ 47.23,  39.82,  35.43,  49.86]   # red, green, blue, nir
+    
