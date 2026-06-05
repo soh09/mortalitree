@@ -1,0 +1,373 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "759",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/gwynethb_mortalitree_prefire_labels.geojson",
+        "SUNETID": "gwynethb",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22051,
+        "TILE_Y": 50887,
+        "TILEXYZ": [
+          17,
+          22051,
+          50887
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22051/50887.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 7
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.4349327879967,
+              37.282803587294374
+            ],
+            [
+              -119.43483771058824,
+              37.28280072007522
+            ],
+            [
+              -119.43483799733502,
+              37.28279464911045
+            ],
+            [
+              -119.43493321015812,
+              37.28279464911045
+            ],
+            [
+              -119.4349327879967,
+              37.282803587294374
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "775",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/gwynethb_mortalitree_prefire_labels.geojson",
+        "SUNETID": "gwynethb",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22051,
+        "TILE_Y": 50887,
+        "TILEXYZ": [
+          17,
+          22051,
+          50887
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22051/50887.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 7
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.4344538729725,
+              37.28279675200858
+            ],
+            [
+              -119.43438414988584,
+              37.28279464911045
+            ],
+            [
+              -119.4344539723083,
+              37.28279464911045
+            ],
+            [
+              -119.4344538729725,
+              37.28279675200858
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "777",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/gwynethb_mortalitree_prefire_labels.geojson",
+        "SUNETID": "gwynethb",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22051,
+        "TILE_Y": 50887,
+        "TILEXYZ": [
+          17,
+          22051,
+          50887
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22051/50887.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 7
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.43468451021671,
+              37.282818923843394
+            ],
+            [
+              -119.43458943281472,
+              37.28281605642381
+            ],
+            [
+              -119.43459044400643,
+              37.28279464911045
+            ],
+            [
+              -119.43468565682278,
+              37.28279464911045
+            ],
+            [
+              -119.43468451021671,
+              37.282818923843394
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "778",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/gwynethb_mortalitree_prefire_labels.geojson",
+        "SUNETID": "gwynethb",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22051,
+        "TILE_Y": 50887,
+        "TILEXYZ": [
+          17,
+          22051,
+          50887
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22051/50887.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 7
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.43479214500921,
+              37.282824705880145
+            ],
+            [
+              -119.43468439060042,
+              37.282821456229755
+            ],
+            [
+              -119.43468565682245,
+              37.28279464911045
+            ],
+            [
+              -119.43479356468416,
+              37.28279464911045
+            ],
+            [
+              -119.43479214500921,
+              37.282824705880145
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "779",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/gwynethb_mortalitree_prefire_labels.geojson",
+        "SUNETID": "gwynethb",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22051,
+        "TILE_Y": 50887,
+        "TILEXYZ": [
+          17,
+          22051,
+          50887
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22051/50887.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 7
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.43435502824133,
+              37.282806450744374
+            ],
+            [
+              -119.4342472739099,
+              37.28280320069742
+            ],
+            [
+              -119.43424767788954,
+              37.28279464911045
+            ],
+            [
+              -119.43435558573736,
+              37.28279464911045
+            ],
+            [
+              -119.43435502824133,
+              37.282806450744374
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "829",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/gwynethb_mortalitree_prefire_labels.geojson",
+        "SUNETID": "gwynethb",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22051,
+        "TILE_Y": 50887,
+        "TILEXYZ": [
+          17,
+          22051,
+          50887
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22051/50887.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 7
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.43356845760033,
+              37.282795404189905
+            ],
+            [
+              -119.4335434286337,
+              37.28279464911045
+            ],
+            [
+              -119.43356849327732,
+              37.28279464911045
+            ],
+            [
+              -119.43356845760033,
+              37.282795404189905
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "838",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/gwynethb_mortalitree_prefire_labels.geojson",
+        "SUNETID": "gwynethb",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22051,
+        "TILE_Y": 50887,
+        "TILEXYZ": [
+          17,
+          22051,
+          50887
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22051/50887.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 7
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.43272705310332,
+              37.28280298572909
+            ],
+            [
+              -119.43263831440257,
+              37.28280030800672
+            ],
+            [
+              -119.4326385818515,
+              37.28279464911045
+            ],
+            [
+              -119.43272744709613,
+              37.28279464911045
+            ],
+            [
+              -119.43272705310332,
+              37.28280298572909
+            ]
+          ]
+        ]
+      }
+    }
+  ],
+  "properties": {
+    "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/gwynethb_mortalitree_prefire_labels.geojson",
+    "SUNETID": "gwynethb",
+    "FIRENAME": "CREEK",
+    "FIRE_SLUG": "CREEK",
+    "PREFIRE": 1,
+    "PREFIRE_STATUS": "prefire",
+    "TILE_Z": 17,
+    "TILE_X": 22051,
+    "TILE_Y": 50887,
+    "TILEXYZ": [
+      17,
+      22051,
+      50887
+    ],
+    "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22051/50887.geojson",
+    "OUTPUT_STATUS_DIR": "prefire",
+    "FEATURE_COUNT": 7
+  }
+}

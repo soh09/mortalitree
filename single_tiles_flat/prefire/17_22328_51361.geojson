@@ -1,0 +1,80 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "35",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "tree_id": 37.0,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/aiong05_prefire_labels.geojson",
+        "SUNETID": "aiong05",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22328,
+        "TILE_Y": 51361,
+        "TILEXYZ": [
+          17,
+          22328,
+          51361
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22328/51361.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 1
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.67428649929744,
+              36.24157392884447
+            ],
+            [
+              -118.67430202972147,
+              36.241514857152275
+            ],
+            [
+              -118.6743103425042,
+              36.24147540209227
+            ],
+            [
+              -118.67431640625,
+              36.24146979511436
+            ],
+            [
+              -118.67431640625,
+              36.241588584248454
+            ],
+            [
+              -118.67428649929744,
+              36.24157392884447
+            ]
+          ]
+        ]
+      }
+    }
+  ],
+  "properties": {
+    "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/aiong05_prefire_labels.geojson",
+    "SUNETID": "aiong05",
+    "FIRENAME": "CASTLE",
+    "FIRE_SLUG": "CASTLE",
+    "PREFIRE": 1,
+    "PREFIRE_STATUS": "prefire",
+    "TILE_Z": 17,
+    "TILE_X": 22328,
+    "TILE_Y": 51361,
+    "TILEXYZ": [
+      17,
+      22328,
+      51361
+    ],
+    "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22328/51361.geojson",
+    "OUTPUT_STATUS_DIR": "prefire",
+    "FEATURE_COUNT": 1
+  }
+}

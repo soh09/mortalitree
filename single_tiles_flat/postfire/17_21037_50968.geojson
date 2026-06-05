@@ -1,0 +1,75 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "222",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/izzyip_mortalitree_postfire_labels.geojson",
+        "SUNETID": "izzyip",
+        "FIRENAME": "CZU AUG LIGHTNING",
+        "FIRE_SLUG": "CZU_AUG_LIGHTNING",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 21037,
+        "TILE_Y": 50968,
+        "TILEXYZ": [
+          17,
+          21037,
+          50968
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/21037/50968.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 1
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.2200961984575,
+              37.10655409505032
+            ],
+            [
+              -122.22009745601109,
+              37.10643145111761
+            ],
+            [
+              -122.22015380859375,
+              37.106431821757894
+            ],
+            [
+              -122.22015380859375,
+              37.10655447396282
+            ],
+            [
+              -122.2200961984575,
+              37.10655409505032
+            ]
+          ]
+        ]
+      }
+    }
+  ],
+  "properties": {
+    "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/izzyip_mortalitree_postfire_labels.geojson",
+    "SUNETID": "izzyip",
+    "FIRENAME": "CZU AUG LIGHTNING",
+    "FIRE_SLUG": "CZU_AUG_LIGHTNING",
+    "PREFIRE": 0,
+    "PREFIRE_STATUS": "postfire",
+    "TILE_Z": 17,
+    "TILE_X": 21037,
+    "TILE_Y": 50968,
+    "TILEXYZ": [
+      17,
+      21037,
+      50968
+    ],
+    "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/21037/50968.geojson",
+    "OUTPUT_STATUS_DIR": "postfire",
+    "FEATURE_COUNT": 1
+  }
+}

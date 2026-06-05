@@ -1,0 +1,75 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "224",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_postfire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 21227,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21227,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/21227/50846.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 1
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69562013280515,
+              37.37303831042996
+            ],
+            [
+              -121.695556640625,
+              37.373037610012254
+            ],
+            [
+              -121.695556640625,
+              37.37284936253032
+            ],
+            [
+              -121.69562339224822,
+              37.372850098901615
+            ],
+            [
+              -121.69562013280515,
+              37.37303831042996
+            ]
+          ]
+        ]
+      }
+    }
+  ],
+  "properties": {
+    "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_postfire_labels.geojson",
+    "SUNETID": "snick",
+    "FIRENAME": "SCU LIGHTNING COMPLEX",
+    "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+    "PREFIRE": 0,
+    "PREFIRE_STATUS": "postfire",
+    "TILE_Z": 17,
+    "TILE_X": 21227,
+    "TILE_Y": 50846,
+    "TILEXYZ": [
+      17,
+      21227,
+      50846
+    ],
+    "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/21227/50846.geojson",
+    "OUTPUT_STATUS_DIR": "postfire",
+    "FEATURE_COUNT": 1
+  }
+}

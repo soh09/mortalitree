@@ -1,0 +1,75 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "340",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/jjackie_mortalitree_postfire_labels.geojson",
+        "SUNETID": "jjackie",
+        "FIRENAME": "CZU AUG LIGHTNING",
+        "FIRE_SLUG": "CZU_AUG_LIGHTNING",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 21014,
+        "TILE_Y": 50950,
+        "TILEXYZ": [
+          17,
+          21014,
+          50950
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/21014/50950.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 1
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.28219990577684,
+              37.147182099723764
+            ],
+            [
+              -122.28209778576327,
+              37.147182099723764
+            ],
+            [
+              -122.28209785290795,
+              37.147174996308195
+            ],
+            [
+              -122.2821999670667,
+              37.14717561478222
+            ],
+            [
+              -122.28219990577684,
+              37.147182099723764
+            ]
+          ]
+        ]
+      }
+    }
+  ],
+  "properties": {
+    "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/jjackie_mortalitree_postfire_labels.geojson",
+    "SUNETID": "jjackie",
+    "FIRENAME": "CZU AUG LIGHTNING",
+    "FIRE_SLUG": "CZU_AUG_LIGHTNING",
+    "PREFIRE": 0,
+    "PREFIRE_STATUS": "postfire",
+    "TILE_Z": 17,
+    "TILE_X": 21014,
+    "TILE_Y": 50950,
+    "TILEXYZ": [
+      17,
+      21014,
+      50950
+    ],
+    "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/21014/50950.geojson",
+    "OUTPUT_STATUS_DIR": "postfire",
+    "FEATURE_COUNT": 1
+  }
+}

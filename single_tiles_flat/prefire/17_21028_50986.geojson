@@ -1,0 +1,75 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "170",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/izzyip_mortalitree_prefire_labels.geojson",
+        "SUNETID": "izzyip",
+        "FIRENAME": "CZU AUG LIGHTNING",
+        "FIRE_SLUG": "CZU_AUG_LIGHTNING",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21028,
+        "TILE_Y": 50986,
+        "TILEXYZ": [
+          17,
+          21028,
+          50986
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21028/50986.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 1
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.24486557086911,
+              37.06679931402035
+            ],
+            [
+              -122.24486678703224,
+              37.066676638415295
+            ],
+            [
+              -122.244873046875,
+              37.0666766782632
+            ],
+            [
+              -122.244873046875,
+              37.066799361610045
+            ],
+            [
+              -122.24486557086911,
+              37.06679931402035
+            ]
+          ]
+        ]
+      }
+    }
+  ],
+  "properties": {
+    "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/izzyip_mortalitree_prefire_labels.geojson",
+    "SUNETID": "izzyip",
+    "FIRENAME": "CZU AUG LIGHTNING",
+    "FIRE_SLUG": "CZU_AUG_LIGHTNING",
+    "PREFIRE": 1,
+    "PREFIRE_STATUS": "prefire",
+    "TILE_Z": 17,
+    "TILE_X": 21028,
+    "TILE_Y": 50986,
+    "TILEXYZ": [
+      17,
+      21028,
+      50986
+    ],
+    "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21028/50986.geojson",
+    "OUTPUT_STATUS_DIR": "prefire",
+    "FEATURE_COUNT": 1
+  }
+}

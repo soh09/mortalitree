@@ -58,6 +58,14 @@ PATCH_M = PATCH_PX * TARGET_GSD               # 153.6 m
 SRC_TILE_M = 1000                             # NEON 1 km tile
 PATCHES_PER_SIDE = int(SRC_TILE_M // PATCH_M) # 6
 
+# Quartering: each 256 parent cell is split into N_SPLIT x N_SPLIT sub-tiles,
+# aligned to the parent grid so quarters nest exactly into a parent (2 x 128 px
+# = 256 px). Keeps trees/tile within the query budget AND recovers dense-forest
+# patches a per-256 max_trees filter would drop. See clay/experiment.md.
+N_SPLIT = 2
+QUARTER_PX = PATCH_PX // N_SPLIT              # 128
+QUARTER_M = PATCH_M / N_SPLIT                 # 76.8 m
+
 NIR_LO, NIR_HI = 835.0, 920.0
 RED_LO, RED_HI = 620.0, 700.0
 NDVI_DEAD = 0.6
@@ -104,7 +112,7 @@ vol = modal.Volume.from_name(VOLUME_NAME, create_if_missing=True)
 )
 def process_tile(
     site: str, year: str, month: str, east: int, north: int,
-    max_trees: int = 0, out_root: str = "/data/patches",
+    max_trees: int = 0, out_root: str = "/data/patches", quarter: bool = False,
 ) -> dict:
     """Process one 1 km source tile, write patches + label chunk to the volume,
     return a small ack dict (so we never trigger Modal's blob result path).
@@ -113,6 +121,12 @@ def process_tile(
     the upper bound). The count is the post-NDVI boxes whose centers fall in the
     patch — the same quantity the density scout reports — so a patch over the
     detector's query budget is dropped before any pixel work is done.
+
+    quarter=True: split each 256 parent cell into N_SPLIT x N_SPLIT sub-tiles
+    (128 px) aligned to the parent grid; apply the max_trees budget per *quarter*
+    and write 128-px tifs + two label chunks: `quarter_{geo}.csv` (per-quarter
+    boxes, 128 frame, with parent/q_row/q_col) for training, and `parent_{geo}.csv`
+    (full unclipped 256-frame GT per parent) for stitched parent-level scoring.
     """
     import h5py
     import numpy as np
@@ -211,169 +225,331 @@ def process_tile(
 
     src_left = east
     src_top  = north + SRC_TILE_M
-    rows: list[dict] = []
+    geo = f"{east}_{north}"
     n_written = 0
-    n_dropped = 0          # patches skipped for exceeding max_trees
-    boxes_dropped = 0      # boxes living in those dropped patches
+    n_dropped = 0          # tiles skipped for exceeding max_trees
+    boxes_dropped = 0      # boxes living in those dropped tiles
 
     with rasterio.open(rgb_path) as rgb_src:
         crs = rgb_src.crs
         # UTM -> WGS84 lat/lon for Clay's metadata. Built once per tile.
         to_wgs84 = Transformer.from_crs(crs, "EPSG:4326", always_xy=True)
-        for r in range(PATCHES_PER_SIDE):
-            for c in range(PATCHES_PER_SIDE):
-                patch_left   = src_left + c * PATCH_M
-                patch_top    = src_top  - r * PATCH_M
-                patch_right  = patch_left + PATCH_M
-                patch_bottom = patch_top  - PATCH_M
 
-                # --- count boxes whose centers fall inside this patch -------
-                # Done first so over-dense / empty patches are skipped before any
-                # expensive pixel work (RGB read, NIR upsample, tif write).
-                inside = (
-                    (cx_box >= patch_left)  & (cx_box < patch_right) &
-                    (cy_box >  patch_bottom) & (cy_box <= patch_top)
-                )
-                n_inside = int(inside.sum())
-                if n_inside == 0:
+        def render(left, top, right, bottom, out_px):
+            """4-band (R,G,B,NIR) uint8 array for a UTM bbox: RGB area-averaged
+            from 0.1 m, NIR bilinear-upsampled from 1 m. boundless + offset-padded
+            so edge-tile windows aren't stretched (see notes below)."""
+            win = rasterio.windows.from_bounds(left, bottom, right, top, rgb_src.transform)
+            rgb = rgb_src.read(
+                [1, 2, 3], window=win, out_shape=(3, out_px, out_px),
+                resampling=Resampling.average, boundless=True, fill_value=0,
+            )
+            c0f = (left  - x0_hsi) / px_hsi
+            c1f = (right - x0_hsi) / px_hsi
+            r0f = (y0_hsi - top)    / px_hsi
+            r1f = (y0_hsi - bottom) / px_hsi
+            cmn = int(np.floor(min(c0f, c1f))); cmx = int(np.ceil(max(c0f, c1f)))
+            rmn = int(np.floor(min(r0f, r1f))); rmx = int(np.ceil(max(r0f, r1f)))
+            Hh, Ww = nir.shape
+            full = np.zeros((max(1, rmx - rmn), max(1, cmx - cmn)), dtype=np.float32)
+            cs, ce = max(0, cmn), min(Ww, cmx)
+            rs, re2 = max(0, rmn), min(Hh, rmx)
+            if ce > cs and re2 > rs:
+                full[rs - rmn:re2 - rmn, cs - cmn:ce - cmn] = np.nan_to_num(
+                    nir[rs:re2, cs:ce], nan=0.0)
+            nir_up = zoom(full, zoom=(out_px / full.shape[0], out_px / full.shape[1]), order=1)
+            nir_q = np.clip(nir_up * 255.0, 0, 255).astype(np.uint8)
+            return np.stack([rgb[0], rgb[1], rgb[2], nir_q], axis=0)
+
+        def write_tif(arr, left, top, out_px, path):
+            tr = from_origin(left, top, TARGET_GSD, TARGET_GSD)
+            with rasterio.open(
+                path, "w", driver="GTiff", height=out_px, width=out_px, count=4,
+                dtype=arr.dtype, crs=crs, transform=tr, compress="deflate",
+            ) as dst:
+                dst.write(arr)
+
+        def box_rows(mask, ref_left, ref_top, out_px, head, tail):
+            """Pixel-frame box dicts for alive boxes selected by `mask`, clamped to
+            the [0, out_px] tile and dropping degenerate (<1 px) boxes. `head`/`tail`
+            wrap the box fields so column order stays site,imgname,...,box,...,meta."""
+            out = []
+            for s in alive.iloc[mask].itertuples(index=False):
+                xmin = (s.left  - ref_left) / TARGET_GSD
+                xmax = (s.right - ref_left) / TARGET_GSD
+                ymin = (ref_top - s.top)    / TARGET_GSD
+                ymax = (ref_top - s.bottom) / TARGET_GSD
+                xmin = max(0.0, xmin); ymin = max(0.0, ymin)
+                xmax = min(float(out_px), xmax); ymax = min(float(out_px), ymax)
+                if xmax - xmin < 1.0 or ymax - ymin < 1.0:
                     continue
-                if max_trees and n_inside > max_trees:
-                    n_dropped += 1
-                    boxes_dropped += n_inside
-                    continue
+                out.append({
+                    **head,
+                    "xmin": round(xmin, 2), "ymin": round(ymin, 2),
+                    "xmax": round(xmax, 2), "ymax": round(ymax, 2),
+                    "score": float(s.score), "ndvi": float(s.ndvi),
+                    **tail,
+                })
+            return out
 
-                patch_cx_utm = patch_left + PATCH_M / 2
-                patch_cy_utm = patch_top  - PATCH_M / 2
-                lon, lat = to_wgs84.transform(patch_cx_utm, patch_cy_utm)
+        def centers_in(left, right, top, bottom):
+            return (
+                (cx_box >= left) & (cx_box < right) &
+                (cy_box > bottom) & (cy_box <= top)
+            )
 
-                # --- RGB area-average from 0.1 m to 0.6 m --------------------
-                # from_bounds gives the exact (possibly fractional / out-of-range)
-                # window for this patch's UTM box. boundless=True is REQUIRED: on
-                # partial/edge tiles the window runs past the raster, and without
-                # it rasterio stretches the in-bounds slice across the whole 256,
-                # sliding the image out from under the (correctly placed) boxes.
-                win = rasterio.windows.from_bounds(
-                    patch_left, patch_bottom, patch_right, patch_top,
-                    rgb_src.transform,
-                )
-                rgb = rgb_src.read(
-                    [1, 2, 3], window=win,
-                    out_shape=(3, PATCH_PX, PATCH_PX),
-                    resampling=Resampling.average,
-                    boundless=True, fill_value=0,
-                )
-
-                # --- HSI NIR crop + bilinear upsample to 0.6 m ---------------
-                # Same edge-tile hazard as RGB: place the in-bounds NIR into a
-                # full-size frame at the correct offset and zero-pad the rest,
-                # then upsample — so a clipped crop is not stretched to fill 256.
-                c0f = (patch_left  - x0_hsi) / px_hsi
-                c1f = (patch_right - x0_hsi) / px_hsi
-                r0f = (y0_hsi - patch_top)   / px_hsi
-                r1f = (y0_hsi - patch_bottom) / px_hsi
-                cmn = int(np.floor(min(c0f, c1f)))
-                cmx = int(np.ceil(max(c0f, c1f)))
-                rmn = int(np.floor(min(r0f, r1f)))
-                rmx = int(np.ceil(max(r0f, r1f)))
-                Hh, Ww = nir.shape
-                full = np.zeros((max(1, rmx - rmn), max(1, cmx - cmn)), dtype=np.float32)
-                cs, ce = max(0, cmn), min(Ww, cmx)
-                rs, re = max(0, rmn), min(Hh, rmx)
-                if ce > cs and re > rs:
-                    full[rs - rmn:re - rmn, cs - cmn:ce - cmn] = np.nan_to_num(
-                        nir[rs:re, cs:ce], nan=0.0)
-                nir_up = zoom(
-                    full,
-                    zoom=(PATCH_PX / full.shape[0], PATCH_PX / full.shape[1]),
-                    order=1,
-                )
-                nir_q = np.clip(nir_up * 255.0, 0, 255).astype(np.uint8)
-
-                # R, G, B, NIR — matches Clay NAIP order
-                patch = np.stack([rgb[0], rgb[1], rgb[2], nir_q], axis=0)
-
-                imgname = f"{site}_{year}_{east}_{north}_r{r}_c{c}"
-                tr = from_origin(patch_left, patch_top, TARGET_GSD, TARGET_GSD)
-                with rasterio.open(
-                    out_dir / f"{imgname}.tif", "w",
-                    driver="GTiff", height=PATCH_PX, width=PATCH_PX, count=4,
-                    dtype=patch.dtype, crs=crs, transform=tr,
-                    compress="deflate",
-                ) as dst:
-                    dst.write(patch)
-
-                # --- write box labels for this (kept) patch ----------------
-                n_written += 1
-                sub = alive.iloc[inside]
-                for s in sub.itertuples(index=False):
-                    xmin = (s.left  - patch_left) / TARGET_GSD
-                    xmax = (s.right - patch_left) / TARGET_GSD
-                    ymin = (patch_top - s.top)    / TARGET_GSD
-                    ymax = (patch_top - s.bottom) / TARGET_GSD
-                    xmin = max(0.0, xmin); ymin = max(0.0, ymin)
-                    xmax = min(float(PATCH_PX), xmax); ymax = min(float(PATCH_PX), ymax)
-                    if xmax - xmin < 1.0 or ymax - ymin < 1.0:
+        if not quarter:
+            # --- 256 patches (baseline) ---------------------------------------
+            rows: list[dict] = []
+            for r in range(PATCHES_PER_SIDE):
+                for c in range(PATCHES_PER_SIDE):
+                    pl = src_left + c * PATCH_M;  pt = src_top - r * PATCH_M
+                    pr = pl + PATCH_M;            pb = pt - PATCH_M
+                    inside = centers_in(pl, pr, pt, pb)
+                    n_inside = int(inside.sum())
+                    if n_inside == 0:
                         continue
-                    rows.append({
-                        "site": site,
-                        "imgname": imgname,
-                        "xmin": round(xmin, 2),
-                        "ymin": round(ymin, 2),
-                        "xmax": round(xmax, 2),
-                        "ymax": round(ymax, 2),
-                        "score": float(s.score),
-                        "ndvi": float(s.ndvi),
-                        "lat": round(float(lat), 6),
-                        "lon": round(float(lon), 6),
-                        "acquisition_yyyymm": month,
-                        "patch_left_utm": patch_left,
-                        "patch_top_utm": patch_top,
-                        "source_geo_index": f"{east}_{north}",
-                    })
+                    if max_trees and n_inside > max_trees:
+                        n_dropped += 1; boxes_dropped += n_inside; continue
+                    lon, lat = to_wgs84.transform(pl + PATCH_M / 2, pt - PATCH_M / 2)
+                    imgname = f"{site}_{year}_{east}_{north}_r{r}_c{c}"
+                    write_tif(render(pl, pt, pr, pb, PATCH_PX), pl, pt, PATCH_PX,
+                              out_dir / f"{imgname}.tif")
+                    n_written += 1
+                    rows.extend(box_rows(
+                        inside, pl, pt, PATCH_PX,
+                        head={"site": site, "imgname": imgname},
+                        tail={"lat": round(float(lat), 6), "lon": round(float(lon), 6),
+                              "acquisition_yyyymm": month,
+                              "patch_left_utm": pl, "patch_top_utm": pt,
+                              "source_geo_index": geo},
+                    ))
+            if rows:
+                pd.DataFrame(rows).to_csv(chunk_dir / f"labels_{geo}.csv", index=False)
+            ack["n_boxes"] = len(rows)
+        else:
+            # --- 128 quarters, 2x2 aligned to each 256 parent cell ------------
+            q_rows: list[dict] = []
+            p_rows: list[dict] = []   # full 256-frame GT per parent (for stitched eval)
+            for r in range(PATCHES_PER_SIDE):
+                for c in range(PATCHES_PER_SIDE):
+                    pl = src_left + c * PATCH_M;  pt = src_top - r * PATCH_M
+                    pr = pl + PATCH_M;            pb = pt - PATCH_M
+                    p_inside = centers_in(pl, pr, pt, pb)
+                    if int(p_inside.sum()) == 0:
+                        continue
+                    parent = f"{site}_{year}_{east}_{north}_r{r}_c{c}"
+                    # full parent GT — all boxes in the 256 cell, regardless of the
+                    # per-quarter cap, so dropped-quarter trees still count at eval.
+                    p_rows.extend(box_rows(
+                        p_inside, pl, pt, PATCH_PX,
+                        head={"site": site, "parent": parent},
+                        tail={"source_geo_index": geo},
+                    ))
+                    for qr in range(N_SPLIT):
+                        for qc in range(N_SPLIT):
+                            ql = pl + qc * QUARTER_M;  qt = pt - qr * QUARTER_M
+                            qrr = ql + QUARTER_M;      qb = qt - QUARTER_M
+                            q_inside = centers_in(ql, qrr, qt, qb)
+                            n_q = int(q_inside.sum())
+                            if n_q == 0:
+                                continue
+                            if max_trees and n_q > max_trees:
+                                n_dropped += 1; boxes_dropped += n_q; continue
+                            lon, lat = to_wgs84.transform(ql + QUARTER_M / 2, qt - QUARTER_M / 2)
+                            imgname = f"{parent}_q{qr}{qc}"
+                            write_tif(render(ql, qt, qrr, qb, QUARTER_PX), ql, qt,
+                                      QUARTER_PX, out_dir / f"{imgname}.tif")
+                            n_written += 1
+                            q_rows.extend(box_rows(
+                                q_inside, ql, qt, QUARTER_PX,
+                                head={"site": site, "imgname": imgname,
+                                      "parent": parent, "q_row": qr, "q_col": qc},
+                                tail={"lat": round(float(lat), 6), "lon": round(float(lon), 6),
+                                      "acquisition_yyyymm": month,
+                                      "patch_left_utm": ql, "patch_top_utm": qt,
+                                      "source_geo_index": geo},
+                            ))
+            if q_rows:
+                pd.DataFrame(q_rows).to_csv(chunk_dir / f"quarter_{geo}.csv", index=False)
+            if p_rows:
+                pd.DataFrame(p_rows).to_csv(chunk_dir / f"parent_{geo}.csv", index=False)
+            ack["n_boxes"] = len(q_rows)
 
-    if rows:
-        pd.DataFrame(rows).to_csv(
-            chunk_dir / f"labels_{east}_{north}.csv", index=False,
-        )
     ack["n_patches"] = n_written
-    ack["n_boxes"] = len(rows)
     ack["dropped_patches"] = n_dropped
     ack["dropped_boxes"] = boxes_dropped
     return ack
 
 
-@app.function(image=image, volumes={"/data": vol}, timeout=6000)
-def write_csvs(out_root: str = "/data/patches") -> dict:
-    """Read per-tile chunks under {out_root}/_chunks/{SITE}/labels_*.csv,
-    concatenate into {out_root}/labels_{SITE}.csv and {out_root}/labels.csv.
-    """
+def _concat_chunks(chunks_root, glob_pat: str, out_dir, out_name: str,
+                   per_site_name) -> dict:
+    """Concat per-tile chunk CSVs matching `glob_pat` under each site dir into
+    one combined CSV (`out_name`) and per-site CSVs, returning row counts.
+
+    Streams one chunk at a time, appending to the per-site and combined CSVs on
+    disk — never holds the full table in memory. labels_parent.csv is the full
+    unfiltered 256 GT (tens of millions of rows), so an in-memory pd.concat of
+    everything OOMs; this does not."""
     import pandas as pd
 
+    summary: dict[str, int] = {}
+    combined_path = out_dir / out_name
+    if combined_path.exists():
+        combined_path.unlink()           # fresh combined file (we append below)
+    combined_header = True
+    total = 0
+    for site_dir in sorted(chunks_root.iterdir()):
+        if not site_dir.is_dir():
+            continue
+        chunk_paths = sorted(site_dir.glob(glob_pat))
+        if not chunk_paths:
+            continue
+        site_path = out_dir / per_site_name(site_dir.name)
+        if site_path.exists():
+            site_path.unlink()
+        site_header = True
+        site_total = 0
+        for p in chunk_paths:
+            df = pd.read_csv(p)
+            if df.empty:
+                continue
+            df.to_csv(site_path, mode="a", index=False, header=site_header)
+            df.to_csv(combined_path, mode="a", index=False, header=combined_header)
+            site_header = False
+            combined_header = False
+            n = len(df)
+            site_total += n
+            total += n
+        if site_total:
+            summary[site_dir.name] = site_total
+    if total:
+        summary["__combined__"] = total
+    return summary
+
+
+@app.function(image=image, volumes={"/data": vol}, timeout=6000, memory=16384)
+def write_csvs(out_root: str = "/data/patches", quarter: bool = False) -> dict:
+    """Concatenate per-tile chunk CSVs under {out_root}/_chunks/{SITE}/.
+
+    Baseline: labels_*.csv -> labels_{SITE}.csv + labels.csv.
+    Quarter:  quarter_*.csv -> labels_quarter_{SITE}.csv + labels_quarter.csv
+              parent_*.csv  -> labels_parent_{SITE}.csv  + labels_parent.csv
+    """
     out_dir = Path(out_root)
     out_dir.mkdir(parents=True, exist_ok=True)
     chunks_root = out_dir / "_chunks"
     if not chunks_root.exists():
         return {}
 
-    summary: dict[str, int] = {}
-    per_site_frames = []
-    for site_dir in sorted(chunks_root.iterdir()):
-        if not site_dir.is_dir():
-            continue
-        chunk_paths = sorted(site_dir.glob("labels_*.csv"))
-        if not chunk_paths:
-            continue
-        site_df = pd.concat(
-            [pd.read_csv(p) for p in chunk_paths], ignore_index=True,
-        )
-        site_df.to_csv(out_dir / f"labels_{site_dir.name}.csv", index=False)
-        summary[site_dir.name] = len(site_df)
-        per_site_frames.append(site_df)
+    if not quarter:
+        return _concat_chunks(chunks_root, "labels_*.csv", out_dir, "labels.csv",
+                              lambda s: f"labels_{s}.csv")
 
-    if per_site_frames:
-        combined = pd.concat(per_site_frames, ignore_index=True)
-        combined.to_csv(out_dir / "labels.csv", index=False)
-        summary["__combined__"] = len(combined)
+    summary: dict[str, int] = {}
+    q = _concat_chunks(chunks_root, "quarter_*.csv", out_dir, "labels_quarter.csv",
+                       lambda s: f"labels_quarter_{s}.csv")
+    p = _concat_chunks(chunks_root, "parent_*.csv", out_dir, "labels_parent.csv",
+                       lambda s: f"labels_parent_{s}.csv")
+    summary["quarter_boxes"] = q.get("__combined__", 0)
+    summary["parent_boxes"] = p.get("__combined__", 0)
+    return summary
+
+
+@app.function(image=image, volumes={"/data": vol}, timeout=14400, memory=16384,
+              cpu=8.0, max_containers=16, retries=2)
+def _pack_site(out_root: str, site: str) -> dict:
+    """Pack one site's quarter tifs into {out_root}/packed/{SITE}.npy
+    (memmapped (N,4,128,128) uint8) + {SITE}_index.csv (imgname,row). Threaded
+    reads (I/O-bound). Resumable: skips if {SITE}.done already exists."""
+    from concurrent.futures import ThreadPoolExecutor
+
+    import numpy as np
+    import pandas as pd
+    import rasterio
+    from numpy.lib.format import open_memmap
+
+    out_dir = Path(out_root)
+    packed_dir = out_dir / "packed"
+    packed_dir.mkdir(parents=True, exist_ok=True)
+    npy_path = packed_dir / f"{site}.npy"
+    done = packed_dir / f"{site}.done"
+    idx_path = packed_dir / f"{site}_index.csv"
+
+    # Tile list: prefer the small per-site CSV; fall back to filtering the combined.
+    per_site = out_dir / f"labels_quarter_{site}.csv"
+    if per_site.exists():
+        names = sorted(pd.read_csv(per_site, usecols=["imgname"])["imgname"].unique().tolist())
+    else:
+        df = pd.read_csv(out_dir / "labels_quarter.csv", usecols=["site", "imgname"])
+        names = sorted(df[df["site"] == site]["imgname"].unique().tolist())
+    N = len(names)
+
+    if done.exists() and npy_path.exists() and idx_path.exists():
+        return {"site": site, "n": N, "status": "skip"}
+
+    arr = open_memmap(npy_path, mode="w+", dtype=np.uint8,
+                      shape=(N, 4, QUARTER_PX, QUARTER_PX))
+
+    def _load(i_nm):
+        i, nm = i_nm
+        with rasterio.open(out_dir / site / f"{nm}.tif") as src:
+            arr[i] = src.read(indexes=[1, 2, 3, 4])
+
+    with ThreadPoolExecutor(max_workers=16) as ex:
+        for _ in ex.map(_load, enumerate(names)):
+            pass
+    arr.flush(); del arr
+    pd.DataFrame({"imgname": names, "row": range(N)}).to_csv(idx_path, index=False)
+    done.touch()
+    vol.commit()
+    return {"site": site, "n": N, "status": "packed"}
+
+
+@app.function(image=image, volumes={"/data": vol}, timeout=14400, memory=8192)
+def pack_quarters(out_root: str = "/data/patches_quarter") -> dict:
+    """Pack the per-quarter 128-px tifs into one memmapped uint8 array per site
+    ({out_root}/packed/{SITE}.npy) + packed_index.csv (imgname,site,row), so
+    training reads memmap rows instead of opening 100k+ GeoTIFFs.
+
+    Fans out one container per site (parallel), reads only the *existing*
+    labels_quarter*.csv + tifs (no re-gen, no re-CSV), and is resumable: sites
+    with a `{SITE}.done` marker are skipped.
+    """
+    import pandas as pd
+
+    out_dir = Path(out_root)
+    packed_dir = out_dir / "packed"
+    packed_dir.mkdir(parents=True, exist_ok=True)
+
+    # Site list from the per-site quarter CSVs (fall back to the combined one).
+    site_files = sorted(out_dir.glob("labels_quarter_*.csv"))
+    if site_files:
+        sites = [p.name[len("labels_quarter_"):-len(".csv")] for p in site_files]
+    elif (out_dir / "labels_quarter.csv").exists():
+        sites = sorted(pd.read_csv(out_dir / "labels_quarter.csv",
+                                   usecols=["site"])["site"].unique().tolist())
+    else:
+        return {"error": "no labels_quarter*.csv found — run the pipeline first"}
+
+    summary: dict[str, int] = {}
+    for ack in _pack_site.starmap([(out_root, s) for s in sites]):
+        summary[ack["site"]] = ack["n"]
+        print(f"[pack] {ack['site']}: {ack['status']} ({ack['n']} tiles)", flush=True)
+
+    # Stitch per-site indices into one packed_index.csv (imgname, site, row).
+    frames = []
+    for s in sites:
+        ip = packed_dir / f"{s}_index.csv"
+        if ip.exists():
+            d = pd.read_csv(ip)
+            d["site"] = s
+            frames.append(d[["imgname", "site", "row"]])
+    if frames:
+        combined = pd.concat(frames, ignore_index=True)
+        combined.to_csv(packed_dir / "packed_index.csv", index=False)
+        summary["__index_rows__"] = len(combined)
+    vol.commit()
     return summary
 
 
@@ -448,6 +624,8 @@ def main(
     dry_run: bool = False,
     max_trees: int = 150,
     out_tag: str = "patches",
+    quarter: bool = False,
+    pack: bool = False,
 ):
     """Process every site in --sites (comma-separated NEON codes). Each site's
     CSV is fetched from Zenodo to the volume and chunked server-side, so nothing
@@ -468,6 +646,22 @@ def main(
     from rich.table import Table
 
     console = Console()
+
+    # --- Pack-only: skip gen/CSV, just memmap the existing quarter tifs --------
+    if pack:
+        if quarter and out_tag == "patches":
+            out_tag = "patches_quarter"
+        out_root = f"/data/{out_tag}"
+        console.rule(f"[bold cyan]Packing quarter tifs in {out_root} -> per-site memmaps")
+        summary = pack_quarters.remote(out_root)
+        tbl = Table(show_header=True, header_style="bold")
+        tbl.add_column("site"); tbl.add_column("tiles")
+        for k, v in summary.items():
+            tbl.add_row(k, str(v))
+        console.print(tbl)
+        console.rule("[bold green]pack done")
+        return
+
     site_list = [s.strip().upper() for s in sites.split(",") if s.strip()]
     if not site_list:
         console.print("[red]pass --sites SITE1,SITE2,...  "
@@ -488,9 +682,13 @@ def main(
         return out
 
     # --- Plan: intersect annotated tiles (CSV) with paired tiles (volume) ---
+    if quarter and out_tag == "patches":
+        out_tag = "patches_quarter"     # don't clobber the 256 baseline output
     out_root = f"/data/{out_tag}"
-    filt = f"max {max_trees} trees/patch" if max_trees else "no density filter"
-    console.rule(f"[bold cyan]Patch pipeline for {site_list}  ({filt}) -> {out_root}")
+    unit = "quarter" if quarter else "patch"
+    filt = f"max {max_trees} trees/{unit}" if max_trees else "no density filter"
+    mode = f"2x2 quarters ({QUARTER_PX}px)" if quarter else f"{PATCH_PX}px patches"
+    console.rule(f"[bold cyan]Patch pipeline for {site_list}  [{mode}, {filt}] -> {out_root}")
     jobs: list[tuple] = []
     plan = Table(show_header=True, header_style="bold")
     plan.add_column("site"); plan.add_column("annotated")
@@ -506,7 +704,7 @@ def main(
         target_utms = sorted({tuple(g.split("_")) for g in target_geo})
 
         for east, north in target_utms:
-            jobs.append((site, year, month, int(east), int(north), max_trees, out_root))
+            jobs.append((site, year, month, int(east), int(north), max_trees, out_root, quarter))
         plan.add_row(site, str(len(annotated)), str(len(vol_paired)),
                      str(len(target_utms)))
 
@@ -547,21 +745,21 @@ def main(
 
     tot_patches = kept_patches + drop_patches
     tot_boxes   = kept_boxes + drop_boxes
-    pct_p = 100 * kept_patches / ok if tot_patches else 0.0
+    pct_p = 100 * kept_patches / tot_patches if tot_patches else 0.0
     pct_b = 100 * kept_boxes / tot_boxes if tot_boxes else 0.0
-    cap = f"max {max_trees} trees/patch" if max_trees else "no filter"
+    cap = f"max {max_trees} trees/{unit}" if max_trees else "no filter"
     console.rule(f"[bold cyan]Kept after filtering ({cap})")
     res = Table(show_header=True, header_style="bold")
     res.add_column(""); res.add_column("kept", justify="right")
     res.add_column("dropped", justify="right"); res.add_column("kept %", justify="right")
-    res.add_row("patches", f"{kept_patches:,}", f"{drop_patches:,}", f"{pct_p:.1f}%")
+    res.add_row(f"{unit}s", f"{kept_patches:,}", f"{drop_patches:,}", f"{pct_p:.1f}%")
     res.add_row("annotations", f"{kept_boxes:,}", f"{drop_boxes:,}", f"{pct_b:.1f}%")
     console.print(res)
     console.print(f"[dim]{len(acks)} tile workers, status: {by_status}[/dim]")
 
     # --- Concat per-tile chunks into per-site + combined CSVs on the volume --
     console.rule("[bold cyan]Writing CSVs")
-    summary = write_csvs.remote(out_root)
+    summary = write_csvs.remote(out_root, quarter)
     tbl = Table(show_header=True, header_style="bold")
     tbl.add_column("site"); tbl.add_column("rows")
     for k, v in summary.items():

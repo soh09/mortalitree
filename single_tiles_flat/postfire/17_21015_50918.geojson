@@ -1,0 +1,483 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "393",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/jjackie_mortalitree_postfire_labels.geojson",
+        "SUNETID": "jjackie",
+        "FIRENAME": "CZU AUG LIGHTNING",
+        "FIRE_SLUG": "CZU_AUG_LIGHTNING",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 21015,
+        "TILE_Y": 50918,
+        "TILEXYZ": [
+          17,
+          21015,
+          50918
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/21015/50918.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 9
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.28046066044189,
+              37.217206113254974
+            ],
+            [
+              -122.28033908304732,
+              37.217206113254974
+            ],
+            [
+              -122.28033913997277,
+              37.217200120958495
+            ],
+            [
+              -122.2804607103423,
+              37.217200859566255
+            ],
+            [
+              -122.28046066044189,
+              37.217206113254974
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "397",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/jjackie_mortalitree_postfire_labels.geojson",
+        "SUNETID": "jjackie",
+        "FIRENAME": "CZU AUG LIGHTNING",
+        "FIRE_SLUG": "CZU_AUG_LIGHTNING",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 21015,
+        "TILE_Y": 50918,
+        "TILEXYZ": [
+          17,
+          21015,
+          50918
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/21015/50918.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 9
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.28027343125473,
+              37.217206113254974
+            ],
+            [
+              -122.28011294909587,
+              37.217206113254974
+            ],
+            [
+              -122.28011296366238,
+              37.21720458038439
+            ],
+            [
+              -122.28027343655256,
+              37.21720555562679
+            ],
+            [
+              -122.28027343125473,
+              37.217206113254974
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "399",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/jjackie_mortalitree_postfire_labels.geojson",
+        "SUNETID": "jjackie",
+        "FIRENAME": "CZU AUG LIGHTNING",
+        "FIRE_SLUG": "CZU_AUG_LIGHTNING",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 21015,
+        "TILE_Y": 50918,
+        "TILEXYZ": [
+          17,
+          21015,
+          50918
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/21015/50918.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 9
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.2803755562657,
+              37.217206113254974
+            ],
+            [
+              -122.28025397887173,
+              37.217206113254974
+            ],
+            [
+              -122.2802540037674,
+              37.217203492904396
+            ],
+            [
+              -122.28037557414008,
+              37.217204231599574
+            ],
+            [
+              -122.2803755562657,
+              37.217206113254974
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "402",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/jjackie_mortalitree_postfire_labels.geojson",
+        "SUNETID": "jjackie",
+        "FIRENAME": "CZU AUG LIGHTNING",
+        "FIRE_SLUG": "CZU_AUG_LIGHTNING",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 21015,
+        "TILE_Y": 50918,
+        "TILEXYZ": [
+          17,
+          21015,
+          50918
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/21015/50918.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 9
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.27980171097396,
+              37.217206113254974
+            ],
+            [
+              -122.27968499667972,
+              37.217206113254974
+            ],
+            [
+              -122.27968503599298,
+              37.2172019786752
+            ],
+            [
+              -122.27980174353374,
+              37.217202688385555
+            ],
+            [
+              -122.27980171097396,
+              37.217206113254974
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "408",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/jjackie_mortalitree_postfire_labels.geojson",
+        "SUNETID": "jjackie",
+        "FIRENAME": "CZU AUG LIGHTNING",
+        "FIRE_SLUG": "CZU_AUG_LIGHTNING",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 21015,
+        "TILE_Y": 50918,
+        "TILEXYZ": [
+          17,
+          21015,
+          50918
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/21015/50918.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 9
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.27926920201314,
+              37.217206113254974
+            ],
+            [
+              -122.27919139248604,
+              37.217206113254974
+            ],
+            [
+              -122.27919147889911,
+              37.21719703139808
+            ],
+            [
+              -122.27926928391227,
+              37.21719750487524
+            ],
+            [
+              -122.27926920201314,
+              37.217206113254974
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "438",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/jjackie_mortalitree_postfire_labels.geojson",
+        "SUNETID": "jjackie",
+        "FIRENAME": "CZU AUG LIGHTNING",
+        "FIRE_SLUG": "CZU_AUG_LIGHTNING",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 21015,
+        "TILE_Y": 50918,
+        "TILEXYZ": [
+          17,
+          21015,
+          50918
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/21015/50918.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 9
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.279043068076,
+              37.217206113254974
+            ],
+            [
+              -122.27895066926384,
+              37.217206113254974
+            ],
+            [
+              -122.27895071412675,
+              37.217201399821136
+            ],
+            [
+              -122.27904310758053,
+              37.21720196225744
+            ],
+            [
+              -122.279043068076,
+              37.217206113254974
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "442",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/jjackie_mortalitree_postfire_labels.geojson",
+        "SUNETID": "jjackie",
+        "FIRENAME": "CZU AUG LIGHTNING",
+        "FIRE_SLUG": "CZU_AUG_LIGHTNING",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 21015,
+        "TILE_Y": 50918,
+        "TILEXYZ": [
+          17,
+          21015,
+          50918
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/21015/50918.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 9
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.27890690140563,
+              37.217206113254974
+            ],
+            [
+              -122.27878532402234,
+              37.217206113254974
+            ],
+            [
+              -122.27878535996669,
+              37.21720233769846
+            ],
+            [
+              -122.27890693029819,
+              37.21720307790098
+            ],
+            [
+              -122.27890690140563,
+              37.217206113254974
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "444",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/jjackie_mortalitree_postfire_labels.geojson",
+        "SUNETID": "jjackie",
+        "FIRENAME": "CZU AUG LIGHTNING",
+        "FIRE_SLUG": "CZU_AUG_LIGHTNING",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 21015,
+        "TILE_Y": 50918,
+        "TILEXYZ": [
+          17,
+          21015,
+          50918
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/21015/50918.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 9
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.27877073473628,
+              37.217206113254974
+            ],
+            [
+              -122.27864915735395,
+              37.217206113254974
+            ],
+            [
+              -122.27864927526406,
+              37.21719373043515
+            ],
+            [
+              -122.27877084557812,
+              37.2171944707772
+            ],
+            [
+              -122.27877073473628,
+              37.217206113254974
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "508",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/jjackie_mortalitree_postfire_labels.geojson",
+        "SUNETID": "jjackie",
+        "FIRENAME": "CZU AUG LIGHTNING",
+        "FIRE_SLUG": "CZU_AUG_LIGHTNING",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 21015,
+        "TILE_Y": 50918,
+        "TILEXYZ": [
+          17,
+          21015,
+          50918
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/21015/50918.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 9
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.27808260676353,
+              37.217206113254974
+            ],
+            [
+              -122.2779318508157,
+              37.217206113254974
+            ],
+            [
+              -122.27793199196726,
+              37.21719130439928
+            ],
+            [
+              -122.27808273912872,
+              37.21719222331769
+            ],
+            [
+              -122.27808260676353,
+              37.217206113254974
+            ]
+          ]
+        ]
+      }
+    }
+  ],
+  "properties": {
+    "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/jjackie_mortalitree_postfire_labels.geojson",
+    "SUNETID": "jjackie",
+    "FIRENAME": "CZU AUG LIGHTNING",
+    "FIRE_SLUG": "CZU_AUG_LIGHTNING",
+    "PREFIRE": 0,
+    "PREFIRE_STATUS": "postfire",
+    "TILE_Z": 17,
+    "TILE_X": 21015,
+    "TILE_Y": 50918,
+    "TILEXYZ": [
+      17,
+      21015,
+      50918
+    ],
+    "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/21015/50918.geojson",
+    "OUTPUT_STATUS_DIR": "postfire",
+    "FEATURE_COUNT": 9
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "385",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21225,
+        "TILE_Y": 50826,
+        "TILEXYZ": [
+          17,
+          21225,
+          50826
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21225/50826.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 1
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.70358432709133,
+              37.41816326969144
+            ],
+            [
+              -121.70349588087727,
+              37.41816326969144
+            ],
+            [
+              -121.70349618138832,
+              37.418145840360886
+            ],
+            [
+              -121.70358461086022,
+              37.41814681026737
+            ],
+            [
+              -121.70358432709133,
+              37.41816326969144
+            ]
+          ]
+        ]
+      }
+    }
+  ],
+  "properties": {
+    "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+    "SUNETID": "snick",
+    "FIRENAME": "SCU LIGHTNING COMPLEX",
+    "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+    "PREFIRE": 1,
+    "PREFIRE_STATUS": "prefire",
+    "TILE_Z": 17,
+    "TILE_X": 21225,
+    "TILE_Y": 50826,
+    "TILEXYZ": [
+      17,
+      21225,
+      50826
+    ],
+    "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21225/50826.geojson",
+    "OUTPUT_STATUS_DIR": "prefire",
+    "FEATURE_COUNT": 1
+  }
+}

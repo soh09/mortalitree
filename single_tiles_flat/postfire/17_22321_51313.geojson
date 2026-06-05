@@ -1,0 +1,5026 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "237",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.6935262244896,
+              36.3482834559176
+            ],
+            [
+              -118.69345493425398,
+              36.34828088191011
+            ],
+            [
+              -118.69345791731502,
+              36.34822681603461
+            ],
+            [
+              -118.69352920750163,
+              36.348229390037055
+            ],
+            [
+              -118.6935262244896,
+              36.3482834559176
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "238",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69352683997054,
+              36.34819138304654
+            ],
+            [
+              -118.69347782799026,
+              36.34818961342503
+            ],
+            [
+              -118.69348081102555,
+              36.34813554754706
+            ],
+            [
+              -118.69352982297214,
+              36.348137317165104
+            ],
+            [
+              -118.69352683997054,
+              36.34819138304654
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "239",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69327824044657,
+              36.34828714251559
+            ],
+            [
+              -118.69316684948855,
+              36.34828312037874
+            ],
+            [
+              -118.69316983274902,
+              36.348229054523784
+            ],
+            [
+              -118.69328122363046,
+              36.34823307665273
+            ],
+            [
+              -118.69327824044657,
+              36.34828714251559
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "240",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69329013490193,
+              36.34823339841858
+            ],
+            [
+              -118.69323221163991,
+              36.34823130692874
+            ],
+            [
+              -118.69323439932776,
+              36.34819165863142
+            ],
+            [
+              -118.6932923225606,
+              36.34819375011824
+            ],
+            [
+              -118.69329013490193,
+              36.34823339841858
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "241",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69329520628591,
+              36.34814148644904
+            ],
+            [
+              -118.69321946057144,
+              36.34813875142738
+            ],
+            [
+              -118.69322224489952,
+              36.34808828995805
+            ],
+            [
+              -118.69329799056538,
+              36.3480910249747
+            ],
+            [
+              -118.69329520628591,
+              36.34814148644904
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "242",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69340315478289,
+              36.34804606592927
+            ],
+            [
+              -118.69334523165098,
+              36.34804397450343
+            ],
+            [
+              -118.69334761814049,
+              36.348000721807615
+            ],
+            [
+              -118.69340554124054,
+              36.34800281323016
+            ],
+            [
+              -118.69340315478289,
+              36.34804606592927
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "243",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.6931371886483,
+              36.347890193820675
+            ],
+            [
+              -118.69305253196364,
+              36.34788713693476
+            ],
+            [
+              -118.69305591303228,
+              36.34782586230426
+            ],
+            [
+              -118.69314056965098,
+              36.34782891918339
+            ],
+            [
+              -118.6931371886483,
+              36.347890193820675
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "244",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69296441413123,
+              36.34786589714759
+            ],
+            [
+              -118.69287975749218,
+              36.34786284014102
+            ],
+            [
+              -118.69288313869319,
+              36.34780156552425
+            ],
+            [
+              -118.6929677952663,
+              36.347804622524
+            ],
+            [
+              -118.69296441413123,
+              36.34786589714759
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "245",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69302685211667,
+              36.34782661871106
+            ],
+            [
+              -118.6929644735655,
+              36.34782436622037
+            ],
+            [
+              -118.69296725802616,
+              36.347773904765354
+            ],
+            [
+              -118.69302963653732,
+              36.347776157251914
+            ],
+            [
+              -118.69302685211667,
+              36.34782661871106
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "246",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69278515522963,
+              36.347837754492154
+            ],
+            [
+              -118.69268267620296,
+              36.34783405374637
+            ],
+            [
+              -118.69268705206818,
+              36.347754757203504
+            ],
+            [
+              -118.69278953099152,
+              36.34775845793864
+            ],
+            [
+              -118.69278515522963,
+              36.347837754492154
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "247",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69268261661797,
+              36.347875584663385
+            ],
+            [
+              -118.6925756819446,
+              36.34787172291842
+            ],
+            [
+              -118.69257985901653,
+              36.347796030775065
+            ],
+            [
+              -118.69268679358697,
+              36.34779989250941
+            ],
+            [
+              -118.69268261661797,
+              36.347875584663385
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "248",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69320676522794,
+              36.34760016880133
+            ],
+            [
+              -118.69310428645566,
+              36.34759646843779
+            ],
+            [
+              -118.69310766744789,
+              36.34753519380015
+            ],
+            [
+              -118.69321014614032,
+              36.34753889415544
+            ],
+            [
+              -118.69320676522794,
+              36.34760016880133
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "249",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69328165566928,
+              36.34765885230109
+            ],
+            [
+              -118.69321036602607,
+              36.34765627818554
+            ],
+            [
+              -118.69321255367907,
+              36.34761662988554
+            ],
+            [
+              -118.69328384328634,
+              36.34761920399738
+            ],
+            [
+              -118.69328165566928,
+              36.34765885230109
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "250",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69326232259202,
+              36.34776650139121
+            ],
+            [
+              -118.693173210419,
+              36.34776328371759
+            ],
+            [
+              -118.69317698913699,
+              36.34769480029466
+            ],
+            [
+              -118.69326610123241,
+              36.347698017960276
+            ],
+            [
+              -118.69326232259202,
+              36.34776650139121
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "251",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69332024337719,
+              36.34756634472605
+            ],
+            [
+              -118.69324449821733,
+              36.34756360975729
+            ],
+            [
+              -118.6932480779705,
+              36.34749873071681
+            ],
+            [
+              -118.69332382306789,
+              36.34750146567912
+            ],
+            [
+              -118.69332024337719,
+              36.34756634472605
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "252",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69335008068816,
+              36.34763243036347
+            ],
+            [
+              -118.6932787910626,
+              36.34762985629034
+            ],
+            [
+              -118.69328197304839,
+              36.34757218603021
+            ],
+            [
+              -118.69335326262168,
+              36.34757476009794
+            ],
+            [
+              -118.69335008068816,
+              36.34763243036347
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "253",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69295482504043,
+              36.347594683010946
+            ],
+            [
+              -118.69285680190602,
+              36.347591143328415
+            ],
+            [
+              -118.69286077977021,
+              36.34751905554276
+            ],
+            [
+              -118.69295880281481,
+              36.347522595216034
+            ],
+            [
+              -118.69295482504043,
+              36.347594683010946
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "254",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.6932597733967,
+              36.34744859100235
+            ],
+            [
+              -118.69320630630877,
+              36.34744666041942
+            ],
+            [
+              -118.69320928945086,
+              36.3473925945541
+            ],
+            [
+              -118.69326275650208,
+              36.347394525133225
+            ],
+            [
+              -118.6932597733967,
+              36.34744859100235
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "255",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69306854070095,
+              36.34739473545126
+            ],
+            [
+              -118.69300616249085,
+              36.347392483005244
+            ],
+            [
+              -118.6930089468807,
+              36.34734202154382
+            ],
+            [
+              -118.69307132505078,
+              36.3473442739857
+            ],
+            [
+              -118.69306854070095,
+              36.34739473545126
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "256",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69309967046999,
+              36.347437392596355
+            ],
+            [
+              -118.69305065898988,
+              36.34743562283105
+            ],
+            [
+              -118.69305284670622,
+              36.34739597453794
+            ],
+            [
+              -118.69310185816165,
+              36.34739774430069
+            ],
+            [
+              -118.69309967046999,
+              36.347437392596355
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "257",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69316809533784,
+              36.347410970753764
+            ],
+            [
+              -118.6931012615189,
+              36.34740855747228
+            ],
+            [
+              -118.69310424472948,
+              36.34735449161408
+            ],
+            [
+              -118.69317107850246,
+              36.347356904890844
+            ],
+            [
+              -118.69316809533784,
+              36.347410970753764
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "258",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69316741842741,
+              36.3473423264434
+            ],
+            [
+              -118.69307385116535,
+              36.3473389478438
+            ],
+            [
+              -118.69307743103073,
+              36.347274068815466
+            ],
+            [
+              -118.69317099821559,
+              36.34727744740711
+            ],
+            [
+              -118.69316741842741,
+              36.3473423264434
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "259",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69303846622283,
+              36.347494773491675
+            ],
+            [
+              -118.69299836589441,
+              36.347493325480876
+            ],
+            [
+              -118.6930009514137,
+              36.34744646841084
+            ],
+            [
+              -118.69304105171823,
+              36.347447916419156
+            ],
+            [
+              -118.69303846622283,
+              36.347494773491675
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "260",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69299593921203,
+              36.34749684942541
+            ],
+            [
+              -118.69292019415184,
+              36.34749411425557
+            ],
+            [
+              -118.69292297860748,
+              36.34744365280072
+            ],
+            [
+              -118.69299872361908,
+              36.34744638796553
+            ],
+            [
+              -118.69299593921203,
+              36.34749684942541
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "261",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69284247967839,
+              36.34744616327561
+            ],
+            [
+              -118.69275336791974,
+              36.347442945313176
+            ],
+            [
+              -118.69275754475429,
+              36.347367253146665
+            ],
+            [
+              -118.69284665642721,
+              36.34737047110025
+            ],
+            [
+              -118.69284247967839,
+              36.34744616327561
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "262",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69273335768878,
+              36.34748194998895
+            ],
+            [
+              -118.69267097943667,
+              36.347479697363354
+            ],
+            [
+              -118.6926729684481,
+              36.34744365347885
+            ],
+            [
+              -118.69273534667163,
+              36.347445906101505
+            ],
+            [
+              -118.69273335768878,
+              36.34748194998895
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "263",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69267772238635,
+              36.3474384077988
+            ],
+            [
+              -118.6925975218283,
+              36.34743551152554
+            ],
+            [
+              -118.6926013010052,
+              36.347367028150835
+            ],
+            [
+              -118.69268150149344,
+              36.34736992441689
+            ],
+            [
+              -118.69267772238635,
+              36.3474384077988
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "264",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69285908917965,
+              36.347549692851814
+            ],
+            [
+              -118.69278334408196,
+              36.34754695759182
+            ],
+            [
+              -118.6927863275274,
+              36.34749289175754
+            ],
+            [
+              -118.69286207257305,
+              36.34749562701215
+            ],
+            [
+              -118.69285908917965,
+              36.347549692851814
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "265",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69296787410207,
+              36.34768183193526
+            ],
+            [
+              -118.69292331807934,
+              36.34768022300015
+            ],
+            [
+              -118.69292570477052,
+              36.347636970325766
+            ],
+            [
+              -118.69297026076877,
+              36.34763857925835
+            ],
+            [
+              -118.69296787410207,
+              36.34768183193526
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "266",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69316322456348,
+              36.347701526420394
+            ],
+            [
+              -118.69309193489248,
+              36.34769895223161
+            ],
+            [
+              -118.69309432149204,
+              36.347655699547744
+            ],
+            [
+              -118.69316561112383,
+              36.347658273732485
+            ],
+            [
+              -118.69316322456348,
+              36.347701526420394
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "267",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69257514467984,
+              36.34763875718156
+            ],
+            [
+              -118.69249939952424,
+              36.347636021735845
+            ],
+            [
+              -118.6925027809953,
+              36.34757474714746
+            ],
+            [
+              -118.69257852609189,
+              36.34757748258707
+            ],
+            [
+              -118.69257514467984,
+              36.34763875718156
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "268",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.6925978402591,
+              36.347551093302734
+            ],
+            [
+              -118.69253100637066,
+              36.34754867969431
+            ],
+            [
+              -118.69253418889848,
+              36.347491009490255
+            ],
+            [
+              -118.69260102273792,
+              36.3474934230936
+            ],
+            [
+              -118.6925978402591,
+              36.347551093302734
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "269",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69254928619272,
+              36.34750058363734
+            ],
+            [
+              -118.6924779967626,
+              36.34749800909447
+            ],
+            [
+              -118.69248038368421,
+              36.347454756444165
+            ],
+            [
+              -118.69255167307512,
+              36.34745733098297
+            ],
+            [
+              -118.69254928619272,
+              36.34750058363734
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "270",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69266481347879,
+              36.34759143340335
+            ],
+            [
+              -118.6926158019302,
+              36.34758966345328
+            ],
+            [
+              -118.69261759207072,
+              36.347557223960195
+            ],
+            [
+              -118.69266660359908,
+              36.34755899390817
+            ],
+            [
+              -118.69266481347879,
+              36.34759143340335
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "271",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69265443064815,
+              36.347739132870345
+            ],
+            [
+              -118.69259205219737,
+              36.347736880189885
+            ],
+            [
+              -118.69259583142066,
+              36.347668396819124
+            ],
+            [
+              -118.69265820981711,
+              36.34767064949398
+            ],
+            [
+              -118.69265443064815,
+              36.347739132870345
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "272",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69234333413627,
+              36.34771345159672
+            ],
+            [
+              -118.69220521053518,
+              36.34770846311839
+            ],
+            [
+              -118.69220998471174,
+              36.347621957851466
+            ],
+            [
+              -118.69234810816094,
+              36.34762694631411
+            ],
+            [
+              -118.69234333413627,
+              36.34771345159672
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "273",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69234212097875,
+              36.347614089586806
+            ],
+            [
+              -118.6922262755229,
+              36.34760990572112
+            ],
+            [
+              -118.69223104965899,
+              36.34752340045038
+            ],
+            [
+              -118.69234689498744,
+              36.3475275843029
+            ],
+            [
+              -118.69234212097875,
+              36.347614089586806
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "274",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.691890886927,
+              36.34830746573221
+            ],
+            [
+              -118.69176612925126,
+              36.348302959481394
+            ],
+            [
+              -118.69176951137922,
+              36.348241684959085
+            ],
+            [
+              -118.69189426895775,
+              36.34824619119987
+            ],
+            [
+              -118.691890886927,
+              36.34830746573221
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "275",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69168288574342,
+              36.3481934113451
+            ],
+            [
+              -118.69160714013965,
+              36.348190675298085
+            ],
+            [
+              -118.69161032342338,
+              36.348133005170475
+            ],
+            [
+              -118.69168606897159,
+              36.34813574121174
+            ],
+            [
+              -118.69168288574342,
+              36.3481934113451
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "276",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69139559754828,
+              36.348181228016294
+            ],
+            [
+              -118.69127975139685,
+              36.348177043177124
+            ],
+            [
+              -118.69128412873944,
+              36.348097746785506
+            ],
+            [
+              -118.69139997477409,
+              36.34810193161262
+            ],
+            [
+              -118.69139559754828,
+              36.348181228016294
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "277",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69118702187151,
+              36.347996726442005
+            ],
+            [
+              -118.69110236528923,
+              36.34799366816684
+            ],
+            [
+              -118.6911057478991,
+              36.347932393695
+            ],
+            [
+              -118.69119040441544,
+              36.34793545196335
+            ],
+            [
+              -118.69118702187151,
+              36.347996726442005
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "278",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69114536865307,
+              36.34806384151005
+            ],
+            [
+              -118.69106516761562,
+              36.34806094416568
+            ],
+            [
+              -118.69106855026295,
+              36.347999669697536
+            ],
+            [
+              -118.6911487512379,
+              36.34800256703545
+            ],
+            [
+              -118.69114536865307,
+              36.34806384151005
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "279",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69106114899084,
+              36.34809330310699
+            ],
+            [
+              -118.69094975863456,
+              36.34808927892182
+            ],
+            [
+              -118.69095413629776,
+              36.34800998256353
+            ],
+            [
+              -118.69106552654175,
+              36.348014006737124
+            ],
+            [
+              -118.69106114899084,
+              36.34809330310699
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "280",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69108298626388,
+              36.34826383574327
+            ],
+            [
+              -118.69097159566147,
+              36.348259811562286
+            ],
+            [
+              -118.69097597332978,
+              36.34818051520399
+            ],
+            [
+              -118.69108736381988,
+              36.348184539373385
+            ],
+            [
+              -118.69108298626388,
+              36.34826383574327
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "281",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69115320324228,
+              36.34820497572932
+            ],
+            [
+              -118.69105517957568,
+              36.348201434518025
+            ],
+            [
+              -118.69105876122859,
+              36.348136555671736
+            ],
+            [
+              -118.69115678481432,
+              36.34814009687468
+            ],
+            [
+              -118.69115320324228,
+              36.34820497572932
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "282",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.6912516639882,
+              36.34824103677102
+            ],
+            [
+              -118.69115809588715,
+              36.34823765659984
+            ],
+            [
+              -118.69116127950751,
+              36.348179986506835
+            ],
+            [
+              -118.69125484753992,
+              36.34818336667093
+            ],
+            [
+              -118.6912516639882,
+              36.34824103677102
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "283",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69152900703573,
+              36.34823119179411
+            ],
+            [
+              -118.69145326141074,
+              36.34822845564713
+            ],
+            [
+              -118.69145624585,
+              36.34817438991382
+            ],
+            [
+              -118.69153199142293,
+              36.34817712605543
+            ],
+            [
+              -118.69152900703573,
+              36.34823119179411
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "284",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69151725280533,
+              36.34812061433232
+            ],
+            [
+              -118.69144150728864,
+              36.34811787818501
+            ],
+            [
+              -118.69144449172398,
+              36.34806381245154
+            ],
+            [
+              -118.69152023718861,
+              36.348066548593486
+            ],
+            [
+              -118.69151725280533,
+              36.34812061433232
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "285",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69140166597037,
+              36.34807129436535
+            ],
+            [
+              -118.69135265420266,
+              36.34806952387719
+            ],
+            [
+              -118.69135484283056,
+              36.34802987567704
+            ],
+            [
+              -118.69140385457357,
+              36.34803164616264
+            ],
+            [
+              -118.69140166597037,
+              36.34807129436535
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "286",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69149664759193,
+              36.34796818409922
+            ],
+            [
+              -118.69141199100598,
+              36.34796512604545
+            ],
+            [
+              -118.69141537336971,
+              36.34790385154831
+            ],
+            [
+              -118.69150002988971,
+              36.34790690959526
+            ],
+            [
+              -118.69149664759193,
+              36.34796818409922
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "287",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69163520875387,
+              36.3480056933477
+            ],
+            [
+              -118.6915728301743,
+              36.34800344012107
+            ],
+            [
+              -118.69157561555116,
+              36.347952978760155
+            ],
+            [
+              -118.69163799409071,
+              36.34795523198267
+            ],
+            [
+              -118.69163520875387,
+              36.3480056933477
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "288",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69170102743992,
+              36.348107388970114
+            ],
+            [
+              -118.69162528191768,
+              36.348104652940144
+            ],
+            [
+              -118.69162826622453,
+              36.348050587193455
+            ],
+            [
+              -118.69170401169468,
+              36.34805332321805
+            ],
+            [
+              -118.69170102743992,
+              36.348107388970114
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "289",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69138230905311,
+              36.34826020251081
+            ],
+            [
+              -118.69135111967134,
+              36.34825907582878
+            ],
+            [
+              -118.69135251244519,
+              36.348233845156855
+            ],
+            [
+              -118.69138370181693,
+              36.34823497183785
+            ],
+            [
+              -118.69138230905311,
+              36.34826020251081
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "290",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69149017865321,
+              36.348287574319286
+            ],
+            [
+              -118.69143671111635,
+              36.34828564290643
+            ],
+            [
+              -118.69143870075521,
+              36.34824959908544
+            ],
+            [
+              -118.69149216826754,
+              36.34825153049576
+            ],
+            [
+              -118.69149017865321,
+              36.348287574319286
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "291",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69175514975193,
+              36.34825922405798
+            ],
+            [
+              -118.6916660371945,
+              36.34825600522308
+            ],
+            [
+              -118.69166922044239,
+              36.34819833509161
+            ],
+            [
+              -118.69175833293446,
+              36.34820155391977
+            ],
+            [
+              -118.69175514975193,
+              36.34825922405798
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "292",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69112928019713,
+              36.34787004136231
+            ],
+            [
+              -118.69104462375843,
+              36.347866983055354
+            ],
+            [
+              -118.69104740946226,
+              36.34781652172845
+            ],
+            [
+              -118.69113206584666,
+              36.347819580029785
+            ],
+            [
+              -118.69112928019713,
+              36.34787004136231
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "293",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.6909837552052,
+              36.34795868486311
+            ],
+            [
+              -118.69089909868677,
+              36.34795562644668
+            ],
+            [
+              -118.69090407333682,
+              36.34786551695252
+            ],
+            [
+              -118.69098872975826,
+              36.34786857535893
+            ],
+            [
+              -118.6909837552052,
+              36.34795868486311
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "294",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69110910913336,
+              36.34795237875202
+            ],
+            [
+              -118.69103336382038,
+              36.34794964235685
+            ],
+            [
+              -118.69103754239704,
+              36.347873950368395
+            ],
+            [
+              -118.69111328763712,
+              36.34787668675607
+            ],
+            [
+              -118.69110910913336,
+              36.34795237875202
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "295",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69123472238594,
+              36.34790093726173
+            ],
+            [
+              -118.69115897711023,
+              36.34789820094949
+            ],
+            [
+              -118.69116156376988,
+              36.34785134399626
+            ],
+            [
+              -118.69123730900046,
+              36.34785408030385
+            ],
+            [
+              -118.69123472238594,
+              36.34790093726173
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "296",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69134354708251,
+              36.34787055858151
+            ],
+            [
+              -118.69124552381052,
+              36.34786701755424
+            ],
+            [
+              -118.69124890629256,
+              36.34780574306953
+            ],
+            [
+              -118.6913469294882,
+              36.34780928408891
+            ],
+            [
+              -118.69134354708251,
+              36.34787055858151
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "297",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69133268539068,
+              36.34794600916874
+            ],
+            [
+              -118.69128367370597,
+              36.347944238657526
+            ],
+            [
+              -118.69128546442224,
+              36.34791179922334
+            ],
+            [
+              -118.69133447608675,
+              36.347913569732476
+            ],
+            [
+              -118.69133268539068,
+              36.34794600916874
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "298",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69103376562707,
+              36.347740185878145
+            ],
+            [
+              -118.69095356493338,
+              36.34773728848097
+            ],
+            [
+              -118.69095714660992,
+              36.34767240963835
+            ],
+            [
+              -118.69103734723747,
+              36.34767530702869
+            ],
+            [
+              -118.69103376562707,
+              36.347740185878145
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "299",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69113491189331,
+              36.34772758783482
+            ],
+            [
+              -118.6910591667955,
+              36.347724851470474
+            ],
+            [
+              -118.69106374326611,
+              36.34764195071522
+            ],
+            [
+              -118.6911394882841,
+              36.34764468707131
+            ],
+            [
+              -118.69113491189331,
+              36.34772758783482
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "300",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69224314357682,
+              36.347466052106995
+            ],
+            [
+              -118.69216739862163,
+              36.347463316461976
+            ],
+            [
+              -118.69217038248381,
+              36.34740925067083
+            ],
+            [
+              -118.69224612738694,
+              36.34741198631048
+            ],
+            [
+              -118.69224314357682,
+              36.347466052106995
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "301",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69225312868399,
+              36.34752780943252
+            ],
+            [
+              -118.692177383668,
+              36.34752507378984
+            ],
+            [
+              -118.69218056645387,
+              36.34746740361245
+            ],
+            [
+              -118.69225631141433,
+              36.347470139249374
+            ],
+            [
+              -118.69225312868399,
+              36.34752780943252
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "302",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69223172637331,
+              36.347389796776106
+            ],
+            [
+              -118.69215152591228,
+              36.34738690020684
+            ],
+            [
+              -118.69215510654911,
+              36.34732202125793
+            ],
+            [
+              -118.69223530694401,
+              36.347324917820366
+            ],
+            [
+              -118.69223172637331,
+              36.347389796776106
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "303",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69146001600146,
+              36.347378175030194
+            ],
+            [
+              -118.69138872678533,
+              36.34737559984492
+            ],
+            [
+              -118.69139151221717,
+              36.34732513849095
+            ],
+            [
+              -118.69146280138754,
+              36.3473277136715
+            ],
+            [
+              -118.69146001600146,
+              36.347378175030194
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "304",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.6915192709929,
+              36.34739656753338
+            ],
+            [
+              -118.69143907060024,
+              36.347393670485495
+            ],
+            [
+              -118.69144205495837,
+              36.34733960474565
+            ],
+            [
+              -118.69152225529591,
+              36.34734250178785
+            ],
+            [
+              -118.6915192709929,
+              36.34739656753338
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "305",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69161755278618,
+              36.347354973032296
+            ],
+            [
+              -118.69154180800106,
+              36.3473522369979
+            ],
+            [
+              -118.69154459333176,
+              36.34730177563354
+            ],
+            [
+              -118.69162033806828,
+              36.34730451166293
+            ],
+            [
+              -118.69161755278618,
+              36.347354973032296
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "306",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.6913294507659,
+              36.34743846682999
+            ],
+            [
+              -118.69123588361553,
+              36.3474350867836
+            ],
+            [
+              -118.69123807225195,
+              36.34739543858534
+            ],
+            [
+              -118.69133163935514,
+              36.34739881862685
+            ],
+            [
+              -118.6913294507659,
+              36.34743846682999
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "307",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69118653467692,
+              36.34739899415145
+            ],
+            [
+              -118.69108851201632,
+              36.347395453034714
+            ],
+            [
+              -118.69109189456317,
+              36.34733417855786
+            ],
+            [
+              -118.69118991714741,
+              36.34733771966671
+            ],
+            [
+              -118.69118653467692,
+              36.34739899415145
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "308",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.6912478395916,
+              36.347339812102454
+            ],
+            [
+              -118.69118100600268,
+              36.34733739775102
+            ],
+            [
+              -118.69118339362765,
+              36.34729414517352
+            ],
+            [
+              -118.69125022717982,
+              36.347296559521155
+            ],
+            [
+              -118.6912478395916,
+              36.347339812102454
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "309",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.6913059218127,
+              36.347298571449066
+            ],
+            [
+              -118.69123908825391,
+              36.34729615713247
+            ],
+            [
+              -118.69124207273968,
+              36.34724209140601
+            ],
+            [
+              -118.69130890625252,
+              36.34724450571786
+            ],
+            [
+              -118.6913059218127,
+              36.347298571449066
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "310",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69202346694136,
+              36.34752312628271
+            ],
+            [
+              -118.69196108871479,
+              36.34752087328435
+            ],
+            [
+              -118.69196287912237,
+              36.347488433818896
+            ],
+            [
+              -118.69202525732325,
+              36.347490686814595
+            ],
+            [
+              -118.69202346694136,
+              36.34752312628271
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "311",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69209302587811,
+              36.34751660967176
+            ],
+            [
+              -118.69205292558847,
+              36.347515161342955
+            ],
+            [
+              -118.69205491488734,
+              36.34747911748803
+            ],
+            [
+              -118.69209501515861,
+              36.34748056581493
+            ],
+            [
+              -118.69209302587811,
+              36.34751660967176
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "312",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.6911227425099,
+              36.34750323092578
+            ],
+            [
+              -118.69105145321146,
+              36.34750065553171
+            ],
+            [
+              -118.69105423887363,
+              36.34745019420125
+            ],
+            [
+              -118.69112552812634,
+              36.34745276959058
+            ],
+            [
+              -118.6911227425099,
+              36.34750323092578
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "313",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69101558816413,
+              36.34758423172623
+            ],
+            [
+              -118.6909264764628,
+              36.34758101239099
+            ],
+            [
+              -118.69092966017766,
+              36.34752334230925
+            ],
+            [
+              -118.69101877181365,
+              36.34752656163774
+            ],
+            [
+              -118.69101558816413,
+              36.34758423172623
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "314",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.691025279493,
+              36.34734802407362
+            ],
+            [
+              -118.69088715677736,
+              36.34734303411473
+            ],
+            [
+              -118.69089193234826,
+              36.34725652899288
+            ],
+            [
+              -118.69103005491196,
+              36.34726151893608
+            ],
+            [
+              -118.691025279493,
+              36.34734802407362
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "315",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69089014151156,
+              36.34728896841379
+            ],
+            [
+              -118.69083221913236,
+              36.347286875807164
+            ],
+            [
+              -118.6908342089773,
+              36.34725083200887
+            ],
+            [
+              -118.69089213132995,
+              36.347252924612775
+            ],
+            [
+              -118.69089014151156,
+              36.34728896841379
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "316",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69085406003835,
+              36.34725516075486
+            ],
+            [
+              -118.6907958984375,
+              36.34725305948443
+            ],
+            [
+              -118.6907958984375,
+              36.34720972066051
+            ],
+            [
+              -118.69085644783698,
+              36.347211908195426
+            ],
+            [
+              -118.69085406003835,
+              36.34725516075486
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "317",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69101213315568,
+              36.34726267727172
+            ],
+            [
+              -118.69092747738753,
+              36.347259618925534
+            ],
+            [
+              -118.6909306610643,
+              36.34720194884062
+            ],
+            [
+              -118.69101531677036,
+              36.3472050071804
+            ],
+            [
+              -118.69101213315568,
+              36.34726267727172
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "318",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.6912354089687,
+              36.34726171431131
+            ],
+            [
+              -118.69116411987986,
+              36.347259138999114
+            ],
+            [
+              -118.69116690544476,
+              36.34720867765911
+            ],
+            [
+              -118.69123819448787,
+              36.34721125296659
+            ],
+            [
+              -118.6912354089687,
+              36.34726171431131
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "319",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69176216276304,
+              36.34706043614853
+            ],
+            [
+              -118.69169087380814,
+              36.347057861162796
+            ],
+            [
+              -118.69169385795561,
+              36.34700379540195
+            ],
+            [
+              -118.6917651468615,
+              36.347006370382644
+            ],
+            [
+              -118.69176216276304,
+              36.34706043614853
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "320",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69284375045484,
+              36.34699837428708
+            ],
+            [
+              -118.69278137257936,
+              36.34699612174476
+            ],
+            [
+              -118.6927847537505,
+              36.346934847127024
+            ],
+            [
+              -118.69284713157737,
+              36.346937099664345
+            ],
+            [
+              -118.69284375045484,
+              36.34699837428708
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "321",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.6926897751279,
+              36.34703795863099
+            ],
+            [
+              -118.69261403054277,
+              36.347035223296636
+            ],
+            [
+              -118.69261761074995,
+              36.34697034430434
+            ],
+            [
+              -118.6926933552726,
+              36.346973079632235
+            ],
+            [
+              -118.6926897751279,
+              36.34703795863099
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "322",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69242104891245,
+              36.3472557829834
+            ],
+            [
+              -118.6923141151235,
+              36.34725192106074
+            ],
+            [
+              -118.69231809343869,
+              36.34717983332257
+            ],
+            [
+              -118.69242502712964,
+              36.347183695235124
+            ],
+            [
+              -118.69242104891245,
+              36.3472557829834
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "323",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69295915863277,
+              36.3471722856074
+            ],
+            [
+              -118.69287895831789,
+              36.34716938954118
+            ],
+            [
+              -118.69288273721162,
+              36.34710090613801
+            ],
+            [
+              -118.69296293745668,
+              36.347103802197026
+            ],
+            [
+              -118.69295915863277,
+              36.3471722856074
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "324",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69299402700211,
+              36.34710673062281
+            ],
+            [
+              -118.69294501573604,
+              36.34710496082798
+            ],
+            [
+              -118.69294839679239,
+              36.34704368619815
+            ],
+            [
+              -118.69299740802028,
+              36.34704545598904
+            ],
+            [
+              -118.69299402700211,
+              36.34710673062281
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "325",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.6930714429408,
+              36.34716008807528
+            ],
+            [
+              -118.69298678705387,
+              36.34715703119534
+            ],
+            [
+              -118.69299016808391,
+              36.34709575656266
+            ],
+            [
+              -118.6930748239049,
+              36.34709881343579
+            ],
+            [
+              -118.6930714429408,
+              36.34716008807528
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "326",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69311281661538,
+              36.347219367186916
+            ],
+            [
+              -118.69302370508339,
+              36.34721614944326
+            ],
+            [
+              -118.69302748385685,
+              36.347147666027574
+            ],
+            [
+              -118.69311659531124,
+              36.34715088376322
+            ],
+            [
+              -118.69311281661538,
+              36.347219367186916
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "327",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69318446344609,
+              36.34717500380921
+            ],
+            [
+              -118.69309535195626,
+              36.34717178612236
+            ],
+            [
+              -118.69309893178195,
+              36.34710690709037
+            ],
+            [
+              -118.6931880431983,
+              36.347110124769635
+            ],
+            [
+              -118.69318446344609,
+              36.34717500380921
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "328",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69345758648261,
+              36.34720111754707
+            ],
+            [
+              -118.6933684749309,
+              36.34719790006189
+            ],
+            [
+              -118.69337225339993,
+              36.34712941661487
+            ],
+            [
+              -118.69346136487401,
+              36.34713263409203
+            ],
+            [
+              -118.69345758648261,
+              36.34720111754707
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "329",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69353903626859,
+              36.34693860774878
+            ],
+            [
+              -118.69345883613205,
+              36.346935712087685
+            ],
+            [
+              -118.69346261448575,
+              36.346867228629506
+            ],
+            [
+              -118.69354248046875,
+              36.346870112221175
+            ],
+            [
+              -118.69354248046875,
+              36.346876179733904
+            ],
+            [
+              -118.69353903626859,
+              36.34693860774878
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "330",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69344676204386,
+              36.346911800921355
+            ],
+            [
+              -118.69337101750533,
+              36.34690906607495
+            ],
+            [
+              -118.69337479593226,
+              36.346840582624374
+            ],
+            [
+              -118.69345054040484,
+              36.346843317463964
+            ],
+            [
+              -118.69344676204386,
+              36.346911800921355
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "331",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69353650728657,
+              36.34674168572886
+            ],
+            [
+              -118.69350086286993,
+              36.346740398780206
+            ],
+            [
+              -118.69350384573146,
+              36.346686332887494
+            ],
+            [
+              -118.69353949012363,
+              36.34668761983363
+            ],
+            [
+              -118.69353650728657,
+              36.34674168572886
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "332",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69353669032357,
+              36.34702158921886
+            ],
+            [
+              -118.69348322350804,
+              36.34701965877926
+            ],
+            [
+              -118.69348600755215,
+              36.346969197282945
+            ],
+            [
+              -118.69353947433339,
+              36.34697112771901
+            ],
+            [
+              -118.69353669032357,
+              36.34702158921886
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "333",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69344682381583,
+              36.34707251812827
+            ],
+            [
+              -118.69339781254195,
+              36.34707074852056
+            ],
+            [
+              -118.69340059664636,
+              36.34702028703037
+            ],
+            [
+              -118.69344960788882,
+              36.34702205663481
+            ],
+            [
+              -118.69344682381583,
+              36.34707251812827
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "334",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+        "SUNETID": "bashah",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22321,
+        "TILE_Y": 51313,
+        "TILEXYZ": [
+          17,
+          22321,
+          51313
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.69254166760498,
+              36.347173461314156
+            ],
+            [
+              -118.6924570117627,
+              36.347170404057934
+            ],
+            [
+              -118.69246019430113,
+              36.347112733855845
+            ],
+            [
+              -118.69254485008136,
+              36.34711579110565
+            ],
+            [
+              -118.69254166760498,
+              36.347173461314156
+            ]
+          ]
+        ]
+      }
+    }
+  ],
+  "properties": {
+    "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/bashah_mortalitree_postfire_labels.geojson",
+    "SUNETID": "bashah",
+    "FIRENAME": "CASTLE",
+    "FIRE_SLUG": "CASTLE",
+    "PREFIRE": 0,
+    "PREFIRE_STATUS": "postfire",
+    "TILE_Z": 17,
+    "TILE_X": 22321,
+    "TILE_Y": 51313,
+    "TILEXYZ": [
+      17,
+      22321,
+      51313
+    ],
+    "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22321/51313.geojson",
+    "OUTPUT_STATUS_DIR": "postfire",
+    "FEATURE_COUNT": 98
+  }
+}

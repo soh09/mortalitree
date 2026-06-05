@@ -1,0 +1,82 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "161",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/jjackie_mortalitree_prefire_lables.geojson",
+        "SUNETID": "jjackie",
+        "FIRENAME": "CZU AUG LIGHTNING",
+        "FIRE_SLUG": "CZU_AUG_LIGHTNING",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21009,
+        "TILE_Y": 50917,
+        "TILEXYZ": [
+          17,
+          21009,
+          50917
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21009/50917.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 1
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.29705603903832,
+              37.218359617245035
+            ],
+            [
+              -122.29705719362633,
+              37.21823519267486
+            ],
+            [
+              -122.29705810546875,
+              37.21823519808631
+            ],
+            [
+              -122.29705810546875,
+              37.21835962950858
+            ],
+            [
+              -122.29705603903832,
+              37.218359617245035
+            ]
+          ]
+        ]
+      }
+    }
+  ],
+  "properties": {
+    "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/jjackie_mortalitree_prefire_lables.geojson",
+    "SUNETID": "jjackie",
+    "FIRENAME": "CZU AUG LIGHTNING",
+    "FIRE_SLUG": "CZU_AUG_LIGHTNING",
+    "PREFIRE": 1,
+    "PREFIRE_STATUS": "prefire",
+    "TILE_Z": 17,
+    "TILE_X": 21009,
+    "TILE_Y": 50917,
+    "TILEXYZ": [
+      17,
+      21009,
+      50917
+    ],
+    "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21009/50917.geojson",
+    "OUTPUT_STATUS_DIR": "prefire",
+    "FEATURE_COUNT": 1
+  }
+}

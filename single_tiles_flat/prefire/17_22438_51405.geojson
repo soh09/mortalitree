@@ -1,0 +1,177 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "1013",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/annayu_mortalitree_prefire_labels.geojson",
+        "SUNETID": "annayu",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22438,
+        "TILE_Y": 51405,
+        "TILEXYZ": [
+          17,
+          22438,
+          51405
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22438/51405.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 3
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.37073755947759,
+              36.14282386800452
+            ],
+            [
+              -118.37066945774836,
+              36.14282122995108
+            ],
+            [
+              -118.37067325228928,
+              36.14275678653913
+            ],
+            [
+              -118.37074135396315,
+              36.14275942458638
+            ],
+            [
+              -118.37073755947759,
+              36.14282386800452
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "1014",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/annayu_mortalitree_prefire_labels.geojson",
+        "SUNETID": "annayu",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22438,
+        "TILE_Y": 51405,
+        "TILEXYZ": [
+          17,
+          22438,
+          51405
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22438/51405.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 3
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.37076998414555,
+              36.14285280562555
+            ],
+            [
+              -118.37070188238822,
+              36.14285016758874
+            ],
+            [
+              -118.37070513483332,
+              36.1427949303763
+            ],
+            [
+              -118.37077323654324,
+              36.14279756840781
+            ],
+            [
+              -118.37076998414555,
+              36.14285280562555
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "2962",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/annayu_mortalitree_prefire_labels.geojson",
+        "SUNETID": "annayu",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22438,
+        "TILE_Y": 51405,
+        "TILEXYZ": [
+          17,
+          22438,
+          51405
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22438/51405.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 3
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.37018423879938,
+              36.143526767975175
+            ],
+            [
+              -118.37010478613634,
+              36.14352368982399
+            ],
+            [
+              -118.3701080390802,
+              36.14346845266451
+            ],
+            [
+              -118.37018749168789,
+              36.143471530809485
+            ],
+            [
+              -118.37018423879938,
+              36.143526767975175
+            ]
+          ]
+        ]
+      }
+    }
+  ],
+  "properties": {
+    "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/annayu_mortalitree_prefire_labels.geojson",
+    "SUNETID": "annayu",
+    "FIRENAME": "CASTLE",
+    "FIRE_SLUG": "CASTLE",
+    "PREFIRE": 1,
+    "PREFIRE_STATUS": "prefire",
+    "TILE_Z": 17,
+    "TILE_X": 22438,
+    "TILE_Y": 51405,
+    "TILEXYZ": [
+      17,
+      22438,
+      51405
+    ],
+    "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22438/51405.geojson",
+    "OUTPUT_STATUS_DIR": "prefire",
+    "FEATURE_COUNT": 3
+  }
+}

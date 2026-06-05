@@ -63,62 +63,90 @@ def _boxes_to_norm_cxcywh(xyxy: np.ndarray, off_x: float, off_y: float,
 
 
 class NeonPatchDataset(Dataset):
-    """One sample per (quarter of a) patch; all of a tile's boxes grouped."""
+    """One sample per (quarter of a) patch; all of a tile's boxes grouped.
+
+    Two ways to get 128-px quarters:
+      * pre-quartered (recommended) — point `labels_csv` at the pipeline's
+        `labels_quarter.csv` (128 tifs on disk, one row group per quarter) and
+        `parent_labels_csv` at `labels_parent.csv` (full 256 GT). Set by passing
+        `parent_labels_csv`.
+      * on-the-fly — point `labels_csv` at a 256 `labels.csv` and pass
+        `quarter=True`; each 256 tif is split at read time. Kept for the
+        sparse-data control; the pre-quartered path is what the pipeline produces.
+
+    Each sample carries `read_crop` (window into the on-disk tif) and a
+    `stitch` offset (where the tile sits in its 256 parent) so predictions can be
+    stitched back to the parent frame (see eval/stitch.py). `source_size` is the
+    parent frame size used for that stitching.
+    """
 
     def __init__(
         self,
         labels_csv: str,
         patches_root: str,
-        tile_size: int = 256,          # source patch size on disk
+        tile_size: int = 256,          # tile size ON DISK (256 baseline / 128 quarter)
         augment: bool = True,
-        quarter: bool = False,         # split each source patch into a grid
-        n_split: int = 2,              # grid per side (2 → 2x2 → 128 px tiles)
+        quarter: bool = False,         # on-the-fly: split each 256 tif into a grid
+        n_split: int = 2,              # grid per side for on-the-fly quartering
         max_trees: int = 0,            # drop tiles with > this many boxes (0 = keep all)
+        parent_labels_csv: Optional[str] = None,  # set -> pre-quartered mode
+        parent_size: int = 256,        # parent frame size (pre-quartered stitching)
+        packed_dir: Optional[str] = None,  # set -> read pixels from per-site memmaps
         norm_mean: Optional[np.ndarray] = None,
         norm_std: Optional[np.ndarray] = None,
     ):
         import pandas as pd
 
         self.patches_root = Path(patches_root)
-        self.source_size = tile_size
         self.augment = NAIPAugmentation() if augment else None
         self.mean = norm_mean if norm_mean is not None else NAIP_MEAN
         self.std = norm_std if norm_std is not None else NAIP_STD
+        self.samples: list[dict] = []
+        # parent_gt: FULL 256-frame GT per parent (normalized cxcywh), used to
+        # score stitched quarter predictions against the baseline's ground truth.
+        self.parent_gt: dict[str, np.ndarray] = {}
+        # Packed mode: read pixels from {packed_dir}/{SITE}.npy memmaps (via
+        # packed_index.csv) instead of opening one GeoTIFF per tile.
+        self.packed = packed_dir is not None
+        self.packed_dir = Path(packed_dir) if packed_dir else None
+        self._mmaps: dict = {}
+        self._packed_loc: dict = {}
+        if self.packed:
+            pidx = pd.read_csv(self.packed_dir / "packed_index.csv")
+            self._packed_loc = {
+                str(r.imgname): (str(r.site), int(r.row))
+                for r in pidx.itertuples(index=False)
+            }
 
+        if parent_labels_csv is not None:
+            self._init_prequartered(pd, labels_csv, parent_labels_csv,
+                                    tile_size, parent_size, max_trees)
+        else:
+            self._init_onthefly(pd, labels_csv, tile_size, quarter, n_split, max_trees)
+
+    def _init_onthefly(self, pd, labels_csv, tile_size, quarter, n_split, max_trees):
+        self.source_size = tile_size
         n = n_split if quarter else 1
         self.out_size = tile_size // n
         if quarter and tile_size % n != 0:
             raise ValueError(f"tile_size {tile_size} not divisible by n_split {n}")
 
         df = pd.read_csv(labels_csv)
-        has_exhaustive = "exhaustive" in df.columns
         xyxy_all = df[["xmin", "ymin", "xmax", "ymax"]].to_numpy(dtype=np.float32)
         cx_all = (xyxy_all[:, 0] + xyxy_all[:, 2]) / 2.0
         cy_all = (xyxy_all[:, 1] + xyxy_all[:, 3]) / 2.0
 
-        # One sample per tile (= per source patch, or per grid cell if quartering).
-        # parent_gt holds the FULL 256-frame GT per parent (normalized cxcywh),
-        # used to score stitched quarter predictions against the un-quartered
-        # baseline's ground truth (see eval/stitch.py).
-        self.samples: list[dict] = []
-        self.parent_gt: dict[str, np.ndarray] = {}
         for imgname, g in df.groupby("imgname", sort=False):
             r0 = g.iloc[0]
             idx = g.index.to_numpy()
             xyxy = xyxy_all[idx]
             cx, cy = cx_all[idx], cy_all[idx]
             self.parent_gt[imgname] = _boxes_to_norm_cxcywh(xyxy, 0, 0, tile_size)
-            meta = dict(
-                tile_path=str(self.patches_root / str(r0["site"]) / f"{imgname}.tif"),
-                lat=float(r0["lat"]), lon=float(r0["lon"]),
-                week=self._week_of_yyyymm(str(r0["acquisition_yyyymm"])),
-                exhaustive=bool(r0["exhaustive"]) if has_exhaustive else True,
-            )
+            meta = self._meta(r0, imgname)
             for gr in range(n):
                 for gc in range(n):
                     off_x, off_y = gc * self.out_size, gr * self.out_size
                     if quarter:
-                        # assign each box to the cell containing its center
                         in_cell = (
                             (cx >= off_x) & (cx < off_x + self.out_size) &
                             (cy >= off_y) & (cy < off_y + self.out_size)
@@ -127,24 +155,61 @@ class NeonPatchDataset(Dataset):
                     else:
                         cell_xyxy = xyxy
                     boxes = _boxes_to_norm_cxcywh(cell_xyxy, off_x, off_y, self.out_size)
-                    if len(boxes) == 0:
-                        continue                      # skip empty tiles
-                    if max_trees and len(boxes) > max_trees:
-                        continue                      # skip over-budget tiles
+                    if len(boxes) == 0 or (max_trees and len(boxes) > max_trees):
+                        continue
                     self.samples.append({
-                        **meta,
-                        "boxes": boxes,
-                        "crop": (off_x, off_y, self.out_size),
+                        **meta, "boxes": boxes,
+                        "read_crop": (off_x, off_y, self.out_size),  # window into the 256 tif
+                        "stitch": (off_x, off_y, self.out_size),     # offset in the parent
                         "parent": imgname,
-                        "quarter": (gr, gc) if quarter else None,
                     })
+
+    def _init_prequartered(self, pd, labels_csv, parent_labels_csv,
+                           tile_size, parent_size, max_trees):
+        self.source_size = parent_size       # stitch predictions back to this frame
+        self.out_size = tile_size            # quarter tif size on disk (e.g. 128)
+
+        df = pd.read_csv(labels_csv)
+        xyxy_all = df[["xmin", "ymin", "xmax", "ymax"]].to_numpy(dtype=np.float32)
+        for imgname, g in df.groupby("imgname", sort=False):
+            r0 = g.iloc[0]
+            xyxy = xyxy_all[g.index.to_numpy()]
+            boxes = _boxes_to_norm_cxcywh(xyxy, 0, 0, tile_size)   # already 128-frame
+            if len(boxes) == 0 or (max_trees and len(boxes) > max_trees):
+                continue
+            qr, qc = int(r0["q_row"]), int(r0["q_col"])
+            self.samples.append({
+                **self._meta(r0, imgname), "imgname": str(imgname),
+                "boxes": boxes,
+                "read_crop": (0, 0, tile_size),                    # the whole 128 tif
+                "stitch": (qc * tile_size, qr * tile_size, tile_size),
+                "parent": str(r0["parent"]),
+            })
+
+        pdf = pd.read_csv(parent_labels_csv)
+        pxyxy = pdf[["xmin", "ymin", "xmax", "ymax"]].to_numpy(dtype=np.float32)
+        for parent, g in pdf.groupby("parent", sort=False):
+            self.parent_gt[str(parent)] = _boxes_to_norm_cxcywh(
+                pxyxy[g.index.to_numpy()], 0, 0, parent_size)
+
+    def _meta(self, r0, imgname) -> dict:
+        has_ex = "exhaustive" in r0.index
+        return dict(
+            tile_path=str(self.patches_root / str(r0["site"]) / f"{imgname}.tif"),
+            lat=float(r0["lat"]), lon=float(r0["lon"]),
+            week=self._week_of_yyyymm(str(r0["acquisition_yyyymm"])),
+            exhaustive=bool(r0["exhaustive"]) if has_ex else True,
+        )
 
     def __len__(self) -> int:
         return len(self.samples)
 
     def __getitem__(self, idx: int) -> dict:
         s = self.samples[idx]
-        pixels = self._load_tile(s["tile_path"], s["crop"])      # (4, out, out) raw DN
+        if self.packed:
+            pixels = self._load_packed(s["imgname"])             # (4, out, out) raw DN
+        else:
+            pixels = self._load_tile(s["tile_path"], s["read_crop"])
         boxes = torch.from_numpy(s["boxes"])                     # (N, 4) cxcywh [0,1]
         if boxes.numel() == 0:
             boxes = torch.zeros((0, 4), dtype=torch.float32)
@@ -167,8 +232,7 @@ class NeonPatchDataset(Dataset):
             "exhaustive":  s["exhaustive"],
             "tile_path":   s["tile_path"],
             "parent":      s["parent"],
-            "quarter":     s["quarter"],
-            "crop":        s["crop"],
+            "crop":        s["stitch"],     # parent-frame offset for stitching
         }
 
     @property
@@ -187,6 +251,16 @@ class NeonPatchDataset(Dataset):
                 window=Window(off_x, off_y, size, size),
             ).astype(np.float32)                                 # (4, size, size)
         return torch.from_numpy(data)
+
+    def _load_packed(self, imgname: str) -> torch.Tensor:
+        """Read one (4, out, out) tile from the per-site memmap — no GeoTIFF open.
+        Memmaps are opened lazily and cached per worker process."""
+        site, row = self._packed_loc[imgname]
+        mm = self._mmaps.get(site)
+        if mm is None:
+            mm = np.load(self.packed_dir / f"{site}.npy", mmap_mode="r")
+            self._mmaps[site] = mm
+        return torch.from_numpy(np.array(mm[row], dtype=np.float32))   # copy out of the mmap
 
     @staticmethod
     def _week_of_yyyymm(yyyymm: str) -> int:

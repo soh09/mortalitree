@@ -1,0 +1,75 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "524",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/luwajobi_mortalitree_postfire_labels.geojson",
+        "SUNETID": "luwajobi",
+        "FIRENAME": "NORTH COMPLEX",
+        "FIRE_SLUG": "NORTH_COMPLEX",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 21539,
+        "TILE_Y": 49673,
+        "TILEXYZ": [
+          17,
+          21539,
+          49673
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/21539/49673.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 1
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -120.84136234010845,
+              39.89076882694576
+            ],
+            [
+              -120.84136962890625,
+              39.89076896267088
+            ],
+            [
+              -120.84136962890625,
+              39.890772566959534
+            ],
+            [
+              -120.84136222274046,
+              39.890772566959534
+            ],
+            [
+              -120.84136234010845,
+              39.89076882694576
+            ]
+          ]
+        ]
+      }
+    }
+  ],
+  "properties": {
+    "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/luwajobi_mortalitree_postfire_labels.geojson",
+    "SUNETID": "luwajobi",
+    "FIRENAME": "NORTH COMPLEX",
+    "FIRE_SLUG": "NORTH_COMPLEX",
+    "PREFIRE": 0,
+    "PREFIRE_STATUS": "postfire",
+    "TILE_Z": 17,
+    "TILE_X": 21539,
+    "TILE_Y": 49673,
+    "TILEXYZ": [
+      17,
+      21539,
+      49673
+    ],
+    "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/21539/49673.geojson",
+    "OUTPUT_STATUS_DIR": "postfire",
+    "FEATURE_COUNT": 1
+  }
+}

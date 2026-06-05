@@ -1,0 +1,5026 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "223",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69547060006921,
+              37.37316019831945
+            ],
+            [
+              -121.69520529142113,
+              37.37315727119604
+            ],
+            [
+              -121.69520895947423,
+              37.372945533265494
+            ],
+            [
+              -121.69547426737697,
+              37.37294846036662
+            ],
+            [
+              -121.69547060006921,
+              37.37316019831945
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "224",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.6953695639159,
+              37.373035546264575
+            ],
+            [
+              -121.69537282398468,
+              37.37284733475493
+            ],
+            [
+              -121.695556640625,
+              37.37284936253032
+            ],
+            [
+              -121.695556640625,
+              37.373037610012254
+            ],
+            [
+              -121.6953695639159,
+              37.373035546264575
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "225",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.6941867179018,
+              37.37281071207326
+            ],
+            [
+              -121.69380349628544,
+              37.3728064796887
+            ],
+            [
+              -121.69380778021943,
+              37.3725594522257
+            ],
+            [
+              -121.69419100057982,
+              37.372563684572675
+            ],
+            [
+              -121.6941867179018,
+              37.37281071207326
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "226",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69400535909818,
+              37.37306754950443
+            ],
+            [
+              -121.69379900829853,
+              37.373065270352676
+            ],
+            [
+              -121.69380145629849,
+              37.37292411181015
+            ],
+            [
+              -121.6940078067117,
+              37.372926390950326
+            ],
+            [
+              -121.69400535909818,
+              37.37306754950443
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "227",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69406146103192,
+              37.37323288560372
+            ],
+            [
+              -121.69384037040012,
+              37.37323044373735
+            ],
+            [
+              -121.69384322632506,
+              37.37306575877263
+            ],
+            [
+              -121.69406431647378,
+              37.37306820062454
+            ],
+            [
+              -121.69406146103192,
+              37.37323288560372
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "228",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69382512103081,
+              37.37325968896031
+            ],
+            [
+              -121.69361876971966,
+              37.373257409484154
+            ],
+            [
+              -121.69362203418883,
+              37.373069198113015
+            ],
+            [
+              -121.69382838498467,
+              37.37307147757374
+            ],
+            [
+              -121.69382512103081,
+              37.37325968896031
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "229",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69350218100902,
+              37.37317964589957
+            ],
+            [
+              -121.69335478738859,
+              37.37317801733954
+            ],
+            [
+              -121.69335784843886,
+              37.3730015691955
+            ],
+            [
+              -121.69350524171425,
+              37.37300319774519
+            ],
+            [
+              -121.69350218100902,
+              37.37317964589957
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "232",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69380002830057,
+              37.37300645429371
+            ],
+            [
+              -121.69353472037074,
+              37.37300352343309
+            ],
+            [
+              -121.69353594461774,
+              37.37293294416897
+            ],
+            [
+              -121.69380125229915,
+              37.37293587502216
+            ],
+            [
+              -121.69380002830057,
+              37.37300645429371
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "233",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.693579958528,
+              37.37294519589678
+            ],
+            [
+              -121.69349152262681,
+              37.37294421884614
+            ],
+            [
+              -121.6934935630992,
+              37.37282658673965
+            ],
+            [
+              -121.69358199886238,
+              37.372827563786146
+            ],
+            [
+              -121.693579958528,
+              37.37294519589678
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "234",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.6939187588743,
+              37.37296070385766
+            ],
+            [
+              -121.6935944938135,
+              37.37295712194313
+            ],
+            [
+              -121.69359939054371,
+              37.37267480487244
+            ],
+            [
+              -121.69392365438992,
+              37.37267838675061
+            ],
+            [
+              -121.6939187588743,
+              37.37296070385766
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "235",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69375833490128,
+              37.37243536865889
+            ],
+            [
+              -121.69353724663681,
+              37.37243292627006
+            ],
+            [
+              -121.69353885941064,
+              37.37233994582318
+            ],
+            [
+              -121.6936407380808,
+              37.37233994582318
+            ],
+            [
+              -121.69375996691686,
+              37.37234126295575
+            ],
+            [
+              -121.69375833490128,
+              37.37243536865889
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "236",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69356570490744,
+              37.37249206800497
+            ],
+            [
+              -121.69331513804039,
+              37.37248929952144
+            ],
+            [
+              -121.69331772906278,
+              37.37233994582318
+            ],
+            [
+              -121.69356834345216,
+              37.37233994582318
+            ],
+            [
+              -121.69356570490744,
+              37.37249206800497
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "237",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.6947392686139,
+              37.37325213463342
+            ],
+            [
+              -121.69450343848354,
+              37.37324953131165
+            ],
+            [
+              -121.6945050696163,
+              37.37315542559353
+            ],
+            [
+              -121.69474089945219,
+              37.37315802890649
+            ],
+            [
+              -121.6947392686139,
+              37.37325213463342
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "238",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69417017085966,
+              37.37333997529926
+            ],
+            [
+              -121.69403751628302,
+              37.373338510347395
+            ],
+            [
+              -121.69403975989614,
+              37.37320911501057
+            ],
+            [
+              -121.69417241424503,
+              37.37321057995562
+            ],
+            [
+              -121.69417017085966,
+              37.37333997529926
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "239",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69532639890491,
+              37.373399799501726
+            ],
+            [
+              -121.69513478650126,
+              37.37339768528271
+            ],
+            [
+              -121.69513784340653,
+              37.373221237019955
+            ],
+            [
+              -121.6953294553616,
+              37.37322335122554
+            ],
+            [
+              -121.69532639890491,
+              37.373399799501726
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "240",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69318330137695,
+              37.372440780798705
+            ],
+            [
+              -121.69299169157641,
+              37.37243866315372
+            ],
+            [
+              -121.69299291630718,
+              37.37236808389815
+            ],
+            [
+              -121.6931845259283,
+              37.37237020153775
+            ],
+            [
+              -121.69318330137695,
+              37.372440780798705
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "241",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69522138896104,
+              37.37350453007339
+            ],
+            [
+              -121.69510347347433,
+              37.37350322894448
+            ],
+            [
+              -121.69510510387245,
+              37.373409123207885
+            ],
+            [
+              -121.69522301921195,
+              37.37341042433239
+            ],
+            [
+              -121.69522138896104,
+              37.37350453007339
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "242",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.6955082986488,
+              37.37353710912984
+            ],
+            [
+              -121.69530194643922,
+              37.37353483257603
+            ],
+            [
+              -121.69530581803795,
+              37.37331133143258
+            ],
+            [
+              -121.69551216963565,
+              37.37331360796809
+            ],
+            [
+              -121.6955082986488,
+              37.37353710912984
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "244",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69553146176804,
+              37.373902094098
+            ],
+            [
+              -121.69526615050063,
+              37.37389916706188
+            ],
+            [
+              -121.6952696147053,
+              37.37369919237018
+            ],
+            [
+              -121.69553492526876,
+              37.37370211938527
+            ],
+            [
+              -121.69553146176804,
+              37.373902094098
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "245",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.6954314433082,
+              37.37371862599948
+            ],
+            [
+              -121.69519561165237,
+              37.37371602403036
+            ],
+            [
+              -121.69519927980672,
+              37.37350428612067
+            ],
+            [
+              -121.69543511079999,
+              37.37350688806999
+            ],
+            [
+              -121.6954314433082,
+              37.37371862599948
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "246",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69530038412874,
+              37.37447605255392
+            ],
+            [
+              -121.69491715387011,
+              37.374471823618066
+            ],
+            [
+              -121.6949218420775,
+              37.37420126968565
+            ],
+            [
+              -121.69530507096042,
+              37.374205498580366
+            ],
+            [
+              -121.69530038412874,
+              37.37447605255392
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "247",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69513536206728,
+              37.374215391476525
+            ],
+            [
+              -121.69495848717703,
+              37.37421343957897
+            ],
+            [
+              -121.69496195223778,
+              37.374013464922456
+            ],
+            [
+              -121.6951388266587,
+              37.37401541680599
+            ],
+            [
+              -121.69513536206728,
+              37.374215391476525
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "248",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69542359882192,
+              37.374171509877684
+            ],
+            [
+              -121.69508458878913,
+              37.374167769338335
+            ],
+            [
+              -121.69508948014895,
+              37.37388545215778
+            ],
+            [
+              -121.69542848891189,
+              37.37388919265915
+            ],
+            [
+              -121.69542359882192,
+              37.374171509877684
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "249",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69517105693723,
+              37.373856938672475
+            ],
+            [
+              -121.69502366189346,
+              37.37385531216725
+            ],
+            [
+              -121.69502549622631,
+              37.37374944322316
+            ],
+            [
+              -121.69517289106304,
+              37.37375106972219
+            ],
+            [
+              -121.69517105693723,
+              37.373856938672475
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "250",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69500657847955,
+              37.3739904264871
+            ],
+            [
+              -121.69484444365537,
+              37.37398863709035
+            ],
+            [
+              -121.6948466859351,
+              37.37385924172612
+            ],
+            [
+              -121.69500882048091,
+              37.373861031114544
+            ],
+            [
+              -121.69500657847955,
+              37.3739904264871
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "251",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69490988597703,
+              37.37446586067315
+            ],
+            [
+              -121.69458561430886,
+              37.37446228135378
+            ],
+            [
+              -121.69458948816272,
+              37.37423878030928
+            ],
+            [
+              -121.69491375886922,
+              37.37424235959988
+            ],
+            [
+              -121.69490988597703,
+              37.37446586067315
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "253",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69490024231393,
+              37.37417161763643
+            ],
+            [
+              -121.694634930164,
+              37.37416868916641
+            ],
+            [
+              -121.69463921158231,
+              37.37392166167852
+            ],
+            [
+              -121.69490452286264,
+              37.37392459012253
+            ],
+            [
+              -121.69490024231393,
+              37.37417161763643
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "254",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69511495212757,
+              37.373691603061644
+            ],
+            [
+              -121.69484964164556,
+              37.37368867510516
+            ],
+            [
+              -121.69485310692956,
+              37.37348870043954
+            ],
+            [
+              -121.69511841670764,
+              37.373491628374964
+            ],
+            [
+              -121.69511495212757,
+              37.373691603061644
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "255",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69440904475124,
+              37.37444268380539
+            ],
+            [
+              -121.6940258147986,
+              37.374438451984545
+            ],
+            [
+              -121.69403111811923,
+              37.37413260851482
+            ],
+            [
+              -121.69441434651671,
+              37.37413684028911
+            ],
+            [
+              -121.69440904475124,
+              37.37444268380539
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "256",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69489857995035,
+              37.3738421662781
+            ],
+            [
+              -121.6945743109685,
+              37.37383858697837
+            ],
+            [
+              -121.69457716535166,
+              37.373673901982414
+            ],
+            [
+              -121.69490143362496,
+              37.37367748126095
+            ],
+            [
+              -121.69489857995035,
+              37.3738421662781
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "257",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69509077205852,
+              37.373385434124806
+            ],
+            [
+              -121.69491389912014,
+              37.37338348219732
+            ],
+            [
+              -121.69491512209179,
+              37.373312902898924
+            ],
+            [
+              -121.69509199486451,
+              37.37331485482146
+            ],
+            [
+              -121.69509077205852,
+              37.373385434124806
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "258",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69491257422939,
+              37.37345994310293
+            ],
+            [
+              -121.69461778573763,
+              37.37345668929389
+            ],
+            [
+              -121.69462145548175,
+              37.37324495142369
+            ],
+            [
+              -121.69491624314534,
+              37.37324820520795
+            ],
+            [
+              -121.69491257422939,
+              37.37345994310293
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "259",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69440888496301,
+              37.37360145136147
+            ],
+            [
+              -121.69402565929008,
+              37.37359721962087
+            ],
+            [
+              -121.69402831088014,
+              37.37344429786626
+            ],
+            [
+              -121.69441153577556,
+              37.373448529583605
+            ],
+            [
+              -121.69440888496301,
+              37.37360145136147
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "260",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.6946355115913,
+              37.37370984246965
+            ],
+            [
+              -121.69437020109575,
+              37.37370691343646
+            ],
+            [
+              -121.69437448331074,
+              37.37345988595531
+            ],
+            [
+              -121.69463979293671,
+              37.373462814962494
+            ],
+            [
+              -121.6946355115913,
+              37.37370984246965
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "262",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69444566079397,
+              37.37403129684425
+            ],
+            [
+              -121.69426878638463,
+              37.3740293439234
+            ],
+            [
+              -121.69427225325325,
+              37.37382936931565
+            ],
+            [
+              -121.69444912719331,
+              37.37383132222246
+            ],
+            [
+              -121.69444566079397,
+              37.37403129684425
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "263",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69470465255439,
+              37.374398885354395
+            ],
+            [
+              -121.69430668317426,
+              37.374394491745484
+            ],
+            [
+              -121.69431178141792,
+              37.37410041145127
+            ],
+            [
+              -121.6947097492452,
+              37.37410480501374
+            ],
+            [
+              -121.69470465255439,
+              37.374398885354395
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "264",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69436120001738,
+              37.37380093776992
+            ],
+            [
+              -121.69400745230944,
+              37.37379703143159
+            ],
+            [
+              -121.6940111238142,
+              37.373585293625155
+            ],
+            [
+              -121.69436487052832,
+              37.37358919993375
+            ],
+            [
+              -121.69436120001738,
+              37.37380093776992
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "265",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69417943141802,
+              37.374081301815764
+            ],
+            [
+              -121.69388464058089,
+              37.37407804613352
+            ],
+            [
+              -121.69388892444556,
+              37.37383101871576
+            ],
+            [
+              -121.69418371431648,
+              37.37383427436909
+            ],
+            [
+              -121.69417943141802,
+              37.374081301815764
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "266",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69372434181683,
+              37.37397038631
+            ],
+            [
+              -121.69351798856715,
+              37.37396810662126
+            ],
+            [
+              -121.69352125337193,
+              37.37377989528037
+            ],
+            [
+              -121.69372760610628,
+              37.373782174953675
+            ],
+            [
+              -121.69372434181683,
+              37.37397038631
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "267",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69384358397156,
+              37.37389522796134
+            ],
+            [
+              -121.6935487939021,
+              37.37389197145573
+            ],
+            [
+              -121.69355348692586,
+              37.373621417644415
+            ],
+            [
+              -121.6938482759371,
+              37.373624674118346
+            ],
+            [
+              -121.69384358397156,
+              37.37389522796134
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "268",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69384789372984,
+              37.37407175751662
+            ],
+            [
+              -121.6936415401923,
+              37.374069478038216
+            ],
+            [
+              -121.6936454167922,
+              37.37384597706301
+            ],
+            [
+              -121.69385176971781,
+              37.3738482565231
+            ],
+            [
+              -121.69384789372984,
+              37.37407175751662
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "269",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69355136856947,
+              37.37416848828073
+            ],
+            [
+              -121.69338923345617,
+              37.374166696881844
+            ],
+            [
+              -121.69339168232143,
+              37.37402553838875
+            ],
+            [
+              -121.69355381713108,
+              37.37402732977854
+            ],
+            [
+              -121.69355136856947,
+              37.37416848828073
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "270",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69385763527781,
+              37.374360118960944
+            ],
+            [
+              -121.69359232257432,
+              37.37435718813957
+            ],
+            [
+              -121.69359558723924,
+              37.37416897680549
+            ],
+            [
+              -121.6938608992802,
+              37.37417190760704
+            ],
+            [
+              -121.69385763527781,
+              37.374360118960944
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "271",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69364350308338,
+              37.37438128448488
+            ],
+            [
+              -121.69342240911791,
+              37.374378841773606
+            ],
+            [
+              -121.69342567420993,
+              37.37419063045299
+            ],
+            [
+              -121.69364676762328,
+              37.37419307314776
+            ],
+            [
+              -121.69364350308338,
+              37.37438128448488
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "272",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69400961244348,
+              37.37452264407724
+            ],
+            [
+              -121.69371476342397,
+              37.37452264407724
+            ],
+            [
+              -121.69371781314685,
+              37.37434680900391
+            ],
+            [
+              -121.69401260501613,
+              37.374350065121824
+            ],
+            [
+              -121.69400961244348,
+              37.37452264407724
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "273",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69374150429829,
+              37.373405833631416
+            ],
+            [
+              -121.69335827972256,
+              37.37340159974713
+            ],
+            [
+              -121.69336195299951,
+              37.373189861981345
+            ],
+            [
+              -121.69374517649868,
+              37.3731940958334
+            ],
+            [
+              -121.69374150429829,
+              37.373405833631416
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "274",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69456086688845,
+              37.37333840629755
+            ],
+            [
+              -121.69441347289514,
+              37.37333677905103
+            ],
+            [
+              -121.6944142885212,
+              37.37328972619455
+            ],
+            [
+              -121.69456168242252,
+              37.37329135343833
+            ],
+            [
+              -121.69456086688845,
+              37.37333840629755
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "275",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69308743777262,
+              37.37329271754933
+            ],
+            [
+              -121.69283686829031,
+              37.37328994800227
+            ],
+            [
+              -121.6928411554689,
+              37.37304292065483
+            ],
+            [
+              -121.69309172412996,
+              37.37304569017731
+            ],
+            [
+              -121.69308743777262,
+              37.37329271754933
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "276",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69320226913838,
+              37.37304691185675
+            ],
+            [
+              -121.69286326446702,
+              37.3730431650458
+            ],
+            [
+              -121.69286857224022,
+              37.372737321645666
+            ],
+            [
+              -121.69320757553596,
+              37.372741068415415
+            ],
+            [
+              -121.69320226913838,
+              37.37304691185675
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "393",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.6955356029895,
+              37.37323739093482
+            ],
+            [
+              -121.69537346975189,
+              37.37323560229385
+            ],
+            [
+              -121.69537591481665,
+              37.37309444366679
+            ],
+            [
+              -121.6955380477506,
+              37.37309623229867
+            ],
+            [
+              -121.6955356029895,
+              37.37323739093482
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "394",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69490816005185,
+              37.37328929513015
+            ],
+            [
+              -121.69477550552541,
+              37.373287831007694
+            ],
+            [
+              -121.6947777478668,
+              37.37315843563167
+            ],
+            [
+              -121.69491040216548,
+              37.373159899747314
+            ],
+            [
+              -121.69490816005185,
+              37.37328929513015
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "395",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69470340871128,
+              37.3727693546878
+            ],
+            [
+              -121.69457075511127,
+              37.37276789035296
+            ],
+            [
+              -121.69457279388546,
+              37.3726502581923
+            ],
+            [
+              -121.69470544727842,
+              37.37265172252094
+            ],
+            [
+              -121.69470340871128,
+              37.3727693546878
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "396",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69425728169557,
+              37.373417412737396
+            ],
+            [
+              -121.69413936639057,
+              37.373416110649856
+            ],
+            [
+              -121.69414120193709,
+              37.37331024173522
+            ],
+            [
+              -121.69425911707646,
+              37.3733115438178
+            ],
+            [
+              -121.69425728169557,
+              37.373417412737396
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "397",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69399074842893,
+              37.37348506214638
+            ],
+            [
+              -121.69382861475815,
+              37.373483271377594
+            ],
+            [
+              -121.69383106273962,
+              37.37334211284341
+            ],
+            [
+              -121.69399319610675,
+              37.37334390360311
+            ],
+            [
+              -121.69399074842893,
+              37.37348506214638
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "398",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69536742563217,
+              37.374435613102015
+            ],
+            [
+              -121.69537088963511,
+              37.374235638420444
+            ],
+            [
+              -121.695556640625,
+              37.37423768759916
+            ],
+            [
+              -121.695556640625,
+              37.37443770050459
+            ],
+            [
+              -121.69536742563217,
+              37.374435613102015
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "399",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.6955428274916,
+              37.37452264407724
+            ],
+            [
+              -121.6952774633305,
+              37.37452264407724
+            ],
+            [
+              -121.69527919169782,
+              37.374422874138986
+            ],
+            [
+              -121.69554450481115,
+              37.374425801180635
+            ],
+            [
+              -121.6955428274916,
+              37.37452264407724
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "400",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69546802127466,
+              37.37416023448514
+            ],
+            [
+              -121.69547005875025,
+              37.37404260231015
+            ],
+            [
+              -121.695556640625,
+              37.37404355742719
+            ],
+            [
+              -121.695556640625,
+              37.37416121208094
+            ],
+            [
+              -121.69546802127466,
+              37.37416023448514
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "401",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69533054251825,
+              37.374011649439545
+            ],
+            [
+              -121.69533339526598,
+              37.37384696439878
+            ],
+            [
+              -121.695556640625,
+              37.37384942721622
+            ],
+            [
+              -121.695556640625,
+              37.37401414373751
+            ],
+            [
+              -121.69533054251825,
+              37.374011649439545
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "402",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69538698661155,
+              37.37330634421939
+            ],
+            [
+              -121.6951069380613,
+              37.37330325425234
+            ],
+            [
+              -121.69510917983463,
+              37.37317385885956
+            ],
+            [
+              -121.69538922790409,
+              37.37317694881222
+            ],
+            [
+              -121.69538698661155,
+              37.37330634421939
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "403",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69338324577872,
+              37.37323715911372
+            ],
+            [
+              -121.69307371896787,
+              37.37323373860985
+            ],
+            [
+              -121.69307657656915,
+              37.373069053695616
+            ],
+            [
+              -121.69338610270368,
+              37.37307247417923
+            ],
+            [
+              -121.69338324577872,
+              37.37323715911372
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "404",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.693400331887,
+              37.373102045063746
+            ],
+            [
+              -121.69323819907879,
+              37.37310025350114
+            ],
+            [
+              -121.69324003587083,
+              37.37299438461891
+            ],
+            [
+              -121.69340216845131,
+              37.372996176174695
+            ],
+            [
+              -121.693400331887,
+              37.373102045063746
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "405",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69313555580169,
+              37.37349326221981
+            ],
+            [
+              -121.69294394332778,
+              37.37349114444694
+            ],
+            [
+              -121.69294720951052,
+              37.37330293313396
+            ],
+            [
+              -121.69313882150595,
+              37.37330505089249
+            ],
+            [
+              -121.69313555580169,
+              37.37349326221981
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "406",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.6933803888305,
+              37.373401844043435
+            ],
+            [
+              -121.69314455835935,
+              37.37339923800326
+            ],
+            [
+              -121.6931476199265,
+              37.37322278988064
+            ],
+            [
+              -121.69338344984557,
+              37.37322539590428
+            ],
+            [
+              -121.6933803888305,
+              37.373401844043435
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "407",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69345163716575,
+              37.373543816846066
+            ],
+            [
+              -121.69326002453904,
+              37.37354169958286
+            ],
+            [
+              -121.69326288176482,
+              37.37337701466496
+            ],
+            [
+              -121.69345449397284,
+              37.373379131915655
+            ],
+            [
+              -121.69345163716575,
+              37.373543816846066
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "408",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69325255277826,
+              37.37354749974756
+            ],
+            [
+              -121.69309041902086,
+              37.37354570796427
+            ],
+            [
+              -121.69309307250454,
+              37.373392786265434
+            ],
+            [
+              -121.69325520593299,
+              37.373394578038855
+            ],
+            [
+              -121.69325255277826,
+              37.37354749974756
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "409",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69408813867396,
+              37.3742450101409
+            ],
+            [
+              -121.69383756592394,
+              37.37424224265413
+            ],
+            [
+              -121.69384082996257,
+              37.37405403129797
+            ],
+            [
+              -121.69409140208684,
+              37.37405679876602
+            ],
+            [
+              -121.69408813867396,
+              37.3742450101409
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "410",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.6948660118235,
+              37.37359473206035
+            ],
+            [
+              -121.69465965950891,
+              37.37359245438294
+            ],
+            [
+              -121.69466251368011,
+              37.3734277693745
+            ],
+            [
+              -121.69486886554384,
+              37.37343004703842
+            ],
+            [
+              -121.6948660118235,
+              37.37359473206035
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "411",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69485928510521,
+              37.373982918164536
+            ],
+            [
+              -121.69462345267577,
+              37.37398031503893
+            ],
+            [
+              -121.69462712247338,
+              37.37376857718703
+            ],
+            [
+              -121.69486295424026,
+              37.37377118029281
+            ],
+            [
+              -121.69485928510521,
+              37.373982918164536
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "412",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69459478915654,
+              37.373932936760426
+            ],
+            [
+              -121.69435895690845,
+              37.37393033311038
+            ],
+            [
+              -121.69436201568979,
+              37.37375388491812
+            ],
+            [
+              -121.69459784738577,
+              37.37375648855166
+            ],
+            [
+              -121.69459478915654,
+              37.373932936760426
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "413",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.6947387186927,
+              37.37413453844465
+            ],
+            [
+              -121.69435549025735,
+              37.37413030772161
+            ],
+            [
+              -121.69435854906892,
+              37.37395385953559
+            ],
+            [
+              -121.69474177660709,
+              37.37395809023178
+            ],
+            [
+              -121.6947387186927,
+              37.37413453844465
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "414",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69409941087821,
+              37.374445147497866
+            ],
+            [
+              -121.69381935823809,
+              37.374442054402174
+            ],
+            [
+              -121.69382343836793,
+              37.37420679021566
+            ],
+            [
+              -121.69410349013388,
+              37.37420988328519
+            ],
+            [
+              -121.69409941087821,
+              37.374445147497866
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "415",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69439593647559,
+              37.374348415371
+            ],
+            [
+              -121.69413062375632,
+              37.374345485757964
+            ],
+            [
+              -121.69413409103132,
+              37.37414551117194
+            ],
+            [
+              -121.6943994030466,
+              37.374148440763925
+            ],
+            [
+              -121.69439593647559,
+              37.374348415371
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "416",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69339231770259,
+              37.37441380566906
+            ],
+            [
+              -121.69317122366384,
+              37.37441136248639
+            ],
+            [
+              -121.69317367295928,
+              37.37427020401145
+            ],
+            [
+              -121.69339476658395,
+              37.37427264718172
+            ],
+            [
+              -121.69339231770259,
+              37.37441380566906
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "417",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69321687117889,
+              37.37432950871124
+            ],
+            [
+              -121.69302525657162,
+              37.374327391029944
+            ],
+            [
+              -121.69302811439172,
+              37.37416270614943
+            ],
+            [
+              -121.69321972858035,
+              37.374164823818184
+            ],
+            [
+              -121.69321687117889,
+              37.37432950871124
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "418",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69308462315323,
+              37.37430451624549
+            ],
+            [
+              -121.69284878988397,
+              37.3743019095622
+            ],
+            [
+              -121.69285246471249,
+              37.3740901718718
+            ],
+            [
+              -121.6930882973192,
+              37.374092778535235
+            ],
+            [
+              -121.69308462315323,
+              37.37430451624549
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "419",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69329444678786,
+              37.3741068221874
+            ],
+            [
+              -121.69308809319988,
+              37.374104541741545
+            ],
+            [
+              -121.69309115497728,
+              37.373928093644025
+            ],
+            [
+              -121.69329750808218,
+              37.37393037407539
+            ],
+            [
+              -121.69329444678786,
+              37.3741068221874
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "420",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69337367759971,
+              37.37421358684636
+            ],
+            [
+              -121.69316732371273,
+              37.37421130653322
+            ],
+            [
+              -121.69316997710408,
+              37.37405838484693
+            ],
+            [
+              -121.69337633057238,
+              37.37406066514751
+            ],
+            [
+              -121.69337367759971,
+              37.37421358684636
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "421",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.6934432706684,
+              37.374026108400514
+            ],
+            [
+              -121.69328113586855,
+              37.374024316859234
+            ],
+            [
+              -121.69328358492376,
+              37.37388315836885
+            ],
+            [
+              -121.69344571941997,
+              37.37388494990103
+            ],
+            [
+              -121.6934432706684,
+              37.374026108400514
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "422",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69298038361542,
+              37.373515078149076
+            ],
+            [
+              -121.69281005859375,
+              37.37351319542913
+            ],
+            [
+              -121.69281005859375,
+              37.37336024440962
+            ],
+            [
+              -121.69298303731954,
+              37.373362156456146
+            ],
+            [
+              -121.69298038361542,
+              37.373515078149076
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "423",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69362009591393,
+              37.37318094861538
+            ],
+            [
+              -121.693472702284,
+              37.373179320202254
+            ],
+            [
+              -121.6934751509055,
+              37.373038161680846
+            ],
+            [
+              -121.69362254425937,
+              37.373039790085706
+            ],
+            [
+              -121.69362009591393,
+              37.37318094861538
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "424",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69382111731166,
+              37.373065514564715
+            ],
+            [
+              -121.69362950587329,
+              37.37306339792306
+            ],
+            [
+              -121.69363236224197,
+              37.37289871296752
+            ],
+            [
+              -121.69382397326166,
+              37.372900829596645
+            ],
+            [
+              -121.69382111731166,
+              37.373065514564715
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "425",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69332087508286,
+              37.37258348663934
+            ],
+            [
+              -121.69314400415227,
+              37.372581532100554
+            ],
+            [
+              -121.69314665743475,
+              37.37242861037345
+            ],
+            [
+              -121.6933235280065,
+              37.37243056490148
+            ],
+            [
+              -121.69332087508286,
+              37.37258348663934
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "426",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69317174782925,
+              37.37268184515744
+            ],
+            [
+              -121.69305383372668,
+              37.372680542009384
+            ],
+            [
+              -121.69305587486309,
+              37.37256290991819
+            ],
+            [
+              -121.69317378878162,
+              37.37256421306071
+            ],
+            [
+              -121.69317174782925,
+              37.37268184515744
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "427",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69306938943588,
+              37.37263365207285
+            ],
+            [
+              -121.69295147541357,
+              37.37263234882418
+            ],
+            [
+              -121.69295290431968,
+              37.37255000636328
+            ],
+            [
+              -121.69307081821317,
+              37.37255130960809
+            ],
+            [
+              -121.69306938943588,
+              37.37263365207285
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "428",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69289057907882,
+              37.37274344763388
+            ],
+            [
+              -121.69281005859375,
+              37.37274255755581
+            ],
+            [
+              -121.69281005859375,
+              37.37258960651616
+            ],
+            [
+              -121.69289323289125,
+              37.37259052592643
+            ],
+            [
+              -121.69289057907882,
+              37.37274344763388
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "429",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69314576102668,
+              37.3729051018012
+            ],
+            [
+              -121.69301310727008,
+              37.372903635714806
+            ],
+            [
+              -121.69301514848654,
+              37.372786003629955
+            ],
+            [
+              -121.69314780203611,
+              37.37278746971016
+            ],
+            [
+              -121.69314576102668,
+              37.3729051018012
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "430",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69301823158384,
+              37.37303311245884
+            ],
+            [
+              -121.69287083827858,
+              37.37303148330111
+            ],
+            [
+              -121.6928732880148,
+              37.372890324810086
+            ],
+            [
+              -121.693020681044,
+              37.372891953959545
+            ],
+            [
+              -121.69301823158384,
+              37.37303311245884
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "431",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69303623682131,
+              37.37284506403024
+            ],
+            [
+              -121.6929330617632,
+              37.37284392365969
+            ],
+            [
+              -121.69293632789676,
+              37.37265571232686
+            ],
+            [
+              -121.69303950269722,
+              37.3726568526897
+            ],
+            [
+              -121.69303623682131,
+              37.37284506403024
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "432",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69305593919407,
+              37.373833580733354
+            ],
+            [
+              -121.69292328380719,
+              37.37383211451533
+            ],
+            [
+              -121.69292573351598,
+              37.373690956040505
+            ],
+            [
+              -121.69305838865438,
+              37.373692422251075
+            ],
+            [
+              -121.69305593919407,
+              37.373833580733354
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "433",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69296288836836,
+              37.373673718526284
+            ],
+            [
+              -121.69281005859375,
+              37.37367202918728
+            ],
+            [
+              -121.69281005859375,
+              37.37356614002298
+            ],
+            [
+              -121.69296472558538,
+              37.37356784966597
+            ],
+            [
+              -121.69296288836836,
+              37.373673718526284
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "434",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69308952203266,
+              37.37402219929672
+            ],
+            [
+              -121.69291264774041,
+              37.374020244348166
+            ],
+            [
+              -121.69291509748577,
+              37.37387908587845
+            ],
+            [
+              -121.69309197144676,
+              37.37388104081706
+            ],
+            [
+              -121.69308952203266,
+              37.37402219929672
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "435",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69306609561102,
+              37.37452264407724
+            ],
+            [
+              -121.69288918621578,
+              37.37452264407724
+            ],
+            [
+              -121.69289147748148,
+              37.374390622388006
+            ],
+            [
+              -121.69306835264192,
+              37.37439257738465
+            ],
+            [
+              -121.69306609561102,
+              37.37452264407724
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "436",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69397447917916,
+              37.373573123445645
+            ],
+            [
+              -121.69384182420234,
+              37.37357165826654
+            ],
+            [
+              -121.69384366017735,
+              37.37346578936725
+            ],
+            [
+              -121.69397631496784,
+              37.373467254540785
+            ],
+            [
+              -121.69397447917916,
+              37.373573123445645
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "437",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69399505853758,
+              37.37366159171435
+            ],
+            [
+              -121.69387714286268,
+              37.37366028935817
+            ],
+            [
+              -121.69387897879392,
+              37.37355442045898
+            ],
+            [
+              -121.69399689430318,
+              37.373555722810195
+            ],
+            [
+              -121.69399505853758,
+              37.37366159171435
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "438",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69332308672077,
+              37.37373064385063
+            ],
+            [
+              -121.69321991043792,
+              37.3737295037074
+            ],
+            [
+              -121.69322133910725,
+              37.37364716125299
+            ],
+            [
+              -121.69332451527738,
+              37.37364830139283
+            ],
+            [
+              -121.69332308672077,
+              37.37373064385063
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "439",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69330169180793,
+              37.37368922831342
+            ],
+            [
+              -121.6931248182825,
+              37.373687273696916
+            ],
+            [
+              -121.69312706349162,
+              37.37355787841487
+            ],
+            [
+              -121.69330393671338,
+              37.37355983302226
+            ],
+            [
+              -121.69330169180793,
+              37.37368922831342
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "440",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69358747901451,
+              37.3737865096764
+            ],
+            [
+              -121.69336638679965,
+              37.373784066893336
+            ],
+            [
+              -121.69336944788975,
+              37.37360761876659
+            ],
+            [
+              -121.693590539587,
+              37.373610061534166
+            ],
+            [
+              -121.69358747901451,
+              37.3737865096764
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "441",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21228,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21228,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 98
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69328723235951,
+              37.37452264407724
+            ],
+            [
+              -121.69308083806058,
+              37.37452264407724
+            ],
+            [
+              -121.6930832963616,
+              37.37438097708336
+            ],
+            [
+              -121.69328965070649,
+              37.37438325755186
+            ],
+            [
+              -121.69328723235951,
+              37.37452264407724
+            ]
+          ]
+        ]
+      }
+    }
+  ],
+  "properties": {
+    "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+    "SUNETID": "snick",
+    "FIRENAME": "SCU LIGHTNING COMPLEX",
+    "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+    "PREFIRE": 1,
+    "PREFIRE_STATUS": "prefire",
+    "TILE_Z": 17,
+    "TILE_X": 21228,
+    "TILE_Y": 50846,
+    "TILEXYZ": [
+      17,
+      21228,
+      50846
+    ],
+    "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21228/50846.geojson",
+    "OUTPUT_STATUS_DIR": "prefire",
+    "FEATURE_COUNT": 98
+  }
+}

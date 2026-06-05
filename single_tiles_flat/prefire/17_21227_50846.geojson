@@ -1,0 +1,228 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "224",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21227,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21227,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21227/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 4
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69562013280515,
+              37.37303831042996
+            ],
+            [
+              -121.695556640625,
+              37.373037610012254
+            ],
+            [
+              -121.695556640625,
+              37.37284936253032
+            ],
+            [
+              -121.69562339224822,
+              37.372850098901615
+            ],
+            [
+              -121.69562013280515,
+              37.37303831042996
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "398",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21227,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21227,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21227/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 4
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.6955737803147,
+              37.37443788958809
+            ],
+            [
+              -121.695556640625,
+              37.37443770050459
+            ],
+            [
+              -121.695556640625,
+              37.37423768759916
+            ],
+            [
+              -121.69557724377013,
+              37.37423791489015
+            ],
+            [
+              -121.6955737803147,
+              37.37443788958809
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "400",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21227,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21227,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21227/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 4
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69558593780694,
+              37.37416153526998
+            ],
+            [
+              -121.695556640625,
+              37.37416121208094
+            ],
+            [
+              -121.695556640625,
+              37.37404355742719
+            ],
+            [
+              -121.69558797509846,
+              37.374043903089486
+            ],
+            [
+              -121.69558593780694,
+              37.37416153526998
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "401",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+        "SUNETID": "snick",
+        "FIRENAME": "SCU LIGHTNING COMPLEX",
+        "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21227,
+        "TILE_Y": 50846,
+        "TILEXYZ": [
+          17,
+          21227,
+          50846
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21227/50846.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 4
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.69559585418864,
+              37.37401457633871
+            ],
+            [
+              -121.695556640625,
+              37.37401414373751
+            ],
+            [
+              -121.695556640625,
+              37.37384942721622
+            ],
+            [
+              -121.69559870635665,
+              37.37384989128059
+            ],
+            [
+              -121.69559585418864,
+              37.37401457633871
+            ]
+          ]
+        ]
+      }
+    }
+  ],
+  "properties": {
+    "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/snick_mortalitree_prefire_labels.geojson",
+    "SUNETID": "snick",
+    "FIRENAME": "SCU LIGHTNING COMPLEX",
+    "FIRE_SLUG": "SCU_LIGHTNING_COMPLEX",
+    "PREFIRE": 1,
+    "PREFIRE_STATUS": "prefire",
+    "TILE_Z": 17,
+    "TILE_X": 21227,
+    "TILE_Y": 50846,
+    "TILEXYZ": [
+      17,
+      21227,
+      50846
+    ],
+    "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21227/50846.geojson",
+    "OUTPUT_STATUS_DIR": "prefire",
+    "FEATURE_COUNT": 4
+  }
+}

@@ -1,0 +1,322 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "1216",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/luwajobi_mortalitree_prefire_labels.geojson",
+        "SUNETID": "luwajobi",
+        "FIRENAME": "NORTH COMPLEX",
+        "FIRE_SLUG": "NORTH_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21480,
+        "TILE_Y": 49705,
+        "TILEXYZ": [
+          17,
+          21480,
+          49705
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21480/49705.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 6
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.00341057318771,
+              39.82132530344198
+            ],
+            [
+              -121.00341245017098,
+              39.821260472923875
+            ],
+            [
+              -121.00341796875,
+              39.82126056792263
+            ],
+            [
+              -121.00341796875,
+              39.82132543075195
+            ],
+            [
+              -121.00341057318771,
+              39.82132530344198
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "1218",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/luwajobi_mortalitree_prefire_labels.geojson",
+        "SUNETID": "luwajobi",
+        "FIRENAME": "NORTH COMPLEX",
+        "FIRE_SLUG": "NORTH_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21480,
+        "TILE_Y": 49705,
+        "TILEXYZ": [
+          17,
+          21480,
+          49705
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21480/49705.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 6
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.00340875485436,
+              39.82138810800559
+            ],
+            [
+              -121.00341063184352,
+              39.821323277488275
+            ],
+            [
+              -121.00341796875,
+              39.821323403789016
+            ],
+            [
+              -121.00341796875,
+              39.82138826661786
+            ],
+            [
+              -121.00340875485436,
+              39.82138810800559
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "1233",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/luwajobi_mortalitree_prefire_labels.geojson",
+        "SUNETID": "luwajobi",
+        "FIRENAME": "NORTH COMPLEX",
+        "FIRE_SLUG": "NORTH_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21480,
+        "TILE_Y": 49705,
+        "TILEXYZ": [
+          17,
+          21480,
+          49705
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21480/49705.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 6
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.0034175300418,
+              39.82216567924987
+            ],
+            [
+              -121.00341796875,
+              39.82215052676575
+            ],
+            [
+              -121.00341796875,
+              39.8221656868019
+            ],
+            [
+              -121.0034175300418,
+              39.82216567924987
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "1238",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/luwajobi_mortalitree_prefire_labels.geojson",
+        "SUNETID": "luwajobi",
+        "FIRENAME": "NORTH COMPLEX",
+        "FIRE_SLUG": "NORTH_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21480,
+        "TILE_Y": 49705,
+        "TILEXYZ": [
+          17,
+          21480,
+          49705
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21480/49705.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 6
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.00341675425986,
+              39.822516308273414
+            ],
+            [
+              -121.00341796875,
+              39.822474361741676
+            ],
+            [
+              -121.00341796875,
+              39.822516329180196
+            ],
+            [
+              -121.00341675425986,
+              39.822516308273414
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "1240",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/luwajobi_mortalitree_prefire_labels.geojson",
+        "SUNETID": "luwajobi",
+        "FIRENAME": "NORTH COMPLEX",
+        "FIRE_SLUG": "NORTH_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21480,
+        "TILE_Y": 49705,
+        "TILEXYZ": [
+          17,
+          21480,
+          49705
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21480/49705.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 6
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.00339496908302,
+              39.822297233617554
+            ],
+            [
+              -121.00339737512515,
+              39.82221413302943
+            ],
+            [
+              -121.00341796875,
+              39.822214487541835
+            ],
+            [
+              -121.00341796875,
+              39.82229762954986
+            ],
+            [
+              -121.00339496908302,
+              39.822297233617554
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "1241",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/luwajobi_mortalitree_prefire_labels.geojson",
+        "SUNETID": "luwajobi",
+        "FIRENAME": "NORTH COMPLEX",
+        "FIRE_SLUG": "NORTH_COMPLEX",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 21480,
+        "TILE_Y": 49705,
+        "TILEXYZ": [
+          17,
+          21480,
+          49705
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21480/49705.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 6
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -121.00340193439958,
+              39.822380495532585
+            ],
+            [
+              -121.00340371277856,
+              39.8223190733595
+            ],
+            [
+              -121.00341796875,
+              39.822319318771264
+            ],
+            [
+              -121.00341796875,
+              39.8223807715589
+            ],
+            [
+              -121.00340193439958,
+              39.822380495532585
+            ]
+          ]
+        ]
+      }
+    }
+  ],
+  "properties": {
+    "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/luwajobi_mortalitree_prefire_labels.geojson",
+    "SUNETID": "luwajobi",
+    "FIRENAME": "NORTH COMPLEX",
+    "FIRE_SLUG": "NORTH_COMPLEX",
+    "PREFIRE": 1,
+    "PREFIRE_STATUS": "prefire",
+    "TILE_Z": 17,
+    "TILE_X": 21480,
+    "TILE_Y": 49705,
+    "TILEXYZ": [
+      17,
+      21480,
+      49705
+    ],
+    "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/21480/49705.geojson",
+    "OUTPUT_STATUS_DIR": "prefire",
+    "FEATURE_COUNT": 6
+  }
+}

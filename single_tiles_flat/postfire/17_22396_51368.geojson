@@ -1,0 +1,177 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "979",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/agaleana_mortalitree_postfire_labels.geojson",
+        "SUNETID": "agaleana",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22396,
+        "TILE_Y": 51368,
+        "TILEXYZ": [
+          17,
+          22396,
+          51368
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22396/51368.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 3
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.48485927476395,
+              36.22610329413825
+            ],
+            [
+              -118.48480224609375,
+              36.226101137741644
+            ],
+            [
+              -118.48480224609375,
+              36.226049892527136
+            ],
+            [
+              -118.48486222003066,
+              36.22605216028888
+            ],
+            [
+              -118.48485927476395,
+              36.22610329413825
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "1033",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/agaleana_mortalitree_postfire_labels.geojson",
+        "SUNETID": "agaleana",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22396,
+        "TILE_Y": 51368,
+        "TILEXYZ": [
+          17,
+          22396,
+          51368
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22396/51368.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 3
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.48482146810427,
+              36.22545580818779
+            ],
+            [
+              -118.48480224609375,
+              36.22545508135588
+            ],
+            [
+              -118.48480224609375,
+              36.2254199993394
+            ],
+            [
+              -118.4848234843774,
+              36.22542080241092
+            ],
+            [
+              -118.48482146810427,
+              36.22545580818779
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "1049",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/agaleana_mortalitree_postfire_labels.geojson",
+        "SUNETID": "agaleana",
+        "FIRENAME": "CASTLE",
+        "FIRE_SLUG": "CASTLE",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22396,
+        "TILE_Y": 51368,
+        "TILEXYZ": [
+          17,
+          22396,
+          51368
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22396/51368.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 3
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.48481991352513,
+              36.22565211457668
+            ],
+            [
+              -118.48480224609375,
+              36.225651446526975
+            ],
+            [
+              -118.48480224609375,
+              36.22562542431821
+            ],
+            [
+              -118.48482140911437,
+              36.22562614891943
+            ],
+            [
+              -118.48481991352513,
+              36.22565211457668
+            ]
+          ]
+        ]
+      }
+    }
+  ],
+  "properties": {
+    "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/agaleana_mortalitree_postfire_labels.geojson",
+    "SUNETID": "agaleana",
+    "FIRENAME": "CASTLE",
+    "FIRE_SLUG": "CASTLE",
+    "PREFIRE": 0,
+    "PREFIRE_STATUS": "postfire",
+    "TILE_Z": 17,
+    "TILE_X": 22396,
+    "TILE_Y": 51368,
+    "TILEXYZ": [
+      17,
+      22396,
+      51368
+    ],
+    "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22396/51368.geojson",
+    "OUTPUT_STATUS_DIR": "postfire",
+    "FEATURE_COUNT": 3
+  }
+}

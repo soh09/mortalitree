@@ -87,6 +87,11 @@ def run_stage_b(
     n_viz_tiles: int = 4,
     viz_conf_thresh: float = 0.5,
     on_checkpoint=None,
+    parent_eval: bool = True,
+    parent_eval_every: int = 1,
+    parent_eval_train_parents: int = 1000,
+    parent_eval_conf: float = 0.5,
+    parent_eval_nms_iou: float = 0.6,
 ):
     if device is None:
         device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -107,18 +112,39 @@ def run_stage_b(
     # so repoint the val subset at a shallow copy with augmentation off. The copy
     # shares the parsed items/data (no re-read) — only `augment` differs. This
     # keeps the val loss a clean, deterministic signal.
+    eval_dataset = dataset
     if getattr(dataset, "augment", None) is not None:
         val_clean = copy.copy(dataset)
         val_clean.augment = None
         val_ds.dataset = val_clean
+        eval_dataset = val_clean   # augment-off, shares .samples/.parent_gt
 
+    # Parent-level (stitched 256) eval each epoch: needs a dataset that carries
+    # parent_gt (NeonPatchDataset). Precompute a fixed train subset (first N
+    # parents) so the train/val parent metrics use a stable, cheap sample.
+    do_parent_eval = parent_eval and hasattr(dataset, "parent_gt")
+    if do_parent_eval:
+        from collections import OrderedDict
+        tr_by_parent: "OrderedDict[str, list]" = OrderedDict()
+        for i in train_ds.indices:
+            tr_by_parent.setdefault(dataset.samples[i]["parent"], []).append(i)
+        train_eval_idx = [
+            i for p in list(tr_by_parent)[:parent_eval_train_parents]
+            for i in tr_by_parent[p]
+        ]
+        val_eval_idx = list(val_ds.indices)
+
+    # Data-loading is the bottleneck (many small tifs on a network volume), so
+    # keep workers alive across epochs and prefetch deeper to hide read latency.
+    loader_extra = dict(persistent_workers=True, prefetch_factor=4) if num_workers > 0 else {}
     train_loader = DataLoader(
         train_ds, batch_size=batch_size, shuffle=True,
         collate_fn=collate_fn, num_workers=num_workers, pin_memory=True,
+        **loader_extra,
     )
     val_loader = DataLoader(
         val_ds, batch_size=batch_size, shuffle=False,
-        collate_fn=collate_fn, num_workers=num_workers,
+        collate_fn=collate_fn, num_workers=num_workers, **loader_extra,
     )
 
     optimizer, scheduler = build_stage_b_optimizer_and_scheduler(
@@ -170,6 +196,30 @@ def run_stage_b(
             "stage_b/lr": lr,
             "stage_b/patience_counter": patience_counter,
         }
+
+        # Parent-level (stitched 256) metrics — directly comparable to the
+        # un-quartered baseline. Count MAE + F1 + the stitched matching loss, on
+        # val and a fixed train subset (per-quarter train/val loss above isn't
+        # comparable across tile sizes; these parent metrics are).
+        if do_parent_eval and (epoch + 1) % parent_eval_every == 0:
+            from ..eval.stitch import stitch_eval
+            ev = dict(device=device, batch_size=batch_size, num_workers=num_workers,
+                      conf_thresh=parent_eval_conf, nms_iou=parent_eval_nms_iou,
+                      lam_cls=lam_cls, lam_l1=lam_l1, lam_giou=lam_giou)
+            vp = stitch_eval(model, eval_dataset, indices=val_eval_idx, **ev)
+            tp = stitch_eval(model, eval_dataset, indices=train_eval_idx, **ev)
+            log_dict.update({
+                "stage_b/parent_val_count_mae": vp["count"]["mae"],
+                "stage_b/parent_val_f1": vp["f1_at_0.5"],
+                "stage_b/parent_val_stitch_loss": vp["stitch_loss"],
+                "stage_b/parent_train_count_mae": tp["count"]["mae"],
+                "stage_b/parent_train_f1": tp["f1_at_0.5"],
+                "stage_b/parent_train_stitch_loss": tp["stitch_loss"],
+            })
+            print(f"[Stage B] parent  val: mae={vp['count']['mae']:.2f} "
+                  f"f1={vp['f1_at_0.5']:.3f} loss={vp['stitch_loss']:.4f}  |  "
+                  f"train: mae={tp['count']['mae']:.2f} f1={tp['f1_at_0.5']:.3f} "
+                  f"loss={tp['stitch_loss']:.4f}")
 
         # Periodic visual check: a few val tiles with predicted vs GT boxes,
         # merged into this epoch's single log call so the media actually shows.

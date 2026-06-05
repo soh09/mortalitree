@@ -46,58 +46,82 @@ parent-tile ground truth.
 
 **Idea.** Instead of raising Q, shrink the *tile* so trees-per-tile stays within a
 modest query budget — which simultaneously recovers the dense patches the per-256
-`max_trees` filter throws away. Each 256-px source patch is split into an
-`n_split × n_split` grid (default 2×2 → 128-px tiles, Q=150). A non-empty 256 patch
-of ~581 crowns becomes four ~145-crown tiles, right at budget.
+`max_trees` filter throws away (a 400-crown 256 region the baseline drops wholesale
+becomes four ~100-crown 128 tiles, all kept). The data is **regenerated natively at
+128 px** by the pipeline, on a 2×2 grid aligned to the 256 parent grid so quarters
+nest exactly into a parent (essential for stitching + head-to-head).
 
-**Box assignment (the key decision).** Each box is assigned to the **single tile
-that contains its center**, then clipped to that tile. A crown straddling an
-internal seam is owned by exactly one tile; the adjacent tile sees the poke-in
-pixels but has no target there — so the model learns to fire only when a crown's
-center is in-tile. This is what prevents systematic double-counting when we stitch
-predictions back together. (Mirrors what `modal_pipeline.py` already does at 256.)
+> ⚠️ Earlier we briefly quartered the *already-filtered* 256 `labels.csv` on the fly
+> — that only subdivided the sparse kept patches and did **not** recover density
+> (the dense patches were never written by the 256 pipeline). The native pipeline
+> below fixes that. The on-the-fly path is retained only as a sparse-data control.
 
-**Overlap.** None for now. Center-assignment handles seams cleanly, so overlap's
-only payoff is recovering crowns whose clipped half is too weak to detect — at the
-cost of more windows + heavier dedup. Left as a future knob, to add only if seam
-error analysis shows it matters.
+**Box assignment (the key decision).** Each box is assigned to the **single quarter
+that contains its center**, then clipped. A crown straddling a seam is owned by one
+quarter; the adjacent quarter has no target there — so the model fires only when a
+crown's center is in-tile, which prevents systematic double-counting at stitch time.
+
+**Density filter — mirrors Evan.** Quarters with > `max_trees` (=150) crowns are
+**dropped at write time** (same "drop tiles over threshold" rule Evan uses, now at
+the quarter granularity). So the clean head-to-head is on the ≤150-crown parents
+(Evan's domain); on those, all four quarters survive and both models fully cover them.
+
+**Overlap.** None. Center-assignment handles seams; overlap's only payoff is
+recovering crowns whose clipped half is too weak to detect, at the cost of more
+windows + dedup. A future knob if seam error analysis shows it matters.
 
 **Metrics — virtual stitching (head-to-head).** The model trains/predicts on 128
 tiles, but evaluation is on the reassembled 256 patch: each quarter's predicted
 boxes are mapped into the parent frame, NMS de-dups (IoU 0.6) any seam double-fire,
-and the result is scored against the full 256 GT — the same GT the un-quartered
-baseline uses. `stitch_eval` also runs unchanged on a non-quartered dataset, so
-Evan's baseline can be scored the same way.
+and the result is scored against the full 256 GT (`labels_parent.csv`) — the same GT
+the un-quartered baseline uses. `stitch_eval` runs unchanged on a non-quartered
+dataset, so Evan's baseline is scored the same way.
+
+**Per-epoch parent metrics.** The per-quarter train/val loss isn't comparable to a
+256 run's loss (different objects/tile + Q). So each epoch also logs **parent-level
+count MAE, F1, and the stitched matching loss** (`stitch_eval` on val + a fixed
+1000-parent train subset) — the cross-run-comparable signal. See `run_stage_b`
+(`parent_eval*` args).
 
 **Where it lives.**
-- `clay/src/data/neon_dataset.py` — `quarter` / `n_split` / `max_trees` args;
-  per-tile center-assignment + clip; `parent_gt` (full 256 GT), `crop`, `group_keys`.
+- `dataset_dev/modal_pipeline.py` — `--quarter`: 2×2-aligned 128-px tifs to
+  `/data/patches_quarter/`, plus `labels_quarter.csv` (per-quarter, with
+  `parent`/`q_row`/`q_col`) and `labels_parent.csv` (full 256 GT).
+- `clay/src/data/neon_dataset.py` — **pre-quartered mode** (`parent_labels_csv` set):
+  reads 128 tifs directly, `parent_gt` from `labels_parent.csv`, separate read-window
+  vs. parent stitch-offset; `group_keys` for the grouped split.
 - `clay/configs/stage_b.yaml` → `data:` block:
   ```yaml
-  quarter: true
-  n_split: 2        # 2 -> 128px (Q=150); 4 -> 64px (set num_queries ~40)
-  max_trees: 150    # drop tiles over the query budget at train time (0 = keep all)
+  prequartered: true
+  tile_size: 128      # quarter tif size on disk
+  parent_size: 256    # parent frame for stitching + GT
+  max_trees: 0        # quarters already capped by the pipeline at write time
   ```
-- `clay/src/eval/stitch.py` — `stitch_eval(...)`.
-- `clay/modal_train.py` — `eval_stage_b` entrypoint.
+- `clay/src/eval/stitch.py` — `stitch_eval(...)`; `clay/modal_train.py` — `stage_b`
+  + `eval_stage_b` (both `--out-tag patches_quarter`).
 
 **Run.**
 ```bash
-modal run modal_train.py::stage_b          # trains on quarters (config-driven)
-modal run modal_train.py::eval_stage_b      # parent-level (256) metrics on held-out val
-# baseline comparison: set quarter:false, retrain, eval the same way
+# 1. regenerate quarters (drops quarters >150 at write time)
+modal run dataset_dev/modal_pipeline.py --quarter --max-trees 150
+# 2. train on quarters; parent metrics logged each epoch
+modal run clay/modal_train.py::stage_b --out-tag patches_quarter
+# 3. parent-level (256) metrics on held-out val
+modal run clay/modal_train.py::eval_stage_b --out-tag patches_quarter
+# baseline: pipeline without --quarter + config prequartered:false, then same eval
 ```
 
 **Caveats / open items.**
-- `num_queries` (in the `model:` block) is **not** auto-coupled to `n_split`. If you
-  switch to `n_split: 4`, lower `num_queries` to ~40 yourself.
-- If the paper's Q degradation is absolute (not object-count-relative), Q=150 is
-  still too high and we should run `n_split: 4` / Q≈40. Tile size is a one-line
-  config sweep, no regen needed.
-- Train/val split is now **parent-grouped** (`_split_train_val` in
-  `clay/src/train/stage_b.py`) so a parent's quarters don't leak across the split.
-- For a *rigorous* head-to-head, build a separate test `labels.csv` and run both
-  models with `eval_stage_b --split all` so they're scored on identical parents/GT.
+- `num_queries` (model block) **must match** the pipeline's per-quarter `--max-trees`
+  (both 150 here). For `n_split: 4` / 64-px quarters you'd drop both to ~40.
+- If the paper's Q degradation is *absolute* (not object-count-relative), Q=150 is
+  still too high → regenerate with a finer split (64 px) and Q≈40.
+- A parent with a dropped (>150) quarter is scored against its **full** 256 GT, so
+  that quarter's trees count as misses — a deliberately conservative metric. Moot on
+  the ≤150-parent head-to-head set (no quarter dropped there).
+- Train/val split is **parent-grouped** (`_split_train_val`) — no quarter leakage.
+- For a rigorous held-out number, build a separate test set and run both models with
+  `eval_stage_b --split all` on identical parents/GT.
 
 ---
 

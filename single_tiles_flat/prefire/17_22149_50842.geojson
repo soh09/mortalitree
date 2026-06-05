@@ -1,0 +1,3623 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "289",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 236.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16542032173348,
+              37.383033023982684
+            ],
+            [
+              -119.16534448447608,
+              37.383030561261435
+            ],
+            [
+              -119.16534700957966,
+              37.382981047942074
+            ],
+            [
+              -119.16542284678742,
+              37.382983510658924
+            ],
+            [
+              -119.16542032173348,
+              37.383033023982684
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "290",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 237.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16540372750774,
+              37.38308759102141
+            ],
+            [
+              -119.16524515859552,
+              37.383082441611265
+            ],
+            [
+              -119.16524768376918,
+              37.38303292829809
+            ],
+            [
+              -119.16540625257761,
+              37.38303807769908
+            ],
+            [
+              -119.16540372750774,
+              37.38308759102141
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "291",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 238.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16520687915457,
+              37.3830205819832
+            ],
+            [
+              -119.1651241476359,
+              37.38301789522725
+            ],
+            [
+              -119.16512751463095,
+              37.382951877484885
+            ],
+            [
+              -119.16521024607744,
+              37.38295456423446
+            ],
+            [
+              -119.16520687915457,
+              37.3830205819832
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "292",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 239.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16509679087761,
+              37.3830803785796
+            ],
+            [
+              -119.1649313277412,
+              37.38307500484867
+            ],
+            [
+              -119.16493609789693,
+              37.38298147973543
+            ],
+            [
+              -119.16510156082877,
+              37.38298685344829
+            ],
+            [
+              -119.16509679087761,
+              37.3830803785796
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "293",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 240.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16511749374027,
+              37.38321606039845
+            ],
+            [
+              -119.16495892461076,
+              37.38321091058951
+            ],
+            [
+              -119.16496481713948,
+              37.383095379565894
+            ],
+            [
+              -119.16512338602679,
+              37.383100529353456
+            ],
+            [
+              -119.16511749374027,
+              37.38321606039845
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "294",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 241.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16329369132107,
+              37.38300969709569
+            ],
+            [
+              -119.16323782441002,
+              37.38300788188273
+            ],
+            [
+              -119.16324172403964,
+              37.38293145826264
+            ],
+            [
+              -119.16329759089426,
+              37.38293327347062
+            ],
+            [
+              -119.16329369132107,
+              37.38300969709569
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "295",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 242.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16383558641915,
+              37.38304325082188
+            ],
+            [
+              -119.1637238524812,
+              37.38303962087888
+            ],
+            [
+              -119.1637267768382,
+              37.38298230313156
+            ],
+            [
+              -119.16383851069152,
+              37.382985933067076
+            ],
+            [
+              -119.16383558641915,
+              37.38304325082188
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "296",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 243.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16399991749402,
+              37.3829560909829
+            ],
+            [
+              -119.16387222168973,
+              37.38295194265367
+            ],
+            [
+              -119.16387644558182,
+              37.38286915033611
+            ],
+            [
+              -119.16400414124634,
+              37.382873298652996
+            ],
+            [
+              -119.16399991749402,
+              37.3829560909829
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "297",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 244.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16379090884836,
+              37.38266542687004
+            ],
+            [
+              -119.16370311834048,
+              37.382662574772105
+            ],
+            [
+              -119.1637063675988,
+              37.38259888838364
+            ],
+            [
+              -119.16379415803279,
+              37.38260174047506
+            ],
+            [
+              -119.16379090884836,
+              37.38266542687004
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "298",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 245.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16361231216996,
+              37.38264048704946
+            ],
+            [
+              -119.16345269316027,
+              37.38263530113038
+            ],
+            [
+              -119.1634549677882,
+              37.382590720671445
+            ],
+            [
+              -119.16361458670383,
+              37.38259590658221
+            ],
+            [
+              -119.16361231216996,
+              37.38264048704946
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "299",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 246.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16344521934754,
+              37.38278177977796
+            ],
+            [
+              -119.16335742873964,
+              37.38277892741587
+            ],
+            [
+              -119.16335970343576,
+              37.382734346963005
+            ],
+            [
+              -119.16344749399192,
+              37.38273719932053
+            ],
+            [
+              -119.16344521934754,
+              37.38278177977796
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "300",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 247.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16401242624877,
+              37.38271089830901
+            ],
+            [
+              -119.16393261662672,
+              37.3827083056422
+            ],
+            [
+              -119.16393554078984,
+              37.382650987877625
+            ],
+            [
+              -119.16401535035142,
+              37.38265358053908
+            ],
+            [
+              -119.16401242624877,
+              37.38271089830901
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "301",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 248.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16432747393048,
+              37.382177549929075
+            ],
+            [
+              -119.16423564344858,
+              37.382174567012925
+            ],
+            [
+              -119.16423916165986,
+              37.38210559823683
+            ],
+            [
+              -119.16433099205807,
+              37.38210858114558
+            ],
+            [
+              -119.16432747393048,
+              37.382177549929075
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "302",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 249.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16420389236455,
+              37.38216058255708
+            ],
+            [
+              -119.16411206191664,
+              37.382157599546126
+            ],
+            [
+              -119.16411514044933,
+              37.38209725187567
+            ],
+            [
+              -119.164206970824,
+              37.38210023488015
+            ],
+            [
+              -119.16420389236455,
+              37.38216058255708
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "303",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 250.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16373241107175,
+              37.38228127349737
+            ],
+            [
+              -119.16359736615837,
+              37.38227688614154
+            ],
+            [
+              -119.16360066504205,
+              37.382212227963514
+            ],
+            [
+              -119.16373570983998,
+              37.38221661530917
+            ],
+            [
+              -119.16373241107175,
+              37.38228127349737
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "304",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 251.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16397868595483,
+              37.38185534617583
+            ],
+            [
+              -119.16385444530023,
+              37.381851310111834
+            ],
+            [
+              -119.16385818372666,
+              37.381778030815944
+            ],
+            [
+              -119.16398242426087,
+              37.38178206686933
+            ],
+            [
+              -119.16397868595483,
+              37.38185534617583
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "305",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 252.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16381842014194,
+              37.3820271650982
+            ],
+            [
+              -119.16373739345563,
+              37.382024532777244
+            ],
+            [
+              -119.16374047227377,
+              37.38196418513198
+            ],
+            [
+              -119.16382149889543,
+              37.381966817447214
+            ],
+            [
+              -119.16381842014194,
+              37.3820271650982
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "306",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 253.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16365178284269,
+              37.38195266842991
+            ],
+            [
+              -119.1635923633421,
+              37.38195073798616
+            ],
+            [
+              -119.16359390280633,
+              37.381920564168375
+            ],
+            [
+              -119.16365332228322,
+              37.381922494610045
+            ],
+            [
+              -119.16365178284269,
+              37.38195266842991
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "307",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 254.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16387088455073,
+              37.381953309896055
+            ],
+            [
+              -119.16376284907065,
+              37.381949800176294
+            ],
+            [
+              -119.16376482829347,
+              37.38191100525991
+            ],
+            [
+              -119.16387286371815,
+              37.38191451497479
+            ],
+            [
+              -119.16387088455073,
+              37.381953309896055
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "308",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 255.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16359056863591,
+              37.382578022683234
+            ],
+            [
+              -119.163451984535,
+              37.382573520164236
+            ],
+            [
+              -119.16345612235531,
+              37.38249242273576
+            ],
+            [
+              -119.16359470630766,
+              37.382496925241625
+            ],
+            [
+              -119.16359056863591,
+              37.382578022683234
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "309",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 256.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16508235077038,
+              37.38243148248778
+            ],
+            [
+              -119.16499489279586,
+              37.38242864215878
+            ],
+            [
+              -119.16499740533155,
+              37.38237937870562
+            ],
+            [
+              -119.16508486324909,
+              37.38238221902959
+            ],
+            [
+              -119.16508235077038,
+              37.38243148248778
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "310",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 257.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16532610477368,
+              37.3821988412656
+            ],
+            [
+              -119.16520777961341,
+              37.382194998716294
+            ],
+            [
+              -119.16521029198861,
+              37.3821457352489
+            ],
+            [
+              -119.16532861707182,
+              37.38214957779139
+            ],
+            [
+              -119.16532610477368,
+              37.3821988412656
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "311",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 258.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16547028844528,
+              37.38240295968081
+            ],
+            [
+              -119.16540340881153,
+              37.38240078789111
+            ],
+            [
+              -119.16540571172217,
+              37.38235562970389
+            ],
+            [
+              -119.165472591316,
+              37.38235780149006
+            ],
+            [
+              -119.16547028844528,
+              37.38240295968081
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "312",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 259.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16540644446539,
+              37.38234126118967
+            ],
+            [
+              -119.16536014322111,
+              37.38233975762409
+            ],
+            [
+              -119.16536265550977,
+              37.382290494149075
+            ],
+            [
+              -119.16540895672391,
+              37.38229199771201
+            ],
+            [
+              -119.16540644446539,
+              37.38234126118967
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "313",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 260.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16535556671354,
+              37.38227792768478
+            ],
+            [
+              -119.16528868719983,
+              37.38227575583637
+            ],
+            [
+              -119.16529078080825,
+              37.38223470294357
+            ],
+            [
+              -119.16535766028568,
+              37.38223687478878
+            ],
+            [
+              -119.16535556671354,
+              37.38227792768478
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "314",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 261.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16484950013009,
+              37.381844115815866
+            ],
+            [
+              -119.16464886288537,
+              37.38183759936298
+            ],
+            [
+              -119.16465200376992,
+              37.38177602006529
+            ],
+            [
+              -119.16485264085131,
+              37.381782536503756
+            ],
+            [
+              -119.16484950013009,
+              37.381844115815866
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "315",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 262.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16510164276956,
+              37.381901649673296
+            ],
+            [
+              -119.1649833181074,
+              37.3818978069253
+            ],
+            [
+              -119.1649868774736,
+              37.38182801702785
+            ],
+            [
+              -119.1651052020266,
+              37.381831859766194
+            ],
+            [
+              -119.16510164276956,
+              37.381901649673296
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "316",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 263.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.1654778231508,
+              37.381901529568026
+            ],
+            [
+              -119.16537493209373,
+              37.38189818838203
+            ],
+            [
+              -119.16537911915519,
+              37.38181608258249
+            ],
+            [
+              -119.16548201010059,
+              37.38181942375863
+            ],
+            [
+              -119.1654778231508,
+              37.381901529568026
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "317",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 264.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16570774223572,
+              37.38183908990667
+            ],
+            [
+              -119.16563057398449,
+              37.38183658417912
+            ],
+            [
+              -119.16563455141966,
+              37.3817585836454
+            ],
+            [
+              -119.16571171959131,
+              37.381761089365924
+            ],
+            [
+              -119.16570774223572,
+              37.38183908990667
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "318",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 265.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16588044297761,
+              37.38178712823662
+            ],
+            [
+              -119.16576211838732,
+              37.38178328627784
+            ],
+            [
+              -119.16576609567856,
+              37.38170528573138
+            ],
+            [
+              -119.16588442014685,
+              37.38170912767939
+            ],
+            [
+              -119.16588044297761,
+              37.38178712823662
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "319",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 266.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16523267850128,
+              37.38160572264904
+            ],
+            [
+              -119.16512464334723,
+              37.38160221420098
+            ],
+            [
+              -119.16512820254445,
+              37.38153242428847
+            ],
+            [
+              -119.16523623759885,
+              37.38153593272772
+            ],
+            [
+              -119.16523267850128,
+              37.38160572264904
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "320",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 267.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16538270733872,
+              37.38159414632623
+            ],
+            [
+              -119.16526438312073,
+              37.381590303886256
+            ],
+            [
+              -119.1652694076812,
+              37.38149177693426
+            ],
+            [
+              -119.16538773174507,
+              37.381495619360635
+            ],
+            [
+              -119.16538270733872,
+              37.38159414632623
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "321",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 268.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16582492789563,
+              37.381612617956854
+            ],
+            [
+              -119.1657168926566,
+              37.38160911004929
+            ],
+            [
+              -119.16572086996968,
+              37.38153110950467
+            ],
+            [
+              -119.1658289050973,
+              37.381534617402394
+            ],
+            [
+              -119.16582492789563,
+              37.381612617956854
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "322",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 269.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16527106841251,
+              37.3817118275924
+            ],
+            [
+              -119.16514759948701,
+              37.38170781795987
+            ],
+            [
+              -119.16515241485817,
+              37.38161339631242
+            ],
+            [
+              -119.16527588362955,
+              37.38161740593133
+            ],
+            [
+              -119.16527106841251,
+              37.3817118275924
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "323",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 270.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16591457860609,
+              37.38121871223097
+            ],
+            [
+              -119.16582712195468,
+              37.38121587259551
+            ],
+            [
+              -119.16583005248215,
+              37.38115839849888
+            ],
+            [
+              -119.16591750906711,
+              37.38116123812846
+            ],
+            [
+              -119.16591457860609,
+              37.38121871223097
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "324",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 271.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16567550803062,
+              37.38115749252243
+            ],
+            [
+              -119.16561377398996,
+              37.38115548795856
+            ],
+            [
+              -119.16561586733646,
+              37.381114435042335
+            ],
+            [
+              -119.16567760134363,
+              37.38111643960325
+            ],
+            [
+              -119.16567550803062,
+              37.38115749252243
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "325",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 272.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16538406633343,
+              37.38121382226391
+            ],
+            [
+              -119.16527603172241,
+              37.38121031398533
+            ],
+            [
+              -119.16527812525716,
+              37.38116926108574
+            ],
+            [
+              -119.16538615980956,
+              37.38117276935914
+            ],
+            [
+              -119.16538406633343,
+              37.38121382226391
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "326",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 273.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.1639240495859,
+              37.38146261473847
+            ],
+            [
+              -119.16377960094094,
+              37.3814579221385
+            ],
+            [
+              -119.16378227394505,
+              37.381405527173776
+            ],
+            [
+              -119.16392672248996,
+              37.38141021976491
+            ],
+            [
+              -119.1639240495859,
+              37.38146261473847
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "327",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 274.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16397672732336,
+              37.381590282330386
+            ],
+            [
+              -119.16387167357546,
+              37.38158686958478
+            ],
+            [
+              -119.1638759502961,
+              37.38150303763369
+            ],
+            [
+              -119.16398100392759,
+              37.381506450369024
+            ],
+            [
+              -119.16397672732336,
+              37.381590282330386
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "328",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 275.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.1641141514186,
+              37.38166822103774
+            ],
+            [
+              -119.16398283407943,
+              37.38166395523624
+            ],
+            [
+              -119.16398711068824,
+              37.38158012327532
+            ],
+            [
+              -119.16411842788189,
+              37.38158438906395
+            ],
+            [
+              -119.1641141514186,
+              37.38166822103774
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "329",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 276.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16441914287526,
+              37.381297634883204
+            ],
+            [
+              -119.16429439197164,
+              37.38129358273101
+            ],
+            [
+              -119.16429920270076,
+              37.38119927173448
+            ],
+            [
+              -119.16442395344885,
+              37.38120332387293
+            ],
+            [
+              -119.16441914287526,
+              37.381297634883204
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "330",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": 277.0,
+        "layer": "hcdemars_mortalitree_prefire_labels2",
+        "path": "C:\\ESS144\\Lab 7\\hcdemars_mortalitree_prefire_labels2.shp",
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16473464652115,
+              37.38136561246656
+            ],
+            [
+              -119.16460989545875,
+              37.38136156064093
+            ],
+            [
+              -119.16461176615145,
+              37.38132488412936
+            ],
+            [
+              -119.16473651715337,
+              37.38132893594965
+            ],
+            [
+              -119.16473464652115,
+              37.38136561246656
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "488",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": null,
+        "layer": null,
+        "path": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.1642764809141,
+              37.38227026413064
+            ],
+            [
+              -119.16414461463796,
+              37.382265980654374
+            ],
+            [
+              -119.16414998258941,
+              37.38216075350864
+            ],
+            [
+              -119.16428184868211,
+              37.3821650369687
+            ],
+            [
+              -119.1642764809141,
+              37.38227026413064
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "489",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": null,
+        "layer": null,
+        "path": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16425927602715,
+              37.382526621469616
+            ],
+            [
+              -119.16412740930477,
+              37.38252233794928
+            ],
+            [
+              -119.16413311283061,
+              37.38241053411394
+            ],
+            [
+              -119.16426497935808,
+              37.38241481761707
+            ],
+            [
+              -119.16425927602715,
+              37.382526621469616
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "490",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": null,
+        "layer": null,
+        "path": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16419968820553,
+              37.38280465863009
+            ],
+            [
+              -119.1641090295025,
+              37.382801713661365
+            ],
+            [
+              -119.16411104254514,
+              37.38276225348723
+            ],
+            [
+              -119.1642017012009,
+              37.382765198451786
+            ],
+            [
+              -119.16419968820553,
+              37.38280465863009
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "491",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": null,
+        "layer": null,
+        "path": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16362868297308,
+              37.382993618053554
+            ],
+            [
+              -119.16356274924831,
+              37.38299147593746
+            ],
+            [
+              -119.16356543370439,
+              37.38293886240729
+            ],
+            [
+              -119.16363136738332,
+              37.38294100451933
+            ],
+            [
+              -119.16362868297308,
+              37.382993618053554
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "492",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": null,
+        "layer": null,
+        "path": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16357721934081,
+              37.383031471617905
+            ],
+            [
+              -119.16347831871249,
+              37.383028258384215
+            ],
+            [
+              -119.16348234548785,
+              37.38294933809702
+            ],
+            [
+              -119.16358124601298,
+              37.382952551321594
+            ],
+            [
+              -119.16357721934081,
+              37.383031471617905
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "493",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": null,
+        "layer": null,
+        "path": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16343778125949,
+              37.38301376613203
+            ],
+            [
+              -119.16335536410102,
+              37.38301108834692
+            ],
+            [
+              -119.1633580487039,
+              37.38295847482972
+            ],
+            [
+              -119.16344046580507,
+              37.38296115260978
+            ],
+            [
+              -119.16343778125949,
+              37.38301376613203
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "494",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": null,
+        "layer": null,
+        "path": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16550547131045,
+              37.38269555337955
+            ],
+            [
+              -119.16542305430029,
+              37.382692877054765
+            ],
+            [
+              -119.16542640820842,
+              37.38262710999509
+            ],
+            [
+              -119.16550882514692,
+              37.382629786313544
+            ],
+            [
+              -119.16550547131045,
+              37.38269555337955
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "495",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": null,
+        "layer": null,
+        "path": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16560684702596,
+              37.38218389348169
+            ],
+            [
+              -119.16551898926727,
+              37.382181040567005
+            ],
+            [
+              -119.16552232610609,
+              37.38211560536394
+            ],
+            [
+              -119.16561018378877,
+              37.38211845827193
+            ],
+            [
+              -119.16560684702596,
+              37.38218389348169
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "496",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": null,
+        "layer": null,
+        "path": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16582671561264,
+              37.38247427458716
+            ],
+            [
+              -119.16574471470011,
+              37.382471612003734
+            ],
+            [
+              -119.1657466213744,
+              37.38243422045119
+            ],
+            [
+              -119.1658286222464,
+              37.38243688303104
+            ],
+            [
+              -119.16582671561264,
+              37.38247427458716
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "497",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": null,
+        "layer": null,
+        "path": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16574113967631,
+              37.382541721163896
+            ],
+            [
+              -119.16568256754827,
+              37.38253981927908
+            ],
+            [
+              -119.165683997581,
+              37.382511775617076
+            ],
+            [
+              -119.16574256968731,
+              37.382513677499965
+            ],
+            [
+              -119.16574113967631,
+              37.382541721163896
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "498",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": null,
+        "layer": null,
+        "path": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16566170979438,
+              37.38254616452788
+            ],
+            [
+              -119.16557385160735,
+              37.382543311630506
+            ],
+            [
+              -119.16557552002611,
+              37.382510594028986
+            ],
+            [
+              -119.16566337817511,
+              37.38251344692301
+            ],
+            [
+              -119.16566170979438,
+              37.38254616452788
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "499",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": null,
+        "layer": null,
+        "path": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16520871223868,
+              37.382398026322754
+            ],
+            [
+              -119.16510328267917,
+              37.38239460244574
+            ],
+            [
+              -119.1651068582778,
+              37.38232449333629
+            ],
+            [
+              -119.1652122877396,
+              37.38232791720466
+            ],
+            [
+              -119.16520871223868,
+              37.382398026322754
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "501",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": null,
+        "layer": null,
+        "path": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16532568613326,
+              37.38246268686735
+            ],
+            [
+              -119.16522025646873,
+              37.3824592630896
+            ],
+            [
+              -119.16522192503606,
+              37.38242654550121
+            ],
+            [
+              -119.16532735465496,
+              37.38242996927492
+            ],
+            [
+              -119.16532568613326,
+              37.38246268686735
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "502",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": null,
+        "layer": null,
+        "path": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16497386205604,
+              37.38263150592901
+            ],
+            [
+              -119.16484500334394,
+              37.382627320899665
+            ],
+            [
+              -119.1648485792131,
+              37.38255721181423
+            ],
+            [
+              -119.16497743780579,
+              37.38256139683301
+            ],
+            [
+              -119.16497386205604,
+              37.38263150592901
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "503",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": null,
+        "layer": null,
+        "path": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16466062034497,
+              37.38261899148583
+            ],
+            [
+              -119.16461376265339,
+              37.3826174695495
+            ],
+            [
+              -119.1646161467102,
+              37.38257073017191
+            ],
+            [
+              -119.16466300437284,
+              37.38257225210569
+            ],
+            [
+              -119.16466062034497,
+              37.38261899148583
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "504",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": null,
+        "layer": null,
+        "path": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16466639342084,
+              37.38244829762602
+            ],
+            [
+              -119.16460196424146,
+              37.38244620497004
+            ],
+            [
+              -119.16460482510006,
+              37.382390117716035
+            ],
+            [
+              -119.16466925423168,
+              37.38239221036782
+            ],
+            [
+              -119.16466639342084,
+              37.38244829762602
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "505",
+      "type": "Feature",
+      "properties": {
+        "zxy_val": null,
+        "z_val": null,
+        "x_val": null,
+        "y_val": null,
+        "url_suffix": null,
+        "upper_left": null,
+        "lower_righ": null,
+        "centroid": null,
+        "FID": null,
+        "layer": null,
+        "path": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+        "SUNETID": "hcdemars",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 1,
+        "PREFIRE_STATUS": "prefire",
+        "TILE_Z": 17,
+        "TILE_X": 22149,
+        "TILE_Y": 50842,
+        "TILEXYZ": [
+          17,
+          22149,
+          50842
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+        "OUTPUT_STATUS_DIR": "prefire",
+        "FEATURE_COUNT": 59
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.16456370995402,
+              37.38185529315175
+            ],
+            [
+              -119.1643473679786,
+              37.38184826608805
+            ],
+            [
+              -119.16435265169741,
+              37.38174468308451
+            ],
+            [
+              -119.16456899337658,
+              37.38175171012205
+            ],
+            [
+              -119.16456370995402,
+              37.38185529315175
+            ]
+          ]
+        ]
+      }
+    }
+  ],
+  "properties": {
+    "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/hcdemars_mortalitree_prefire_labels-1.geojson",
+    "SUNETID": "hcdemars",
+    "FIRENAME": "CREEK",
+    "FIRE_SLUG": "CREEK",
+    "PREFIRE": 1,
+    "PREFIRE_STATUS": "prefire",
+    "TILE_Z": 17,
+    "TILE_X": 22149,
+    "TILE_Y": 50842,
+    "TILEXYZ": [
+      17,
+      22149,
+      50842
+    ],
+    "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/prefire/17/22149/50842.geojson",
+    "OUTPUT_STATUS_DIR": "prefire",
+    "FEATURE_COUNT": 59
+  }
+}

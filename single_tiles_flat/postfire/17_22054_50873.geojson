@@ -1,0 +1,75 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "12",
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/enrique9_mortalitree_postfire_labels.geojson",
+        "SUNETID": "enrique9",
+        "FIRENAME": "CREEK",
+        "FIRE_SLUG": "CREEK",
+        "PREFIRE": 0,
+        "PREFIRE_STATUS": "postfire",
+        "TILE_Z": 17,
+        "TILE_X": 22054,
+        "TILE_Y": 50873,
+        "TILEXYZ": [
+          17,
+          22054,
+          50873
+        ],
+        "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22054/50873.geojson",
+        "OUTPUT_STATUS_DIR": "postfire",
+        "FEATURE_COUNT": 1
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.42589294230649,
+              37.31339688208924
+            ],
+            [
+              -119.42544921865883,
+              37.313383462280974
+            ],
+            [
+              -119.42544923631286,
+              37.313383089908044
+            ],
+            [
+              -119.42589359610629,
+              37.313383089908044
+            ],
+            [
+              -119.42589294230649,
+              37.31339688208924
+            ]
+          ]
+        ]
+      }
+    }
+  ],
+  "properties": {
+    "SOURCE_FILE": "/Users/maples/GitHub/mortalitree_testing/labels/enrique9_mortalitree_postfire_labels.geojson",
+    "SUNETID": "enrique9",
+    "FIRENAME": "CREEK",
+    "FIRE_SLUG": "CREEK",
+    "PREFIRE": 0,
+    "PREFIRE_STATUS": "postfire",
+    "TILE_Z": 17,
+    "TILE_X": 22054,
+    "TILE_Y": 50873,
+    "TILEXYZ": [
+      17,
+      22054,
+      50873
+    ],
+    "OUTPUT_FILE": "/Users/maples/GitHub/mortalitree_testing/notebooks/single_tiles/postfire/17/22054/50873.geojson",
+    "OUTPUT_STATUS_DIR": "postfire",
+    "FEATURE_COUNT": 1
+  }
+}

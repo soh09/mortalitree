@@ -93,7 +93,8 @@ except Exception:
 
 COMMON = dict(
     gpu="A10G",
-    timeout=60 * 60 * 24,       # 6 hours max
+    cpu=8.0,                    # feed the 16 dataloader workers (I/O-bound on the volume)
+    timeout=60 * 60 * 24,
     volumes={DATA_DIR: data_vol, CKPT_DIR: ckpt_vol, NEON_DIR: neon_vol},
     secrets=_wandb_secret,
 )
@@ -139,6 +140,28 @@ def _ensure_clay_ckpt():
 def fetch_clay_ckpt():
     """Standalone: pull the Clay checkpoint to the volume (run once if you like)."""
     _ensure_clay_ckpt()
+
+
+def _localize_packed(packed_dir):
+    """Copy packed {SITE}.npy + packed_index.csv from the network volume to local
+    container disk. Training shuffles, so reads are random-access; from the volume
+    that means a network page-fault per access (GPU starves at ~50% even after
+    packing). Copying once up front (sequential, fast) makes every epoch's reads
+    hit local SSD / page cache instead — the difference between data-bound and
+    GPU-bound. Returns the local dir (or the input unchanged if packed_dir is None)."""
+    import os
+    import shutil
+    if not packed_dir:
+        return packed_dir
+    local = "/tmp/packed"
+    os.makedirs(local, exist_ok=True)
+    files = [f for f in sorted(os.listdir(packed_dir)) if f.endswith((".npy", ".csv"))]
+    for f in files:
+        dst = os.path.join(local, f)
+        if not os.path.exists(dst):
+            shutil.copy(os.path.join(packed_dir, f), dst)
+    print(f"[setup] localized {len(files)} packed files {packed_dir} -> {local}", flush=True)
+    return local
 
 
 def _setup(config_path: str, num_queries: int = 0):
@@ -201,8 +224,16 @@ def stage_b(
 
     t, l, d = cfg["training"], cfg["loss"], cfg.get("data", {})
 
-    # Derive the data paths from out_tag unless explicitly overridden.
-    labels_csv = labels_csv or f"/neon/{out_tag}/labels.csv"
+    # Derive the data paths from out_tag unless explicitly overridden. In
+    # prequartered mode the pipeline writes labels_quarter.csv (128 tiles) +
+    # labels_parent.csv (full 256 GT for stitched eval).
+    prequartered = d.get("prequartered", False)
+    if prequartered:
+        labels_csv = labels_csv or f"/neon/{out_tag}/labels_quarter.csv"
+        parent_labels_csv = f"/neon/{out_tag}/labels_parent.csv"
+    else:
+        labels_csv = labels_csv or f"/neon/{out_tag}/labels.csv"
+        parent_labels_csv = None
     patches_root = patches_root or f"/neon/{out_tag}"
 
     # Default: 4-band NEON patches (mot volume) produced by modal_pipeline.py.
@@ -211,6 +242,8 @@ def stage_b(
     if data_source == "neon":
         from src.data.neon_dataset import NeonPatchDataset
         from src.data.deepforest_dataset import deepforest_collate_fn
+        packed_dir = f"/neon/{out_tag}/packed" if (prequartered and d.get("packed", False)) else None
+        packed_dir = _localize_packed(packed_dir)   # copy to local disk -> fast random reads
         dataset = NeonPatchDataset(
             labels_csv=labels_csv,
             patches_root=patches_root,
@@ -219,20 +252,24 @@ def stage_b(
             quarter=d.get("quarter", False),
             n_split=d.get("n_split", 2),
             max_trees=d.get("max_trees", 0),
+            parent_labels_csv=parent_labels_csv,
+            parent_size=d.get("parent_size", 256),
+            packed_dir=packed_dir,
         )
         collate_fn = deepforest_collate_fn
-        print(f"[Stage B] NEON dataset: {len(dataset)} patches from {labels_csv}")
+        print(f"[Stage B] NEON dataset: {len(dataset)} tiles from {labels_csv}"
+              + (f" (packed: {packed_dir})" if packed_dir else ""))
 
-        # Q must be >= the densest patch or Hungarian matching silently drops GT
+        # Q must be >= the densest tile or Hungarian matching silently drops GT
         # (spec gotcha #12). Warn loudly if the data outgrew num_queries.
         q = cfg["model"]["num_queries"]
-        max_boxes = max((len(it["boxes"]) for it in dataset.items), default=0)
+        max_boxes = max((len(s["boxes"]) for s in dataset.samples), default=0)
         if max_boxes > q:
-            print(f"[Stage B] *** WARNING: densest patch has {max_boxes} boxes > "
+            print(f"[Stage B] *** WARNING: densest tile has {max_boxes} boxes > "
                   f"num_queries={q}; GT will be dropped. Re-run with "
                   f"--num-queries {max_boxes} (and match Stage C). ***")
         else:
-            print(f"[Stage B] densest patch = {max_boxes} boxes <= num_queries={q} (ok)")
+            print(f"[Stage B] densest tile = {max_boxes} boxes <= num_queries={q} (ok)")
 
     run = _wandb_init(
         "stage_b", cfg,
@@ -272,8 +309,10 @@ def stage_b(
 @app.function(**COMMON)
 def eval_stage_b(
     checkpoint: str = "/checkpoints/stage_b_best.pt",
-    labels_csv: str = "/neon/patches/labels.csv",
-    patches_root: str = "/neon/patches",
+    out_tag: str = "patches_quarter",
+    num_queries: int = 0,
+    labels_csv: str = "",
+    patches_root: str = "",
     config: str = "/root/configs/stage_b.yaml",
     split: str = "val",            # "val" (held-out parents) or "all"
     conf_thresh: float = 0.5,
@@ -282,16 +321,16 @@ def eval_stage_b(
     """Parent-level (256-frame) metrics for a trained Stage-B model. Runs the
     model on quarter tiles, stitches predictions back into the parent frame,
     and scores against the full 256 GT — directly comparable to an un-quartered
-    baseline. Reads quartering settings (quarter/n_split/tile_size) from the
-    config, and evaluates on the same held-out val parents the training used.
+    baseline. Reads quartering settings (prequartered/tile_size) from the config,
+    and evaluates on the same held-out val parents the training used.
 
     For a rigorous held-out number, point --labels-csv at a separate test CSV
-    and pass --split all."""
+    and pass --split all. num_queries must match the trained checkpoint."""
     import json
 
     import torch
 
-    model, cfg = _setup(config)
+    model, cfg = _setup(config, num_queries)
     state = torch.load(checkpoint, map_location="cuda")
     model.load_state_dict(state["model"])
     model = model.to("cuda")
@@ -301,13 +340,25 @@ def eval_stage_b(
     from src.train.stage_b import _split_train_val
 
     d = cfg.get("data", {})
-    # max_trees=0: evaluate every tile incl. dense ones (the Q-cap undercounting
-    # them is a real, measured limitation, not something to filter away here).
+    prequartered = d.get("prequartered", False)
+    if prequartered:
+        labels_csv = labels_csv or f"/neon/{out_tag}/labels_quarter.csv"
+        parent_labels_csv = f"/neon/{out_tag}/labels_parent.csv"
+    else:
+        labels_csv = labels_csv or f"/neon/{out_tag}/labels.csv"
+        parent_labels_csv = None
+    patches_root = patches_root or f"/neon/{out_tag}"
+
+    # max_trees=0: score every available tile (quarters were already capped at
+    # write time, so dense quarters' GT counts as misses against the full 256 GT).
+    packed_dir = f"/neon/{out_tag}/packed" if (prequartered and d.get("packed", False)) else None
+    packed_dir = _localize_packed(packed_dir)
     dataset = NeonPatchDataset(
         labels_csv=labels_csv, patches_root=patches_root,
         tile_size=d.get("tile_size", 256), augment=False,
         quarter=d.get("quarter", False), n_split=d.get("n_split", 2),
-        max_trees=0,
+        max_trees=0, parent_labels_csv=parent_labels_csv,
+        parent_size=d.get("parent_size", 256), packed_dir=packed_dir,
     )
     if split == "val":
         _, val = _split_train_val(dataset, cfg["training"]["val_fraction"], seed=42)
