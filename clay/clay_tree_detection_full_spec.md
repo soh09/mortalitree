@@ -1,6 +1,8 @@
-# Project Spec — NAIP Tree Detection with Clay + ViTDet Neck
+# Project Spec — NAIP Tree Detection with Clay + ViTDet Neck + DQ-DETR
 
-A complete specification for a vision-transformer-based tree detector that finetunes the Clay geospatial foundation model with a lightweight ViTDet-style neck and a point-detection head. Targeted at NAIP 4-band aerial imagery (RGB + NIR) at 60 cm resolution, with a small labeled training set on the order of 200 tiles. Eventual purpose: counting trees in matched pre-fire and post-fire imagery to estimate fire-induced mortality.
+A complete specification for a vision-transformer-based tree detector that finetunes the Clay geospatial foundation model with a lightweight ViTDet-style neck and a **DQ-DETR-style dynamic-query detection head**. Targeted at NAIP 4-band aerial imagery (RGB + NIR) at 60 cm resolution, with a small labeled training set on the order of 200 tiles. Eventual purpose: counting trees in matched pre-fire and post-fire imagery to estimate fire-induced mortality.
+
+The detection head follows **DQ-DETR** (Huang et al., ECCV 2024, *DETR with Dynamic Query for Tiny Object Detection*), which is purpose-built for the regime here: many tiny objects (trees are 4–10 px wide) at a count that varies wildly per image (20–500 per tile). DQ-DETR adds three pieces over a vanilla DETR head — a **Categorical Counting Module (CCM)**, **Category-Guided Feature Enhancement (CGFE)**, and **Dynamic Query Selection (DQS)** — so the number of object queries scales with the predicted object count instead of being a fixed constant. See §3.4–§3.5.
 
 ---
 
@@ -30,11 +32,11 @@ The novelty contributions, stated precisely:
 1. **First use of a geospatial foundation model (Clay) for individual-tree detection.** Geospatial foundation models have been evaluated on NAIP downstream tasks (e.g. SatMAE in the PhilEO benchmark, ~72% land-cover accuracy), but not for tree detection. Clay specifically has documented finetuning recipes for segmentation, classification, and regression; tree detection at sub-meter resolution is not among them.
 2. **Contrast with Zhang et al. (2025):** that paper uses an ImageNet-pretrained generic transformer; this design uses an MAE-pretrained sensor-aware foundation model whose pretraining matches the deployment sensor (NAIP) and includes the spectral band most relevant to the eventual fire-mortality task (NIR).
 3. **A ViTDet-style neck adapted for the small-object regime of 60 cm NAIP.** Plain ViTs output single-scale features; Clay v1.5 (patch size 8) emits them at stride 8, and the neck upsamples once more to stride 4 to better resolve small crowns. Building the multi-scale pyramid a detection head needs is non-trivial when training data is limited.
-4. **Bounding box detection from a foundation-model backbone, sized for the data-limited regime.** A DETR-style box head replaces the original point-detection plan to preserve crown-size information for the eventual mortality-by-biomass analysis, while a modest number of object queries (124) and a stripped-down neck keep the from-scratch parameter count compatible with ~200 labeled tiles.
+4. **Bounding box detection from a foundation-model backbone, with a DQ-DETR dynamic-query head sized for the data-limited regime.** A DETR-style box head replaces the original point-detection plan to preserve crown-size information for the eventual mortality-by-biomass analysis. On top of that, the **DQ-DETR** counting/dynamic-query design (CCM + CGFE + DQS) lets the number of object queries scale with the predicted tree count (200–600) rather than a single fixed value — important here because tree counts span 20–500 per tile, where a fixed query budget is either too few (drops GT on dense tiles) or mostly-negative noise (on sparse tiles). A stripped-down single-scale neck keeps the from-scratch parameter count (~3.2M) compatible with ~200 labeled tiles.
 5. **A training schedule explicitly designed for the data-limited regime** — frozen encoder, mandatory Stage B pretraining on abundant RGB tree datasets, late unfreezing of upper encoder blocks, with a stripped-down neck to keep from-scratch parameters small.
 
 ### What this design is *not* claiming
-- Not a new architecture (Clay, ViTDet neck, P2PNet head are all published).
+- Not a new architecture (Clay, ViTDet neck, and the DQ-DETR head are all published).
 - Not a new pretraining method (Clay's MAE is reused, not redone).
 - Not a fire-mortality model (yet) — that's the downstream extension. The deliverable is a tree detector that supports the eventual mortality work.
 
@@ -60,21 +62,35 @@ Clay ViT encoder    (~311M params, large variant, frozen → late-unfrozen)
         │
         ▼
 Stripped ViTDet neck    (~1M params, from scratch)
-   single 2× deconv → P3: (B, 128, 64, 64)    stride 4
+   single 2× deconv → EMSV map: (B, 128, 64, 64)    stride 4
+        │
+        ├──────────────► CCM  (Categorical Counting Module)
+        │                  ├─ count-category logits (B, 3)  ──► DQS
+        │                  └─ density feature map  (B, 128, 64, 64) ──┐
+        │                                                             │
+        ▼                                                             ▼
+   CGFE (Category-Guided Feature Enhancement)  ◄── density-gated  (Stage 2 only;
+        │  spatial gate (from density) → channel gate              bypassed in Stage 1)
+        ▼
+   enhanced EMSV map  (B, 128, 64, 64)
         │
         ▼
-DETR-style box detection head    (~2M params, from scratch)
-   Q learnable object queries (Q=124) → transformer decoder over neck features
-       cls branch:  (B, Q, 1)   tree objectness per query
-       box branch:  (B, Q, 4)   (cx, cy, w, h) per query, normalized to [0, 1]
+Two-stage DQS detection head    (~2M params, from scratch)
+   stage 1: every memory token → objectness + anchor-seeded box proposal
+   DQS:     keep top-k proposals, k = dynamic_query_list[predicted count category]
+            (k ∈ {200, 400, 600} — more queries for denser tiles)
+   stage 2: DAB-style decoder over the k selected queries, iterative box refine
+       cls branch:  (B, k, 1)   tree objectness per query
+       box branch:  (B, k, 4)   (cx, cy, w, h) per query, normalized to [0, 1]
         │
         ▼
-At training: Hungarian matching between Q predicted boxes and box-center labels;
-             BCE classification (masked) + L1 box loss + generalized IoU loss
+At training: Hungarian matching on decoder outputs (BCE cls + L1 + GIoU),
+             same matching on the two-stage proposals (focal cls + L1 + GIoU),
+             and a cross-entropy CCM loss on the count category.
 At inference: keep boxes with cls_score > τ; count = |kept boxes|
 ```
 
-**Total trainable params at Stage C with frozen encoder: ~3M (neck + head).** Larger than the point-head variant but still small enough to train on 200 tiles with the mitigations below.
+**Total trainable params at Stage C with frozen encoder: ~3.2M (neck + CCM + CGFE + DQS head).** Larger than the point-head variant but still small enough to train on 200 tiles with the mitigations below.
 
 ---
 
@@ -228,87 +244,106 @@ class StrippedViTDetNeck(nn.Module):
 
 **Why a single 2× upsample, not the full P2/P3/P4/P5 pyramid.** The full ViTDet pyramid has ~3–8M params (mostly in the deeper deconv branches). At 200 tiles, that's risky. Clay v1.5 already outputs stride 8 (~4.8 m/cell at 60 cm); the single 2× deconv here takes it to stride 4 (~2.4 m/cell) — fine enough to resolve individual crowns while keeping the from-scratch parameter count small. Add a further branch (e.g. another 2× to stride 2) only if this is demonstrably missing small detections in validation.
 
-### 3.4 Detection head — DETR-style box head
+### 3.4 Detection head — DQ-DETR dynamic-query head
 
-A small DETR-style decoder with a fixed set of object queries. Each query attends to the neck's feature map and outputs a box + objectness score. No anchors, no NMS — the Hungarian matching during training enforces one-prediction-per-object behavior at inference.
+The head follows DQ-DETR. Instead of a fixed set of learnable queries, the number of queries is chosen *per image* from a coarse count prediction, and the queries are seeded by a two-stage proposal step on the feature map. There are three sub-modules — **CCM**, **CGFE**, **DQS** — feeding a small DAB-style decoder. No anchors-as-NMS, no NMS at inference; Hungarian matching during training enforces one-prediction-per-object behavior.
+
+Files: `src/model/ccm.py`, `src/model/cgfe.py`, `src/model/head.py`. The single-scale plumbing (one EMSV map, plain multi-head attention) is the adaptation of DQ-DETR's multi-scale deformable design to this Clay pipeline — it keeps the contribution (count-conditioned dynamic query number + two-stage anchor-seeded queries + density enhancement) without the CUDA deformable-attention ops.
+
+#### CCM — Categorical Counting Module
+
+Consumes the EMSV map (the neck output) and emits two things: a **count-category** logit vector (which coarse count bin the tile falls in) and a **density feature map** (a density-map-like tensor at the EMSV resolution). The count category drives DQS; the density map drives CGFE. A dilated-conv stack keeps the density map at full EMSV resolution — important for the small, densely packed crowns here.
 
 ```python
-import torch
-import torch.nn as nn
-
-class BoxDetectionHead(nn.Module):
-    """DETR-style box head with Q object queries."""
-    def __init__(self, feat_channels=128, num_queries=124, hidden=128,
-                 n_heads=4, n_decoder_layers=3):
+class CategoricalCountingModule(nn.Module):
+    """EMSV map -> (count-category logits, density feature map)."""
+    def __init__(self, in_channels=128, cls_num=3, density_channels=128):
         super().__init__()
-        self.num_queries = num_queries
-        # Learnable object queries
-        self.queries = nn.Embedding(num_queries, hidden)
-        # 2D positional encoding for the neck features
-        self.pos_enc = SinCos2DPositionalEncoding(hidden)
-        # Project neck features to decoder dim if needed
-        self.input_proj = nn.Conv2d(feat_channels, hidden, kernel_size=1)
-        # Transformer decoder
-        layer = nn.TransformerDecoderLayer(
-            d_model=hidden, nhead=n_heads, dim_feedforward=hidden * 4,
-            batch_first=True, norm_first=True,
-        )
-        self.decoder = nn.TransformerDecoder(layer, num_layers=n_decoder_layers)
-        # Output heads on each decoded query
-        self.cls_head = nn.Linear(hidden, 1)
-        self.box_head = nn.Sequential(
-            nn.Linear(hidden, hidden), nn.ReLU(),
-            nn.Linear(hidden, hidden), nn.ReLU(),
-            nn.Linear(hidden, 4),  # (cx, cy, w, h)
-        )
+        self.proj = nn.Conv2d(in_channels, 256, kernel_size=1)
+        self.ccm  = _make_dilated_layers([256, 256, density_channels, density_channels],
+                                          in_channels=256, d_rate=2)  # dilated 3x3 + ReLU
+        self.pool   = nn.AdaptiveAvgPool2d(1)
+        self.linear = nn.Linear(density_channels, cls_num)
 
-    def forward(self, feat):
-        # feat: (B, feat_channels, H_p3, W_p3)
-        B, _, H, W = feat.shape
-        x = self.input_proj(feat)                       # (B, hidden, H, W)
-        pos = self.pos_enc(H, W, x.device)              # (H*W, hidden)
-        memory = x.flatten(2).transpose(1, 2)           # (B, H*W, hidden)
-        memory = memory + pos.unsqueeze(0)
-        # Queries: (Q, hidden) → (B, Q, hidden)
-        q = self.queries.weight.unsqueeze(0).expand(B, -1, -1)
-        decoded = self.decoder(q, memory)               # (B, Q, hidden)
-        cls_logits = self.cls_head(decoded).squeeze(-1) # (B, Q)
-        boxes = self.box_head(decoded).sigmoid()        # (B, Q, 4)  in [0, 1]
-        return cls_logits, boxes
+    def forward(self, feat):                  # feat: (B, in_channels, H, W)
+        x = self.proj(feat)
+        density = self.ccm(x)                 # (B, density_channels, H, W)
+        count_logits = self.linear(self.pool(density).flatten(1))  # (B, cls_num)
+        return count_logits, density
 ```
 
-**Why only 3 decoder layers?** Standard DETR uses 6. At 200 tiles, fewer layers means fewer from-scratch parameters and more stable training. 3 layers is a reasonable compromise — enough capacity for the queries to specialize, not so many that overfitting dominates.
+The count categories come from box-count thresholds `ccm_params = [100, 300]` → 3 bins (`<100`, `100–299`, `>=300`), matching the 20–500 trees/tile range. The CCM is supervised with a cross-entropy **CCM loss** against the bin a tile's GT count falls in.
+
+#### CGFE — Category-Guided Feature Enhancement
+
+A CBAM-style attention block that uses the CCM density map to enhance the EMSV features before the head sees them: a **spatial gate** computed from the density map (where, and how densely, objects are) followed by a **channel gate**. Single-scale, so it runs once on the `(B, 128, 64, 64)` map.
+
+```python
+class CGFE(nn.Module):
+    def __init__(self, gate_channels=128, reduction_ratio=16):
+        super().__init__()
+        self.spatial_gate = SpatialGate()                 # 7x7 conv on (max,mean) channel-pool
+        self.channel_gate = ChannelGate(gate_channels, reduction_ratio)  # SE-style avg+max MLP
+    def forward(self, emsv, density):                     # both (B, C, H, W)
+        feat = emsv * self.spatial_gate(density)
+        feat = feat * self.channel_gate(feat)
+        return feat
+```
+
+CGFE is **bypassed in Stage 1** (EMSV passes straight through) and **enabled in Stage 2**, once the density map is reliable — see §4.3.
+
+#### DQS — Dynamic Query Selection + two-stage head
+
+A lightweight two-stage proposal step scores every memory token (objectness) and regresses a box from a per-token grid anchor. DQS keeps the top-`k` proposals, where `k = dynamic_query_list[predicted count category]` (`{200, 400, 600}` here). To keep the batch tensor rectangular, `k` is taken from the **densest** predicted category in the batch (DQ-DETR's trick). The selected proposals seed a DAB-style decoder that derives its query positional encodings from the reference boxes and refines them iteratively.
+
+```python
+class TwoStageDQSHead(nn.Module):
+    def __init__(self, feat_channels=128, hidden=128, max_queries=600,
+                 n_heads=4, n_decoder_layers=3, dropout=0.1,
+                 dynamic_query_list=(200, 400, 600), anchor_size=0.05):
+        ...
+        self.input_proj   = nn.Conv2d(feat_channels, hidden, 1)
+        self.enc_cls_head = nn.Linear(hidden, 1)          # stage-1 objectness
+        self.enc_box_head = MLP(hidden, hidden, 4, 3)      # stage-1 box (delta on grid anchor)
+        self.tgt_embed    = nn.Embedding(max_queries, hidden)  # learnable content queries
+        self.query_pos_mlp = MLP(hidden, hidden, hidden, 2)    # query pos from box sine-embed
+        self.layers       = nn.ModuleList(DecoderLayer(...) for _ in range(n_decoder_layers))
+        self.cls_head     = nn.Linear(hidden, 1)
+        self.box_head     = MLP(hidden, hidden, 4, 3)
+
+    def forward(self, feat, count_logits):
+        memory = self.input_proj(feat).flatten(2).transpose(1, 2)   # (B, HW, hidden)
+        # stage 1: proposals on every token (grid anchors -> sigmoid boxes)
+        enc_cls_logits = self.enc_cls_head(memory + pos).squeeze(-1)        # (B, HW)
+        enc_boxes      = (self.enc_box_head(memory + pos) + anchors).sigmoid()
+        # DQS: k from the densest predicted category; keep top-k proposals
+        k = dynamic_query_list[count_logits.argmax(1).max()]
+        idx = enc_cls_logits.topk(k, dim=1).indices
+        reference = gather(enc_boxes, idx).detach()                         # (B, k, 4)
+        # stage 2: decode k queries, iterative box refinement
+        tgt = self.tgt_embed.weight[:k].expand(B, -1, -1)
+        for layer in self.layers:
+            query_pos = self.query_pos_mlp(gen_sineembed_for_boxes(reference, hidden))
+            tgt = layer(tgt, query_pos, memory, pos)
+            box = (self.box_head(tgt) + inverse_sigmoid(reference)).sigmoid()
+            reference = box.detach()
+        return dict(cls_logits=self.cls_head(tgt).squeeze(-1), pred_boxes=box,
+                    enc_cls_logits=enc_cls_logits, enc_boxes=enc_boxes, num_select=k)
+```
+
+**Why two-stage / dynamic queries instead of fixed Q?** Tree counts span 20–500 per tile. A fixed query budget is either too small (Hungarian matching silently drops GT on dense tiles — gotcha #12) or mostly-negative noise on sparse tiles. DQS sizes the query set to the predicted count, and seeding queries from high-objectness proposals (rather than free-floating learnable queries) gives the tiny-object decoder a much better starting point.
+
+**Why only 3 decoder layers?** Standard DETR uses 6. At 200 tiles, fewer layers means fewer from-scratch parameters and more stable training.
 
 **Why box outputs in [0, 1] via sigmoid?** Normalized coordinates are scale-invariant and well-behaved for L1 loss. Convert to pixel coordinates only at inference / evaluation time.
 
-A simple 2D sinusoidal positional encoding for the neck features:
-
-```python
-class SinCos2DPositionalEncoding(nn.Module):
-    def __init__(self, dim):
-        super().__init__()
-        assert dim % 4 == 0, "dim must be divisible by 4 for 2D sin/cos encoding"
-        self.dim = dim
-
-    def forward(self, H, W, device):
-        d = self.dim // 4
-        y = torch.arange(H, device=device).float().unsqueeze(1).expand(H, W)
-        x = torch.arange(W, device=device).float().unsqueeze(0).expand(H, W)
-        freqs = torch.exp(
-            torch.arange(0, d, device=device).float()
-            * (-torch.log(torch.tensor(10000.0)) / d)
-        )
-        pe_y = torch.cat([torch.sin(y[..., None] * freqs),
-                          torch.cos(y[..., None] * freqs)], dim=-1)
-        pe_x = torch.cat([torch.sin(x[..., None] * freqs),
-                          torch.cos(x[..., None] * freqs)], dim=-1)
-        pe = torch.cat([pe_y, pe_x], dim=-1)             # (H, W, dim)
-        return pe.reshape(H * W, self.dim)
-```
+The model `forward` returns a **dict** (`cls_logits`, `pred_boxes`, `count_logits`, `enc_cls_logits`, `enc_boxes`, `num_select`), not a `(cls, boxes)` tuple — all call sites read from the dict.
 
 ### 3.5 Loss
 
-Hungarian matching between Q predicted boxes and ground-truth boxes, with classification, L1 box, and generalized IoU (GIoU) losses on matched pairs.
+Three terms, matching DQ-DETR: (1) the main **detection loss** — Hungarian matching between the `k` decoder predictions and GT boxes with classification + L1 + GIoU; (2) the **two-stage proposal loss** — the same matching on the stage-1 proposals (the "interm" supervision that teaches the proposal scorer what to select, since top-k selection is non-differentiable), using focal classification; (3) the **CCM loss** — cross-entropy on the count category. CGFE has no loss of its own; it is trained through the detection loss once enabled.
+
+The main detection loss is Hungarian matching between the predicted boxes and ground-truth boxes, with classification, L1 box, and generalized IoU (GIoU) losses on matched pairs.
 
 ```python
 import torch
@@ -373,11 +408,17 @@ The combined L1 + GIoU box loss is the DETR standard. L1 alone is poorly scale-a
 
 The exhaustive-tile flag controls whether unmatched queries are pushed toward "no tree." This is the box-detection analog of the point-detection masked classification loss: in sparsely annotated tiles, real unlabeled trees might be near unmatched queries, so pushing them all toward score 0 would create false-negative gradients.
 
+**Two-stage proposal loss (`encoder_proposal_loss`).** The same Hungarian matching is applied to the stage-1 proposals so the proposal scorer learns what to select (top-k selection is non-differentiable, so without this the scorer gets no gradient). To keep matching cheap, GT is matched only against the top-T = 1200 proposals by objectness — the candidates DQS actually draws from, and also the hardest negatives. Classification uses **sigmoid focal loss** (α=0.25, γ=2) rather than plain BCE, because there are thousands of mostly-negative proposals per tile and focal loss handles that imbalance. The same exhaustive-vs-sparse gating applies.
+
+**CCM loss (`ccm_loss`).** Cross-entropy between the CCM count-category logits and the bin a tile's GT box count falls in (`ccm_params = [100, 300]` → 3 bins). This is what makes DQS's per-image query count meaningful.
+
+The total training loss is `detection + λ_enc · proposal + λ_ccm · ccm`, with `λ_enc = λ_ccm = 1.0` (DQ-DETR defaults).
+
 ---
 
 ## 4. Training pipeline
 
-Two stages. Stage A (your own MAE pretraining) is *not* part of this design — Clay has already done it on a corpus you can't match.
+Two stages (B, C). Stage A (your own MAE pretraining) is *not* part of this design — Clay has already done it on a corpus you can't match. Orthogonal to B/C, the DQ-DETR head runs a **two-phase CGFE schedule** within each stage — see §4.3.
 
 ### 4.1 Stage B — RGB tree-dataset pretraining (mandatory)
 
@@ -386,7 +427,7 @@ Two stages. Stage A (your own MAE pretraining) is *not* part of this design — 
 - **Data:** DeepForest's NEON crown dataset (tens of thousands of annotated crowns) and/or the TreeFormer datasets. All RGB.
 - **Input adaptation:** NAIP wavelengths are `[0.665, 0.560, 0.493, 0.842]` (R,G,B,NIR); the RGB datasets contribute only the first three, `[0.665, 0.560, 0.493]`. Pass just those 3 bands and 3 wavelengths to Clay's dynamic embedding — no zero NIR channel is needed, since the dynamic embedding handles variable band counts natively.
 - **Encoder:** frozen.
-- **Trainable:** neck + head (~1.5M params).
+- **Trainable:** neck + CCM + CGFE + DQS head (~3.2M params).
 - **Optimizer:** AdamW, lr 1e-3, weight decay 0.05, cosine schedule with 5 epoch warmup.
 - **Epochs:** ~50, with early stopping on a held-out validation split.
 - **Why this is mandatory:** the neck is from scratch. Asking it to learn to upsample Clay features *and* detect trees on 200 tiles is the most likely failure mode. Pretraining on tens of thousands of RGB crowns means the neck arrives at Stage C already producing tree-shaped features, and Stage C only has to adapt them to NAIP's spectral domain.
@@ -398,11 +439,20 @@ Two stages. Stage A (your own MAE pretraining) is *not* part of this design — 
 - **Data:** your ~200 annotated NAIP tiles. Boxes converted to centers. Annotated masks per tile.
 - **Input:** full 4-channel NAIP, real NIR, all 4 wavelengths to Clay.
 - **Schedule:**
-  - Epochs 1–30: encoder frozen. Train neck + head only. lr 5e-4.
+  - Epochs 1–30: encoder frozen. Train the from-scratch modules (neck + CCM + CGFE + DQS head) only. lr 5e-4.
   - Epochs 31+: unfreeze Clay's **last 2 transformer blocks**. lr 1e-5 for unfrozen Clay params, 5e-4 for neck + head. Cosine decay.
 - **Epochs:** 50–100 total with early stopping on validation F1 at point level.
 - **Augmentation:** rotations (90/180/270°), horizontal+vertical flips, mild brightness/contrast jitter applied identically across all 4 bands, optional small per-band gain jitter (±5%) to simulate NAIP inter-year radiometric drift. **Do not** jitter NIR independently of RGB — this breaks spectral relationships.
 - **Splits:** train/val/test by geographic region, never by random crop within a region.
+
+### 4.3 Two-phase CGFE schedule (within each stage)
+
+DQ-DETR enables CGFE only once the counting head is producing a reasonable density map — feeding CGFE a noisy density map early on just injects noise. So both Stage B and Stage C run a two-phase schedule, controlled by `cgfe_start_epoch` (config; defaults to half the stage's epoch budget):
+
+- **Phase 1 (stabilize counting).** CGFE disabled (`model.enable_cgfe = False`): EMSV features pass straight through to DQS. The CCM loss + detection loss + two-stage proposal loss are all active, so the counting head and the detector train together. Run until the CCM count-category accuracy plateaus — roughly the first half of the budget.
+- **Phase 2 (add feature enhancement).** CGFE enabled: it now receives a reasonably accurate density map and gates the EMSV features. Resume with all losses active. CGFE's parameters simply start receiving gradient (through the detection loss) at this point.
+
+The toggle is `model.set_cgfe_enabled(epoch >= cgfe_start_epoch)`, flipped at the top of each epoch in `stage_b.py` / `stage_c.py`, and the phase is logged (`*/cgfe_enabled`). The CCM and two-stage losses are on in **both** phases — only CGFE is gated.
 
 ---
 
@@ -441,14 +491,20 @@ Skip: anything that desyncs bands more than mildly. Skip Gaussian blur (NAIP is 
 | Tile size | 256×256 | Matches NAIP native tile size; multiple of Clay's patch size (8) → 32×32 tokens. Use same dim across Stage B, Stage C, and inference. |
 | Clay variant | v1.5 (large, dim 1024, depth 24, patch 8, ~311M params) | The released v1.5.0 checkpoint |
 | Neck input channels | 1024 | = Clay v1.5 encoder dim |
-| Neck output channels | 128 | Halved from typical FPN 256 to stay trainable |
-| Neck scales | P3 only (stride 8 → stride 4 via one 2× deconv) | Add another branch only if small detections are missed |
-| Object queries Q | 124 | ≥ max trees per tile; raise if denser |
+| Neck output channels | 128 | Halved from typical FPN 256 to stay trainable; also the EMSV / density / CGFE width |
+| Neck scales | P3 only (stride 8 → stride 4 via one 2× deconv) | Single-scale; CCM/CGFE/DQS all run on this one EMSV map |
+| `dynamic_query_list` (DQS) | [200, 400, 600] | #queries per count category; `k` chosen from densest predicted category in the batch. Also sizes the learnable query bank (`max_queries = max(dynamic_query_list)`), so it must match across Stage B/C — it's in the checkpoint. There is no separate fixed-`Q` knob. |
+| `ccm_params` (count bins) | [100, 300] | Thresholds → 3 categories: `<100`, `100–299`, `>=300` trees |
+| `ccm_cls_num` | 3 | Number of count categories (= len(ccm_params) + 1) |
+| `anchor_size` | 0.05 | Default normalized w/h of stage-1 grid-anchor proposals |
+| `cgfe_start_epoch` | total_epochs // 2 | DQ-DETR two-phase: CGFE off (Phase 1) then on (Phase 2) |
 | Decoder layers | 3 | Standard DETR uses 6; fewer is safer at 200 tiles |
 | Decoder heads | 4 | |
 | λ_cls | 1.0 | |
 | λ_l1 | 5.0 | DETR default |
 | λ_giou | 2.0 | DETR default |
+| λ_ccm | 1.0 | CCM count-category cross-entropy weight (DQ-DETR default) |
+| λ_enc | 1.0 | Two-stage proposal (interm) loss weight (DQ-DETR default) |
 | Confidence threshold | 0.5 | Sweep on val for best F1 / AP |
 | Stage B optimizer | AdamW, lr 1e-3, wd 0.05 | Cosine with 5-epoch warmup |
 | Stage B epochs | ~50 | Early stop on val |
@@ -497,7 +553,10 @@ Things that have bitten projects like this before. Check each before assuming a 
 9. **Late unfreezing schedule, not early.** Unfreezing Clay's last blocks too early — before the neck and head have stabilized — risks clobbering Clay's pretrained features with noisy gradients.
 10. **Stage B is mandatory.** It's the single biggest risk mitigation. Don't skip it for time pressure; without it, the from-scratch neck and decoder have too little signal to converge on 200 tiles.
 11. **Verify shapes after each component** with random input before wiring up training. Most failures-to-train in pipelines like this come from a silent shape error that produces garbage features.
-12. **Number of queries `Q` matters for training stability.** Too few queries (Q < trees per tile) means Hungarian matching can't assign all GT objects — some are silently dropped. Too many means most queries are negative examples and the matching is noisy. Start with Q ≈ max trees per tile in your dataset, with some headroom.
+12. **Query count must cover the densest tile.** With DQS the per-image query count is `dynamic_query_list[count category]`, but the **learnable query pool `max_queries`** (and the largest `dynamic_query_list` entry) still has to be ≥ the densest tile, or Hungarian matching can't assign all GT objects and some are silently dropped. `max_queries` is part of the checkpoint (the `tgt_embed` table), so it must be **identical across Stage B and Stage C**. The modal trainer warns if the densest patch exceeds it.
+13. **DQS needs the two-stage proposal loss.** Top-k selection is non-differentiable, so the stage-1 objectness scorer only learns from `encoder_proposal_loss`. If you drop that loss, query selection never improves past random and the detector stalls. Keep `λ_enc > 0`.
+14. **Don't enable CGFE before the density map is meaningful.** CGFE gates features by the CCM density map; feeding it a noisy early density map injects noise. Keep `cgfe_start_epoch` at roughly half the budget (see §4.3). CCM and the two-stage loss, by contrast, are on from epoch 0.
+15. **`ccm_params` (count bins) must match your data.** The defaults `[100, 300]` are tuned for 20–500 trees/tile. If your tiles are much sparser or denser, re-bin so the categories are reasonably balanced — a degenerate CCM (all tiles in one bin) makes DQS pick a constant query count, defeating the point.
 
 ---
 
@@ -512,12 +571,14 @@ src/
   model/
     clay_loader.py         # load Clay v1.5, wrap forward with batch dict
     neck.py                # StrippedViTDetNeck with bilinear-init deconv
-    head.py                # PointHead (cls + reg branches)
-    detector.py            # full pipeline module
+    ccm.py                 # Categorical Counting Module (count category + density map)
+    cgfe.py                # Category-Guided Feature Enhancement (spatial + channel gate)
+    head.py                # TwoStageDQSHead (two-stage proposals + Dynamic Query Selection)
+    detector.py            # full pipeline module (encoder→neck→CCM→CGFE→head); returns dict
   train/
-    losses.py              # Hungarian matching, masked BCE, L1
-    stage_b.py             # RGB pretraining loop
-    stage_c.py             # NAIP finetune loop with unfreezing schedule
+    losses.py              # Hungarian matching (det + two-stage proposal), focal, CCM cross-entropy
+    stage_b.py             # RGB pretraining loop (+ CGFE two-phase schedule)
+    stage_c.py             # NAIP finetune loop with unfreezing + CGFE two-phase schedule
     schedulers.py          # cosine, warmup, layer-wise LR
   eval/
     metrics.py             # per-tile MAE/F1, per-hectare aggregation, PR curves

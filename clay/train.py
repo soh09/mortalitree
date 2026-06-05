@@ -11,15 +11,19 @@ from src.train.stage_c import run_stage_c
 
 def build_model(cfg: dict, clay_checkpoint: str) -> TreeDetector:
     encoder = load_clay_encoder(clay_checkpoint)
+    m = cfg["model"]
     return TreeDetector(
         encoder=encoder,
-        neck_in_channels=cfg["model"]["neck_in_channels"],
-        neck_out_channels=cfg["model"]["neck_out_channels"],
-        num_queries=cfg["model"]["num_queries"],
-        hidden=cfg["model"]["hidden"],
-        n_heads=cfg["model"]["n_heads"],
-        n_decoder_layers=cfg["model"]["n_decoder_layers"],
-        dropout=cfg["model"]["dropout"],
+        neck_in_channels=m["neck_in_channels"],
+        neck_out_channels=m["neck_out_channels"],
+        hidden=m["hidden"],
+        n_heads=m["n_heads"],
+        n_decoder_layers=m["n_decoder_layers"],
+        dropout=m["dropout"],
+        dynamic_query_list=m.get("dynamic_query_list", (200, 400, 600)),
+        ccm_cls_num=m.get("ccm_cls_num", 3),
+        ccm_params=m.get("ccm_params", (100, 300)),
+        anchor_size=m.get("anchor_size", 0.05),
     )
 
 
@@ -60,6 +64,9 @@ def main():
             lam_cls=cfg_b["loss"]["lam_cls"],
             lam_l1=cfg_b["loss"]["lam_l1"],
             lam_giou=cfg_b["loss"]["lam_giou"],
+            lam_ccm=cfg_b["loss"].get("lam_ccm", 1.0),
+            lam_enc=cfg_b["loss"].get("lam_enc", 1.0),
+            cgfe_start_epoch=cfg_b["training"].get("cgfe_start_epoch"),
             device=device,
             num_workers=cfg_b["training"]["num_workers"],
         )
@@ -88,6 +95,9 @@ def main():
             lam_cls=cfg_c["loss"]["lam_cls"],
             lam_l1=cfg_c["loss"]["lam_l1"],
             lam_giou=cfg_c["loss"]["lam_giou"],
+            lam_ccm=cfg_c["loss"].get("lam_ccm", 1.0),
+            lam_enc=cfg_c["loss"].get("lam_enc", 1.0),
+            cgfe_start_epoch=cfg_c["training"].get("cgfe_start_epoch"),
             device=device,
             num_workers=cfg_c["training"]["num_workers"],
             stage_b_checkpoint=stage_b_ckpt,

@@ -28,7 +28,8 @@ def predict_tile(
         if k not in ("boxes", "exhaustive", "tile_paths")
     }
     with torch.no_grad():
-        cls_logits, pred_boxes = model(batch_gpu)
+        out = model(batch_gpu)
+        cls_logits, pred_boxes = out["cls_logits"], out["pred_boxes"]
 
     B = cls_logits.shape[0]
     boxes_list, scores_list = [], []
@@ -74,7 +75,8 @@ def threshold_sweep(
                 for k, v in batch.items()
                 if k not in ("boxes", "exhaustive", "tile_paths")
             }
-            cls_logits, pred_boxes = model(batch_gpu)
+            out = model(batch_gpu)
+            cls_logits, pred_boxes = out["cls_logits"], out["pred_boxes"]
             for i in range(cls_logits.shape[0]):
                 all_pred_boxes.append(pred_boxes[i].cpu())
                 all_pred_scores.append(cls_logits[i].sigmoid().cpu())

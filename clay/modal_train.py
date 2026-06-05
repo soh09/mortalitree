@@ -141,11 +141,8 @@ def fetch_clay_ckpt():
     _ensure_clay_ckpt()
 
 
-def _setup(config_path: str, num_queries: int = 0):
-    """Container-side setup: put src on the path, seed, load config + model.
-
-    num_queries > 0 overrides model.num_queries from the YAML (so you can match
-    it to a dataset's --max-trees from the CLI without editing the config)."""
+def _setup(config_path: str):
+    """Container-side setup: put src on the path, seed, load config + model."""
     import sys
 
     import torch
@@ -160,21 +157,20 @@ def _setup(config_path: str, num_queries: int = 0):
     with open(config_path) as f:
         cfg = yaml.safe_load(f)
 
-    if num_queries:
-        print(f"[setup] num_queries override: {cfg['model']['num_queries']} -> {num_queries}")
-        cfg["model"]["num_queries"] = num_queries
-
     m = cfg["model"]
     encoder = load_clay_encoder(CLAY_CKPT)
     model = TreeDetector(
         encoder,
         neck_in_channels=m["neck_in_channels"],
         neck_out_channels=m["neck_out_channels"],
-        num_queries=m["num_queries"],
         hidden=m["hidden"],
         n_heads=m["n_heads"],
         n_decoder_layers=m["n_decoder_layers"],
         dropout=m["dropout"],
+        dynamic_query_list=m.get("dynamic_query_list", (200, 400, 600)),
+        ccm_cls_num=m.get("ccm_cls_num", 3),
+        ccm_params=m.get("ccm_params", (100, 300)),
+        anchor_size=m.get("anchor_size", 0.05),
     )
     return model, cfg
 
@@ -185,21 +181,51 @@ def _setup(config_path: str, num_queries: int = 0):
 @app.function(**COMMON)
 def stage_b(
     data_source: str = "neon",
-    out_tag: str = "patches",
-    num_queries: int = 0,
+    out_tag: str = "yes ",
     labels_csv: str = "",
     patches_root: str = "",
     stage_b_annotations: str = "/data/deepforest.json",
     config: str = "/root/configs/stage_b.yaml",
+    cgfe_start_epoch: int = -1,
+    viz_every: int = 5,
+    n_viz_tiles: int = 8,
+    viz_conf_thresh: float = 0.5,
+    ckpt_every: int = 5,
+    resume_from: str = "",
 ):
     """out_tag: which pipeline output dir on the `mot` volume to train on
     (mounted at /neon/{out_tag}); mirrors modal_pipeline.py --out-tag.
-    num_queries: override model.num_queries (set it to that run's --max-trees)."""
+
+    The per-image query count is dynamic (DQ-DETR DQS picks it from the predicted
+    count category), so there is no num_queries knob -- the learnable query pool
+    is sized from `dynamic_query_list` in the config.
+
+    DQ-DETR logging (Stage B): W&B gets per-component loss curves (total / det /
+    enc / ccm) for train and val, duplicated under per-phase namespaces
+    (`stage_b/phase1/*` = CGFE-off counting-stabilization, `stage_b/phase2/*` =
+    CGFE-on), the eval curves (f1/precision/recall/mAP/count) likewise, and
+    CCM density-map panels on eval tiles every `viz_every` epochs.
+
+    cgfe_start_epoch: override the Phase 1->2 (CGFE on) boundary; -1 keeps the
+    config value (defaults to half the epoch budget). viz_every: epochs between
+    image-panel logs; set 0 to disable.
+
+    Checkpointing: `stage_b_best.pt` (best val loss) and a rolling
+    `stage_b_last.pt` every `ckpt_every` epochs (0 disables) are written to the
+    clay-checkpoints volume with full training state (model + optimizer +
+    scheduler + epoch + best/patience), so a run can be resumed exactly. To
+    continue an interrupted run, pass `resume_from=/checkpoints/stage_b_last.pt`
+    (and raise total_epochs in the config if you want to train further)."""
     _ensure_clay_ckpt()
-    model, cfg = _setup(config, num_queries)
+    model, cfg = _setup(config)
     from src.train.stage_b import run_stage_b
 
     t, l, d = cfg["training"], cfg["loss"], cfg.get("data", {})
+
+    # CLI override of the CGFE phase boundary (else use the config / src default).
+    cfg_cgfe_start = t.get("cgfe_start_epoch")
+    if cgfe_start_epoch >= 0:
+        cfg_cgfe_start = cgfe_start_epoch
 
     # Derive the data paths from out_tag unless explicitly overridden.
     labels_csv = labels_csv or f"/neon/{out_tag}/labels.csv"
@@ -220,21 +246,24 @@ def stage_b(
         collate_fn = deepforest_collate_fn
         print(f"[Stage B] NEON dataset: {len(dataset)} patches from {labels_csv}")
 
-        # Q must be >= the densest patch or Hungarian matching silently drops GT
-        # (spec gotcha #12). Warn loudly if the data outgrew num_queries.
-        q = cfg["model"]["num_queries"]
+        # The largest DQS bin must be >= the densest patch, or even max-query
+        # tiles can't match every GT and Hungarian silently drops some (gotcha
+        # #12). Warn loudly if the data outgrew the top of dynamic_query_list.
+        q = max(cfg["model"].get("dynamic_query_list", (600,)))
         max_boxes = max((len(it["boxes"]) for it in dataset.items), default=0)
         if max_boxes > q:
             print(f"[Stage B] *** WARNING: densest patch has {max_boxes} boxes > "
-                  f"num_queries={q}; GT will be dropped. Re-run with "
-                  f"--num-queries {max_boxes} (and match Stage C). ***")
+                  f"max(dynamic_query_list)={q}; GT will be dropped. Raise the top "
+                  f"dynamic_query_list bin to >= {max_boxes} in the config. ***")
         else:
-            print(f"[Stage B] densest patch = {max_boxes} boxes <= num_queries={q} (ok)")
+            print(f"[Stage B] densest patch = {max_boxes} boxes <= "
+                  f"max(dynamic_query_list)={q} (ok)")
 
     run = _wandb_init(
         "stage_b", cfg,
         extra={"stage": "B", "data_source": data_source,
-               "n_patches": len(dataset) if dataset is not None else None},
+               "n_patches": len(dataset) if dataset is not None else None,
+               "cgfe_start_epoch": cfg_cgfe_start},
     )
     try:
         run_stage_b(
@@ -252,9 +281,17 @@ def stage_b(
             lam_cls=l["lam_cls"],
             lam_l1=l["lam_l1"],
             lam_giou=l["lam_giou"],
+            lam_ccm=l.get("lam_ccm", 1.0),
+            lam_enc=l.get("lam_enc", 1.0),
+            cgfe_start_epoch=cfg_cgfe_start,
+            viz_every=viz_every,
+            n_viz_tiles=n_viz_tiles,
+            viz_conf_thresh=viz_conf_thresh,
+            ckpt_every=ckpt_every,
+            resume_from=(resume_from or None),
             device="cuda",
             num_workers=t["num_workers"],
-            on_checkpoint=ckpt_vol.commit,   # persist each new best immediately
+            on_checkpoint=ckpt_vol.commit,   # persist each new best / rolling ckpt
         )
     finally:
         if run is not None:
@@ -271,13 +308,13 @@ def stage_c(
     train_annotations: str = "/data/naip_train.json",
     val_annotations:   str = "/data/naip_val.json",
     stage_b_checkpoint: str = "/checkpoints/stage_b_best.pt",
-    num_queries: int = 0,
     config: str = "/root/configs/stage_c.yaml",
 ):
-    """num_queries must MATCH the Stage B run (the query embedding is part of the
-    checkpoint being loaded), so pass the same value you used for Stage B."""
+    """Loads the Stage B checkpoint and finetunes on NAIP. The query pool is
+    sized from `dynamic_query_list`, which must match the Stage B config (the
+    learnable query bank is part of the checkpoint being loaded)."""
     _ensure_clay_ckpt()
-    model, cfg = _setup(config, num_queries)
+    model, cfg = _setup(config)
     from src.train.stage_c import run_stage_c
 
     t, l = cfg["training"], cfg["loss"]
@@ -307,6 +344,9 @@ def stage_c(
             lam_cls=l["lam_cls"],
             lam_l1=l["lam_l1"],
             lam_giou=l["lam_giou"],
+            lam_ccm=l.get("lam_ccm", 1.0),
+            lam_enc=l.get("lam_enc", 1.0),
+            cgfe_start_epoch=t.get("cgfe_start_epoch"),
             device="cuda",
             num_workers=t["num_workers"],
             stage_b_checkpoint=stage_b_checkpoint,
@@ -327,19 +367,17 @@ def main(
     stage: str = "both",
     data_source: str = "neon",
     out_tag: str = "patches",
-    num_queries: int = 0,
     stage_b_annotations: str = "/data/deepforest.json",
     train_annotations:   str = "/data/naip_train.json",
     val_annotations:     str = "/data/naip_val.json",
 ):
-    """out_tag selects the Stage B data dir (/neon/{out_tag}); num_queries
-    overrides model.num_queries for BOTH stages (keep them equal)."""
+    """out_tag selects the Stage B data dir (/neon/{out_tag}). The query count is
+    dynamic (DQS), so there's no num_queries to keep in sync across stages."""
     if stage in ("b", "both"):
         print(f"Launching Stage B (data_source={data_source}, out_tag={out_tag})...")
         stage_b.remote(
             data_source=data_source,
             out_tag=out_tag,
-            num_queries=num_queries,
             stage_b_annotations=stage_b_annotations,
         )
 
@@ -348,5 +386,4 @@ def main(
         stage_c.remote(
             train_annotations=train_annotations,
             val_annotations=val_annotations,
-            num_queries=num_queries,
         )

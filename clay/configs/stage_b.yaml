@@ -2,11 +2,15 @@
 model:
   neck_in_channels: 1024     # Clay v1.5 large embedding dim
   neck_out_channels: 128
-  num_queries: 500           # >= max trees per tile; matches pipeline --max-trees 500 (gotcha #12)
   hidden: 128
   n_heads: 4
   n_decoder_layers: 3
   dropout: 0.1
+  # DQ-DETR Dynamic Query Selection + Categorical Counting
+  dynamic_query_list: [200, 400, 600]   # #queries per count category
+  ccm_cls_num: 3                         # number of count categories
+  ccm_params: [100, 300]                 # count-category thresholds (<100 / 100-299 / >=300)
+  anchor_size: 0.05                      # default proposal box size (normalized)
 
 training:
   total_epochs: 50
@@ -16,11 +20,14 @@ training:
   warmup_epochs: 5
   val_fraction: 0.1
   num_workers: 4
+  cgfe_start_epoch: 25       # DQ-DETR phase: CGFE off (Stage 1) then on (Stage 2)
 
 loss:
   lam_cls: 1.0
   lam_l1: 5.0
   lam_giou: 2.0
+  lam_ccm: 1.0               # CCM count-category cross-entropy weight
+  lam_enc: 1.0               # two-stage proposal (interm) loss weight
 
 data:
   tile_size: 256

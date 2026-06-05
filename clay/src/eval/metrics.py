@@ -195,6 +195,30 @@ def compute_crown_area_metrics(
     return {"crown_r2": r2, "crown_rrmse": rrmse, "n_matched": len(pred_areas)}
 
 
+def compute_detection_metrics(
+    pred_boxes_list: list[torch.Tensor],
+    pred_scores_list: list[torch.Tensor],
+    gt_boxes_list: list[torch.Tensor],
+    iou_thresh: float = 0.5,
+    conf_thresh: float = 0.5,
+) -> dict:
+    """Precision, recall, F1, mAP@0.5, mAP@0.5:0.95, and count MAE/RMSE/R² in one pass."""
+    tp = fp = fn = 0
+    for pred_b, pred_s, gt_b in zip(pred_boxes_list, pred_scores_list, gt_boxes_list):
+        keep = pred_s >= conf_thresh
+        pb, ps = pred_b[keep], pred_s[keep]
+        tp_flags, _ = match_predictions_to_gt(pb, ps, gt_b, iou_thresh)
+        tp += sum(tp_flags)
+        fp += sum(1 - t for t in tp_flags)
+        fn += max(0, gt_b.shape[0] - sum(tp_flags))
+    prec = tp / max(1, tp + fp)
+    rec  = tp / max(1, tp + fn)
+    f1   = 2 * prec * rec / max(1e-9, prec + rec)
+    map_m   = compute_map(pred_boxes_list, pred_scores_list, gt_boxes_list)
+    count_m = compute_count_metrics(pred_boxes_list, pred_scores_list, gt_boxes_list, conf_thresh)
+    return {"precision": prec, "recall": rec, "f1": f1, **map_m, **count_m}
+
+
 def aggregate_to_hectare(
     pred_boxes_list: list[torch.Tensor],
     pred_scores_list: list[torch.Tensor],

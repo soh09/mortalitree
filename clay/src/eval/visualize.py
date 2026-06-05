@@ -77,7 +77,8 @@ def make_prediction_panels(
                 for k, v in batch.items()
                 if k not in ("boxes", "exhaustive", "tile_paths")
             }
-            cls_logits, pred_boxes = model(batch_gpu)
+            out = model(batch_gpu)
+            cls_logits, pred_boxes = out["cls_logits"], out["pred_boxes"]
             scores = cls_logits.sigmoid()
             for i in range(pred_boxes.shape[0]):
                 rgb = tile_to_rgb(batch["pixels"][i])
@@ -87,6 +88,70 @@ def make_prediction_panels(
                 gt_i = batch["boxes"][i]
                 gt = gt_i.cpu().numpy() if len(gt_i) > 0 else None
                 panels.append(draw_boxes(rgb, pb, ps, gt_boxes=gt))
+                if len(panels) >= n_tiles:
+                    break
+            if len(panels) >= n_tiles:
+                break
+    if was_training:
+        model.train()
+    return panels
+
+
+def density_to_heatmap(density: torch.Tensor, out_hw: tuple[int, int]) -> np.ndarray:
+    """Reduce a (C, H, W) CCM density map to an (out_h, out_w, 3) uint8 heatmap.
+
+    Channels are collapsed by mean, min-max normalized per tile, upsampled to the
+    tile size, and colorized (JET). Returns RGB (not BGR).
+    """
+    try:
+        import cv2
+    except ImportError:
+        return np.zeros((*out_hw, 3), dtype=np.uint8)
+
+    d = density.detach().float().mean(dim=0).cpu().numpy()      # (H, W)
+    d = (d - d.min()) / max(1e-6, d.max() - d.min())
+    d = (np.clip(d, 0, 1) * 255).astype(np.uint8)
+    d = cv2.resize(d, (out_hw[1], out_hw[0]), interpolation=cv2.INTER_CUBIC)
+    heat = cv2.applyColorMap(d, cv2.COLORMAP_JET)               # BGR
+    return cv2.cvtColor(heat, cv2.COLOR_BGR2RGB)
+
+
+def make_density_panels(
+    model,
+    loader,
+    device: str = "cpu",
+    n_tiles: int = 4,
+    alpha: float = 0.5,
+) -> list:
+    """Run `model` on up to n_tiles and return [RGB | density heatmap | overlay]
+    panels (each (H, 3W, 3) uint8) visualizing the CCM density map over the eval
+    image. GT boxes are drawn on the RGB pane for context. Restores model state.
+    """
+    try:
+        import cv2
+    except ImportError:
+        return []
+
+    was_training = model.training
+    model.eval()
+    panels: list = []
+    with torch.no_grad():
+        for batch in loader:
+            batch_gpu = {
+                k: v.to(device) if isinstance(v, torch.Tensor) else v
+                for k, v in batch.items()
+                if k not in ("boxes", "exhaustive", "tile_paths")
+            }
+            out = model(batch_gpu)
+            density = out["density"]                       # (B, C, H, W)
+            for i in range(density.shape[0]):
+                rgb = tile_to_rgb(batch["pixels"][i])      # (H, W, 3)
+                gt_i = batch["boxes"][i]
+                gt = gt_i.cpu().numpy() if len(gt_i) > 0 else None
+                rgb_gt = draw_boxes(rgb, np.zeros((0, 4)), gt_boxes=gt)
+                heat = density_to_heatmap(density[i], rgb.shape[:2])
+                overlay = (alpha * heat + (1 - alpha) * rgb).astype(np.uint8)
+                panels.append(np.concatenate([rgb_gt, heat, overlay], axis=1))
                 if len(panels) >= n_tiles:
                     break
             if len(panels) >= n_tiles:
@@ -127,7 +192,8 @@ def visualize_predictions(
             if k not in ("boxes", "exhaustive", "tile_paths")
         }
         with torch.no_grad():
-            cls_logits, pred_boxes = model(batch_gpu)
+            out = model(batch_gpu)
+            cls_logits, pred_boxes = out["cls_logits"], out["pred_boxes"]
 
         scores = cls_logits[0].sigmoid().cpu()
         keep = scores >= conf_thresh

@@ -2,11 +2,15 @@
 model:
   neck_in_channels: 1024     # Clay v1.5 large embedding dim
   neck_out_channels: 128
-  num_queries: 500           # must match Stage B (checkpoint query-embedding shape)
   hidden: 128
   n_heads: 4
   n_decoder_layers: 3
   dropout: 0.1
+  # DQ-DETR Dynamic Query Selection + Categorical Counting (keep == Stage B)
+  dynamic_query_list: [200, 400, 600]
+  ccm_cls_num: 3
+  ccm_params: [100, 300]
+  anchor_size: 0.05
 
 training:
   total_epochs: 80
@@ -18,11 +22,14 @@ training:
   weight_decay: 0.05
   warmup_epochs: 5
   num_workers: 4
+  cgfe_start_epoch: 40       # DQ-DETR phase: CGFE off (Stage 1) then on (Stage 2)
 
 loss:
   lam_cls: 1.0
   lam_l1: 5.0
   lam_giou: 2.0
+  lam_ccm: 1.0
+  lam_enc: 1.0
 
 eval:
   conf_thresh: 0.5           # starting threshold; sweep on val for best F1
