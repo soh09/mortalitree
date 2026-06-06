@@ -23,3 +23,10 @@ dataset_dev/teak_patches
 .DS_Store
 stace_labels/tiles/
 stace_labels/good_images/
+single_tiles_flat/deepforest_data
+single_tiles_flat/good
+dataset_dev/ndvi_filter_visual/
+dataset_dev/teak_patches_visual/
+dfft/baseline_eval
+dfft/lightning_logs
+dfft/runs
