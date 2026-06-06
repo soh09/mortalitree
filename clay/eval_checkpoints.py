@@ -1,6 +1,13 @@
-"""Evaluate Stage-B tree-detector checkpoints on the good-annotated NAIP tiles.
+"""Evaluate tree-detector checkpoints on the good-annotated NAIP tiles.
 
-For every checkpoint in --checkpoints-dir (e.g. q150_final.pt, q500_final.pt):
+`--stage b` (default) evaluates the Stage-B checkpoints in checkpoints/stage_b/;
+`--stage c` evaluates the Stage-C checkpoints in checkpoints/stage_c/ and uses the
+finetuned DeepForest (checkpoints/stage_c/deepforest_finetuned.pt) as the baseline.
+Outputs go to <out-dir>/stage_<b|c>/. The per-model checkpoint paths (q<NNN>_*,
+dqdetr, quarter, deepforest) are resolved from the stage subdir automatically.
+
+For every q<NNN>_* checkpoint in the stage dir (e.g. q150_final.pt or
+q150_stage_c_best.pt):
   * parse the query count Q from the leading "q<NNN>" of the filename,
   * build the TreeDetector with that Q and load the checkpoint,
   * filter the good-annotated labels to tiles with <= Q boxes (a model with Q
@@ -20,13 +27,18 @@ at ~0.6 m/px — each tile is **center-cropped** to a 256x256 native window
 space (see single_tiles_flat/geojson_to_labels.py); they are remapped into the
 crop frame and boxes whose center falls outside the crop are dropped.
 
+By default tiles come from the good-tile --split (prefire/postfire/all). Pass
+--test-set to instead evaluate on the held-out stage_c_data/test.json — the clean,
+no-contamination choice for Stage-C numbers. Output files are tagged "test".
+
 Example:
   python eval_checkpoints.py --split prefire --n-samples 6
-  python eval_checkpoints.py --split prefire --compare --n-samples 5
+  python eval_checkpoints.py --stage c --test-set --compare --n-samples 5
 """
 import argparse
 import importlib
 import importlib.util
+import json
 import re
 import sys
 from pathlib import Path
@@ -183,6 +195,64 @@ class GoodTileDataset:
         }
 
 
+class TestTileDataset:
+    """One sample per entry of a stage_c_data split JSON (train/val/test.json).
+
+    Those tiles are already the 256x256 native-res crops written by
+    build_stage_c_split.py, with boxes normalized to the 256 frame — so no
+    cropping happens here. Yields the same item dict GoodTileDataset does, so the
+    run_inference* / collate / viz paths consume it unchanged. ``max_boxes``
+    drops tiles with more than that many boxes (the per-model query cap)."""
+
+    def __init__(self, test_json, tiles_root, modal_root="/data/stage_c",
+                 max_boxes=None):
+        self.tiles_root = Path(tiles_root)
+        with open(test_json) as f:
+            raw = json.load(f)
+        self.items = []
+        for it in raw:
+            tp = it["tile_path"].replace(modal_root, str(self.tiles_root))
+            if not Path(tp).exists():
+                continue
+            boxes = np.asarray(it.get("boxes", []), dtype=np.float32).reshape(-1, 4)
+            if max_boxes is not None and len(boxes) > max_boxes:
+                continue
+            self.items.append({
+                "tile_path": tp,
+                "imgname": Path(tp).stem,
+                "boxes": boxes,
+                "lat": float(it.get("lat", 37.0)),
+                "lon": float(it.get("lon", -119.0)),
+                "date": it.get("acquisition_date", "2020-06-01"),
+            })
+
+    def __len__(self):
+        return len(self.items)
+
+    def __getitem__(self, idx):
+        import rasterio
+        from datetime import datetime
+        it = self.items[idx]
+        with rasterio.open(it["tile_path"]) as src:
+            raw = src.read(indexes=[1, 2, 3, 4]).astype(np.float32)   # (4, 256, 256)
+        mean = NAIP_MEAN.reshape(4, 1, 1)
+        std = NAIP_STD.reshape(4, 1, 1)
+        pixels = torch.from_numpy((raw - mean) / std)
+        week = datetime.strptime(it["date"], "%Y-%m-%d").isocalendar()[1]
+        return {
+            "pixels": pixels,
+            "wavelengths": NAIP_WAVELENGTHS,
+            "gsd": torch.tensor([NAIP_GSD], dtype=torch.float32),
+            "time": encode_time(week, 12.0),
+            "latlon": encode_latlon(it["lat"], it["lon"]),
+            "boxes": torch.from_numpy(it["boxes"]),
+            "imgname": it["imgname"],
+            "tile_path": it["tile_path"],
+            "rgb": display_rgb(raw),
+            "rgb_raw": raw[:3].astype(np.uint8).transpose(1, 2, 0),
+        }
+
+
 def display_rgb(raw_dn):
     """Percentile-stretch the raw R,G,B DN bands to an (H, W, 3) uint8 image."""
     rgb = raw_dn[:3].astype(np.float32)
@@ -239,6 +309,19 @@ def build_dataset(split, labels_csv, img_dir, max_boxes, crop_size=TILE):
         else:
             ds.items.extend(d.items)
     return ds
+
+
+def build_eval_dataset(args, max_boxes):
+    """Pick the eval data: the held-out test split (--test-set) or the good-tile
+    --split. Both yield the same item-dict interface."""
+    if args.test_set:
+        return TestTileDataset(args.test_json, args.tiles_root, max_boxes=max_boxes)
+    return build_dataset(args.split, args.labels_csv, args.img_dir, max_boxes=max_boxes)
+
+
+def data_tag(args):
+    """Label used in output filenames / titles for the chosen data source."""
+    return "test" if args.test_set else args.split
 
 
 # --------------------------------------------------------------------------- #
@@ -659,10 +742,19 @@ def save_sample_panels(res, out_dir, tag, conf_thresh, n_samples, seed=0):
 # --------------------------------------------------------------------------- #
 # DeepForest
 # --------------------------------------------------------------------------- #
-def load_deepforest():
+def load_deepforest(checkpoint=None):
+    """Load DeepForest. With `checkpoint` (a Lightning .pt of a finetuned
+    DeepForest), build the standard model then overlay its state_dict — avoids
+    load_from_checkpoint, which tries to restore the training machine's data
+    paths. Without it, use the pretrained weecology release."""
     from deepforest import main
     m = main.deepforest()
     m.load_model(model_name="weecology/deepforest-tree", revision="main")
+    if checkpoint:
+        ck = torch.load(checkpoint, map_location="cpu", weights_only=False)
+        sd = ck.get("state_dict", ck) if isinstance(ck, dict) else ck
+        m.load_state_dict(sd, strict=False)
+        print(f"[deepforest] loaded finetuned weights from {Path(checkpoint).name}")
     return m
 
 
@@ -710,14 +802,14 @@ def comparison_mode(args, device):
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
 
+    tag = data_tag(args)
     ckpt_dir = Path(args.checkpoints_dir)
     ckpts = {parse_q(p): p for p in q_checkpoints(ckpt_dir)}
     if not ckpts:
         raise SystemExit(f"No q<NNN>_*.pt checkpoints in {ckpt_dir}")
 
-    # Filter to tiles with < compare-max-ann annotations (combined for 'all').
-    ds = build_dataset(args.split, args.labels_csv, args.img_dir,
-                       max_boxes=args.compare_max_ann - 1)
+    # Filter to tiles with < compare-max-ann annotations.
+    ds = build_eval_dataset(args, args.compare_max_ann - 1)
     if len(ds) == 0:
         raise SystemExit("No tiles after annotation filter.")
     print(f"[compare] {len(ds)} tiles with < {args.compare_max_ann} annotations")
@@ -792,11 +884,13 @@ def comparison_mode(args, device):
                 print(f"[compare] quarter failed ({type(e).__name__}: {e}) — skipping column.")
                 quarter_preds = None
 
-    print("[compare] running DeepForest ...")
-    df_model = load_deepforest()
+    df_ft = bool(args.deepforest_checkpoint)
+    print(f"[compare] running DeepForest{' (finetuned)' if df_ft else ''} ...")
+    df_model = load_deepforest(args.deepforest_checkpoint)
     df_preds = [deepforest_boxes(df_model, it["rgb_raw"],
                                  score_thresh=args.deepforest_score)
                 for it in samples]
+    df_label = "DeepForest-ft" if df_ft else "DeepForest"
 
     out_dir = Path(args.out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -830,14 +924,15 @@ def comparison_mode(args, device):
                  title=f"quarter ({len(quarter_preds[row])})")
             col += 1
         draw(axes[row, col], rgb, gt=gt, preds=df_preds[row],
-             pred_color="#ffaa00", title=f"DeepForest ({len(df_preds[row])})")
+             pred_color="#ffaa00", title=f"{df_label} ({len(df_preds[row])})")
     dq_legend = " vs DQ-DETR (magenta)" if has_dq else ""
     q_legend = " vs quarter (cyan)" if has_quarter else ""
     fig.suptitle(
-        f"{args.split}: GT (blue) vs Clay checkpoints (green){dq_legend}{q_legend} "
-        f"vs DeepForest (orange)  [conf>={args.conf_thresh}]", fontsize=12)
+        f"{tag} (stage {args.stage.upper()}): GT (blue) vs Clay checkpoints "
+        f"(green){dq_legend}{q_legend} vs {df_label} (orange)  "
+        f"[conf>={args.conf_thresh}]", fontsize=12)
     fig.tight_layout(rect=[0, 0, 1, 0.99])
-    path = out_dir / f"compare_{args.split}.png"
+    path = out_dir / f"compare_{tag}.png"
     fig.savefig(path, dpi=130, bbox_inches="tight")
     plt.close(fig)
     print(f"[compare] saved -> {path}")
@@ -857,21 +952,20 @@ def pick_device(requested):
 
 
 def per_checkpoint_mode(args, device):
-    import json
-
     ckpt_dir = Path(args.checkpoints_dir)
     ckpts = q_checkpoints(ckpt_dir)
     if not ckpts:
         raise SystemExit(f"No q<NNN>_*.pt checkpoints in {ckpt_dir}")
 
+    tag = data_tag(args)
     out_dir = Path(args.out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
     summary = {}
     for ckpt in ckpts:
         q = parse_q(ckpt)
-        print(f"\n=== {ckpt.name}  (Q={q}, split={args.split}) ===")
-        ds = build_dataset(args.split, args.labels_csv, args.img_dir, max_boxes=q)
+        print(f"\n=== {ckpt.name}  (Q={q}, data={tag}) ===")
+        ds = build_eval_dataset(args, q)
         print(f"  {len(ds)} tiles with <= {q} labels")
         if len(ds) == 0:
             print("  (no tiles after filter, skipping)")
@@ -881,7 +975,7 @@ def per_checkpoint_mode(args, device):
         metrics = evaluate(res, args.iou_thresh, args.conf_thresh)
         for k, v in metrics.items():
             print(f"    {k:16s} {v:.4f}" if isinstance(v, float) else f"    {k:16s} {v}")
-        save_sample_panels(res, out_dir, f"q{q}_{args.split}",
+        save_sample_panels(res, out_dir, f"q{q}_{tag}",
                            args.conf_thresh, args.n_samples, seed=args.seed)
         summary[ckpt.name] = metrics
         del model
@@ -899,8 +993,8 @@ def per_checkpoint_mode(args, device):
             with open(args.dqdetr_config) as f:
                 qmax = max(yaml.safe_load(f)["model"].get(
                     "dynamic_query_list", (200, 400, 600)))
-            print(f"\n=== {dq_ckpt.name}  (DQ-DETR, max_q={qmax}, split={args.split}) ===")
-            ds = build_dataset(args.split, args.labels_csv, args.img_dir, max_boxes=qmax)
+            print(f"\n=== {dq_ckpt.name}  (DQ-DETR, max_q={qmax}, data={tag}) ===")
+            ds = build_eval_dataset(args, qmax)
             print(f"  {len(ds)} tiles with <= {qmax} labels")
             if len(ds) > 0:
                 try:
@@ -912,7 +1006,7 @@ def per_checkpoint_mode(args, device):
                     for k, v in metrics.items():
                         print(f"    {k:16s} {v:.4f}" if isinstance(v, float)
                               else f"    {k:16s} {v}")
-                    save_sample_panels(res, out_dir, f"dqdetr_{args.split}",
+                    save_sample_panels(res, out_dir, f"dqdetr_{tag}",
                                        args.conf_thresh, args.n_samples, seed=args.seed)
                     summary[dq_ckpt.name] = metrics
                     del model
@@ -933,8 +1027,8 @@ def per_checkpoint_mode(args, device):
             try:
                 model, nq = build_quarter_model(qckpt, device)
                 cap = 4 * nq
-                print(f"\n=== {qckpt.name}  (quarter, q/tile={nq}, split={args.split}) ===")
-                ds = build_dataset(args.split, args.labels_csv, args.img_dir, max_boxes=cap)
+                print(f"\n=== {qckpt.name}  (quarter, q/tile={nq}, data={tag}) ===")
+                ds = build_eval_dataset(args, cap)
                 print(f"  {len(ds)} tiles with <= {cap} labels")
                 if len(ds) > 0:
                     res = run_inference_quarter(model, ds, device, args.quarter_nms_iou)
@@ -942,7 +1036,7 @@ def per_checkpoint_mode(args, device):
                     for k, v in metrics.items():
                         print(f"    {k:16s} {v:.4f}" if isinstance(v, float)
                               else f"    {k:16s} {v}")
-                    save_sample_panels(res, out_dir, f"quarter_{args.split}",
+                    save_sample_panels(res, out_dir, f"quarter_{tag}",
                                        args.conf_thresh, args.n_samples, seed=args.seed)
                     summary[qckpt.name] = metrics
                 del model
@@ -951,17 +1045,59 @@ def per_checkpoint_mode(args, device):
             except Exception as e:
                 print(f"  quarter eval failed ({type(e).__name__}: {e}) — skipping row.")
 
-    with open(out_dir / f"metrics_{args.split}.json", "w") as f:
+    with open(out_dir / f"metrics_{tag}.json", "w") as f:
         json.dump(summary, f, indent=2)
-    print(f"\nWrote metrics -> {out_dir / f'metrics_{args.split}.json'}")
+    print(f"\nWrote metrics -> {out_dir / f'metrics_{tag}.json'}")
+
+
+# Per-stage checkpoint filenames (the q<NNN>_* checkpoints are auto-globbed).
+_STAGE_FILES = {
+    "b": {"dqdetr": "dq-detr_final.pt",      "quarter": "quarter_final.pt",
+          "deepforest": None},
+    "c": {"dqdetr": "dqdetr_stage_c_best.pt", "quarter": "quarter_stage_c_best.pt",
+          "deepforest": "deepforest_finetuned.pt"},
+}
+
+
+def resolve_stage_paths(args):
+    """Point all checkpoint paths at checkpoints/stage_<stage>/ (falling back to
+    the flat dir for backward compat), and the output dir at out/stage_<stage>/.
+    Explicitly-passed --*-checkpoint values are left untouched."""
+    root = Path(args.checkpoints_dir)
+    stage_dir = root / f"stage_{args.stage}"
+    if not stage_dir.exists():
+        stage_dir = root
+    args.checkpoints_dir = str(stage_dir)
+
+    files = _STAGE_FILES[args.stage]
+    if args.dqdetr_checkpoint is None:
+        args.dqdetr_checkpoint = str(stage_dir / files["dqdetr"])
+    if args.quarter_checkpoint is None:
+        args.quarter_checkpoint = str(stage_dir / files["quarter"])
+    if args.deepforest_checkpoint is None and files["deepforest"]:
+        cand = stage_dir / files["deepforest"]
+        args.deepforest_checkpoint = str(cand) if cand.exists() else None
+
+    args.out_dir = str(Path(args.out_dir) / f"stage_{args.stage}")
 
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--checkpoints-dir", default=str(HERE / "checkpoints"))
+    ap.add_argument("--checkpoints-dir", default=str(HERE / "checkpoints"),
+                    help="root containing stage_b/ and stage_c/ subdirs")
+    ap.add_argument("--stage", choices=["b", "c"], default="b",
+                    help="which trained stage to evaluate: checkpoints/stage_<b|c>/")
     ap.add_argument("--split", choices=["prefire", "postfire", "all"], default="prefire",
                     help="'all' merges prefire + postfire tiles into one eval set")
+    ap.add_argument("--test-set", action="store_true",
+                    help="evaluate on the held-out stage_c_data/test.json instead of "
+                         "the good-tile --split (no train/val contamination)")
+    ap.add_argument("--test-json",
+                    default=str(REPO / "single_tiles_flat/stage_c_data/test.json"))
+    ap.add_argument("--tiles-root",
+                    default=str(REPO / "single_tiles_flat/stage_c_data"),
+                    help="local dir the test.json tile_path entries resolve against")
     ap.add_argument("--labels-csv", default=None,
                     help="override; default single_tiles_flat/{split}_labels.csv")
     ap.add_argument("--img-dir", default=None,
@@ -981,8 +1117,9 @@ def main():
     ap.add_argument("--compare-max-ann", type=int, default=150,
                     help="keep tiles with strictly fewer annotations than this")
     ap.add_argument("--deepforest-score", type=float, default=0.15)
-    # DQ-DETR comparison model (separate impl in dq-detr-impl/)
-    ap.add_argument("--dqdetr-checkpoint", default=str(HERE / "checkpoints/dq-detr_final.pt"))
+    # DQ-DETR comparison model (separate impl in dq-detr-impl/). None -> resolved
+    # to the stage's checkpoint filename under checkpoints/stage_<stage>/.
+    ap.add_argument("--dqdetr-checkpoint", default=None)
     ap.add_argument("--clay-ckpt", default=str(HERE / "checkpoints/clay.ckpt"),
                     help="full Clay v1.5 checkpoint supplying the DQ-DETR encoder weights")
     ap.add_argument("--dqdetr-config",
@@ -991,13 +1128,19 @@ def main():
                     help="disable CGFE at inference (default: on, matching end-of-training)")
     ap.add_argument("--no-dqdetr", action="store_true",
                     help="skip the DQ-DETR column in --compare")
-    # Patch-quartering model
-    ap.add_argument("--quarter-checkpoint", default=str(HERE / "checkpoints/quarter_final.pt"))
+    # Patch-quartering model (None -> resolved per stage as above).
+    ap.add_argument("--quarter-checkpoint", default=None)
     ap.add_argument("--quarter-nms-iou", type=float, default=0.6,
                     help="NMS IoU for merging stitched quarter predictions")
     ap.add_argument("--no-quarter", action="store_true",
                     help="skip the patch-quartering row/column")
+    # DeepForest baseline (Stage C uses the finetuned checkpoint if present).
+    ap.add_argument("--deepforest-checkpoint", default=None,
+                    help="Lightning .pt of a finetuned DeepForest; default for "
+                         "--stage c is stage_c/deepforest_finetuned.pt")
     args = ap.parse_args()
+
+    resolve_stage_paths(args)
 
     device = pick_device(args.device)
     print(f"device: {device}")
