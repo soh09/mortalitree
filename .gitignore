@@ -26,3 +26,7 @@ dataset_dev/teak_patches
 .DS_Store
 stace_labels/tiles/
 stace_labels/good_images/
+dataset_dev/ndvi_filter_visual/
+dataset_dev/teak_patches_visual/
+single_tiles_flat/deepforest_data/
+dfft/
