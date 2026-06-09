@@ -1,0 +1,88 @@
+# Clay model directory (separate repo)
+clay_clone/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.whl
+MANIFEST
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Data and model weights
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.onnx
+*.bin
+*.h5
+*.hdf5
+# Anchored to clay/ root so these only ignore top-level data dirs, NOT the
+# clay/src/data source package (an unanchored `data/` matched it at any depth).
+/data/
+/datasets/
+checkpoints/
+outputs/
+runs/
+
+# Raster / geospatial files
+*.tif
+*.tiff
+*.geotiff
+*.shp
+*.shx
+*.dbf
+*.prj
+*.gpkg
+*.geojson
+
+# Logs
+*.log
+logs/
+wandb/
+mlruns/
+lightning_logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Secrets / credentials
+.env.local
+*.pem
+*.key
+secrets.yaml
+credentials.json
