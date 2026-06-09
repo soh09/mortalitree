@@ -10,6 +10,9 @@ synthetic_nir_dev/NAIP/__pycache__
 milliontrees/TreeBoxes_supervised_v0.13
 milliontrees/TreeBoxes_v0.13
 *.pt
+*/DQ-DETR/*
+*.png
+**/*/.png
 synthetic_nir_dev/NAIP/wandb
 .claude/
 */__pycache__
