@@ -18,6 +18,8 @@ Run:
   modal run modal_train.py            # Stage B then Stage C
   modal run modal_train.py::stage_b   # Stage B only
   modal run modal_train.py::stage_c   # Stage C only (needs stage_b_best.pt in checkpoints volume)
+  modal run modal_train.py::stage_c_quarter   # quartered fine-tune of stage_b_best.pt on
+                                              # /data/stage_c/{train,val,test}.json (128-px quarters)
 
 Model and training hyperparameters are read from configs/stage_b.yaml and
 configs/stage_c.yaml (mounted into the image), so the YAML files are the single
@@ -431,6 +433,88 @@ def stage_c(
             run.finish()
     ckpt_vol.commit()
     print("Stage C complete. Checkpoints written to clay-checkpoints volume.")
+
+
+# ---------------------------------------------------------------------------
+# Stage C (quartered): fine-tune the 128-px quarter detector on NAIP JSON tiles
+# ---------------------------------------------------------------------------
+@app.function(**COMMON)
+def stage_c_quarter(
+    train_annotations: str = "/data/stage_c/train.json",
+    val_annotations:   str = "/data/stage_c/val.json",
+    test_annotations:  str = "/data/stage_c/test.json",
+    stage_b_checkpoint: str = "/checkpoints/stage_b_best.pt",
+    num_queries: int = 0,
+    config: str = "/root/configs/stage_c_quarter.yaml",
+):
+    """Fine-tune the quarter (128-px) detector from `stage_b_checkpoint` on the
+    stage_c_data JSON splits. Every 256 tile is split into 2x2 128-px quarters for
+    training; validation (each epoch) and the final test are scored on predictions
+    stitched back to the 256 frame, so the F1 is comparable to the un-quartered
+    baseline. num_queries defaults to the checkpoint's own query budget (the quarter
+    Stage B used 150) — the query embedding is part of the saved weights, so it must
+    match."""
+    import torch
+
+    _ensure_clay_ckpt()
+
+    # Match the model's query budget to the checkpoint unless explicitly overridden.
+    if not num_queries:
+        sd = torch.load(stage_b_checkpoint, map_location="cpu")
+        sd = sd.get("model", sd) if isinstance(sd, dict) else sd
+        num_queries = int(sd["head.queries.weight"].shape[0])
+        print(f"[Stage C-q] num_queries from checkpoint: {num_queries}")
+
+    model, cfg = _setup(config, num_queries)
+    from src.train.stage_c import run_stage_c_quartered
+
+    t, l = cfg["training"], cfg["loss"]
+    d, e = cfg.get("data", {}), cfg.get("eval", {})
+    norm_stats = d.get("norm_stats_path", "configs/naip_normalization.yaml")
+    if not norm_stats.startswith("/"):
+        norm_stats = "/root/" + norm_stats
+
+    run = _wandb_init(
+        "stage_c_quarter", cfg,
+        extra={"stage": "C-quarter", "resume_from": stage_b_checkpoint,
+               "num_queries": num_queries},
+    )
+    try:
+        res = run_stage_c_quartered(
+            model=model,
+            train_annotations_path=train_annotations,
+            val_annotations_path=val_annotations,
+            test_annotations_path=test_annotations,
+            checkpoint_dir=CKPT_DIR,
+            norm_stats_path=norm_stats,
+            tile_size=d.get("tile_size", 256),
+            n_split=d.get("n_split", 2),
+            total_epochs=t["total_epochs"],
+            frozen_epochs=t["frozen_epochs"],
+            batch_size=t["batch_size"],
+            neck_head_lr=t["neck_head_lr"],
+            encoder_lr=t["encoder_lr"],
+            weight_decay=t["weight_decay"],
+            warmup_epochs=t["warmup_epochs"],
+            unfreeze_n_blocks=t["unfreeze_n_blocks"],
+            patience=t.get("patience", 15),
+            lam_cls=l["lam_cls"],
+            lam_l1=l["lam_l1"],
+            lam_giou=l["lam_giou"],
+            conf_thresh=e.get("conf_thresh", 0.5),
+            nms_iou=e.get("nms_iou", 0.6),
+            device="cuda",
+            num_workers=t["num_workers"],
+            stage_b_checkpoint=stage_b_checkpoint,
+            on_checkpoint=ckpt_vol.commit,   # persist each new best immediately
+        )
+    finally:
+        if run is not None:
+            run.finish()
+    ckpt_vol.commit()
+    print("Stage C (quartered) complete. Wrote stage_c_quarter_best.pt / "
+          "stage_c_quarter_final.pt to clay-checkpoints volume.")
+    return res
 
 
 # ---------------------------------------------------------------------------

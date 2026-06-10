@@ -49,10 +49,16 @@ def stitch_eval(
     lam_cls: float = 1.0,
     lam_l1: float = 5.0,
     lam_giou: float = 2.0,
+    return_preds: bool = False,
 ) -> dict:
     """Run `model` over the tiles, stitch predictions to the parent 256 frame,
     and return parent-level count / F1 / mAP / crown-area metrics + the stitched
-    matching loss. `indices` restricts evaluation to a subset of dataset.samples."""
+    matching loss. `indices` restricts evaluation to a subset of dataset.samples.
+
+    When `return_preds` is set, the result also carries the per-parent stitched
+    predictions under `parents` / `pred_boxes` / `pred_scores` / `gt_boxes`
+    (parallel lists; boxes are normalized cxcywh in the 256 parent frame, NMS'd but
+    not confidence-filtered) so callers can dump or visualize them."""
     data = Subset(dataset, indices) if indices is not None else dataset
     loader = DataLoader(
         data, batch_size=batch_size, shuffle=False,
@@ -83,9 +89,10 @@ def stitch_eval(
             pred_by_parent[batch["parent"][i]].append((b, logits[i]))
 
     # Per parent: concat quarter predictions, NMS in the parent frame, gather GT.
+    parents = sorted(pred_by_parent)
     pred_boxes_list, pred_scores_list, gt_boxes_list = [], [], []
     stitch_loss, n_loss = 0.0, 0
-    for p in sorted(pred_by_parent):
+    for p in parents:
         bs = torch.cat([c[0] for c in pred_by_parent[p]], dim=0)
         lg = torch.cat([c[1] for c in pred_by_parent[p]], dim=0)
         keep = nms(box_convert(bs, "cxcywh", "xyxy"), lg.sigmoid(), nms_iou)
@@ -98,7 +105,7 @@ def stitch_eval(
             stitch_loss += float(matching_loss(lg, bs, gt, True, lam_cls, lam_l1, lam_giou))
             n_loss += 1
 
-    return {
+    out = {
         "n_parents": len(pred_boxes_list),
         "stitch_loss": stitch_loss / max(1, n_loss),
         "count": compute_count_metrics(pred_boxes_list, pred_scores_list, gt_boxes_list, conf_thresh),
@@ -109,3 +116,9 @@ def stitch_eval(
             conf_thresh=conf_thresh, tile_size_px=source,
         ),
     }
+    if return_preds:
+        out["parents"] = parents
+        out["pred_boxes"] = pred_boxes_list      # each (P,4) cxcywh in 256 frame
+        out["pred_scores"] = pred_scores_list    # each (P,)
+        out["gt_boxes"] = gt_boxes_list          # each (M,4)
+    return out

@@ -1,0 +1,39 @@
+# Stage C (quartered): fine-tune the 128-px quarter detector on NAIP JSON tiles.
+# Each 256 tile is split into a 2x2 grid of 128-px quarters; the model trains
+# per-quarter and is validated/tested on predictions stitched back to the 256
+# parent frame. num_queries is auto-detected from the Stage B checkpoint at run
+# time (the quarter Stage B used 150), so the value below is only a fallback.
+model:
+  neck_in_channels: 1024     # Clay v1.5 large embedding dim
+  neck_out_channels: 128
+  num_queries: 150           # quarter Stage B budget; overridden by the checkpoint
+  hidden: 128
+  n_heads: 4
+  n_decoder_layers: 3
+  dropout: 0.1
+
+training:
+  total_epochs: 80
+  frozen_epochs: 10          # epochs before unfreezing encoder blocks
+  unfreeze_n_blocks: 2       # Clay transformer blocks to unfreeze (per user)
+  batch_size: 16             # 128-px quarters are cheap; 75 tiles -> ~300 quarters
+  neck_head_lr: 5.0e-4
+  encoder_lr: 1.0e-5
+  weight_decay: 0.05
+  warmup_epochs: 5
+  patience: 15
+  num_workers: 4
+
+loss:
+  lam_cls: 1.0
+  lam_l1: 5.0
+  lam_giou: 2.0
+
+eval:
+  conf_thresh: 0.5           # threshold for stitched F1 / count metrics
+  nms_iou: 0.6               # de-dup crowns caught by two adjacent quarters
+
+data:
+  tile_size: 256             # parent tile size on disk (split into n_split^2 quarters)
+  n_split: 2                 # 2 -> 128-px quarters
+  norm_stats_path: configs/naip_normalization.yaml
