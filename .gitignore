@@ -30,3 +30,5 @@ dataset_dev/ndvi_filter_visual/
 dataset_dev/teak_patches_visual/
 single_tiles_flat/deepforest_data/
 dfft/
+# generated viewers (large, image-heavy)
+baselines/alignment_viewer*/
