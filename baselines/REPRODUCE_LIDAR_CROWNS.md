@@ -37,16 +37,18 @@ which covers part of the Santa Cruz Mountains and about a quarter of the CZU fir
 
 ## 0. Setup
 
-Python 3.10. These are the versions used:
+Dependencies are managed with [uv](https://docs.astral.sh/uv/) from the repo-root
+`pyproject.toml` / `uv.lock`. Install uv (`brew install uv`, or
+`curl -LsSf https://astral.sh/uv/install.sh | sh`), then from the repo root:
 
 ```bash
-python3 -m venv .venv && source .venv/bin/activate
-pip install numpy==1.26.4 scipy==1.11.4 scikit-image==0.25.2 rasterio==1.4.4 \
-            matplotlib==3.10.9 pillow==12.3.0 shapely==2.1.2 pyproj==3.7.1
+uv sync
 ```
 
-On recent macOS, scipy ≥ 1.12 wheels fail to import (`dlopen ... __thread_bss`); keep
-`scipy<1.12`.
+This installs Python 3.10 (pinned in `.python-version`) if needed and creates `.venv`
+with the exact versions in `uv.lock` (numpy 2.2, scipy 1.15, scikit-image 0.25,
+rasterio 1.4, …). Run scripts with `uv run python …`, as below, or
+`source .venv/bin/activate` and drop the `uv run`.
 
 Run all commands from the repo root. Set a work directory with ~10 GB free:
 
@@ -80,19 +82,19 @@ md5 -q $WORK/*.tar        # macOS;  on Linux: md5sum $WORK/*.tar
 The first 150 chips, in sorted filename order, that are ≥ 30% covered by trees over 5 m:
 
 ```bash
-python baselines/chm_crowns.py $WORK/chm_10-411.tar $WORK/naip_10-411.tar $WORK/forest --n 150
+uv run python baselines/chm_crowns.py $WORK/chm_10-411.tar $WORK/naip_10-411.tar $WORK/forest --n 150
 ```
 
 Expected: `wrote 150 chips`. Output: `$WORK/forest/crowns.json`.
 
 ```bash
-python baselines/make_alignment_viewer.py $WORK/chm_10-411.tar $WORK/naip_10-411.tar \
+uv run python baselines/make_alignment_viewer.py $WORK/chm_10-411.tar $WORK/naip_10-411.tar \
        $WORK/forest/crowns.json $WORK/viewer_forest
 open $WORK/viewer_forest/index.html           # Linux: xdg-open
 ```
 
 ```bash
-python baselines/make_crown_figures.py $WORK/chm_10-411.tar $WORK/naip_10-411.tar \
+uv run python baselines/make_crown_figures.py $WORK/chm_10-411.tar $WORK/naip_10-411.tar \
        $WORK/forest/crowns.json $WORK/figures
 ```
 
@@ -104,7 +106,7 @@ Writes `crowns_on_chm.png` (10 chips, sparse to dense) and `crowns_hillshade.png
 **Chips overlapping the perimeter:**
 
 ```bash
-python baselines/select_fire_chips.py $WORK/naip_10-411.tar $WORK/czu --name-like CZU
+uv run python baselines/select_fire_chips.py $WORK/naip_10-411.tar $WORK/czu --name-like CZU
 ```
 
 Expected: `CZU LIGHTNING COMPLEX 86553.46 acres`; `268 overlap the perimeter (222 fully inside)`.
@@ -113,7 +115,7 @@ All 268 are pre-fire: LiDAR April 2020 + NAIP May 2020, or LiDAR April 2018 + NA
 **Crowns for those chips** (every chip, regardless of tree cover):
 
 ```bash
-python baselines/chm_crowns.py $WORK/chm_10-411.tar $WORK/naip_10-411.tar $WORK/czu_crowns \
+uv run python baselines/chm_crowns.py $WORK/chm_10-411.tar $WORK/naip_10-411.tar $WORK/czu_crowns \
        --keys $WORK/czu/fire_chips.json --min-forest 0 --n 1000
 ```
 
@@ -122,7 +124,7 @@ Expected: `wrote 267 chips` (one is dropped for incomplete NAIP), ~125,000 crown
 **Post-fire NAIP (2022):**
 
 ```bash
-python baselines/fetch_postfire_naip.py $WORK/naip_10-411.tar $WORK/czu_crowns/crowns.json \
+uv run python baselines/fetch_postfire_naip.py $WORK/naip_10-411.tar $WORK/czu_crowns/crowns.json \
        $WORK/czu_post --year 2022
 ```
 
@@ -132,7 +134,7 @@ Reads only each chip's footprint over the network, so it's modest in size.
 **Viewer:**
 
 ```bash
-python baselines/make_alignment_viewer.py $WORK/chm_10-411.tar $WORK/naip_10-411.tar \
+uv run python baselines/make_alignment_viewer.py $WORK/chm_10-411.tar $WORK/naip_10-411.tar \
        $WORK/czu_crowns/crowns.json $WORK/viewer_czu $WORK/czu_post
 open $WORK/viewer_czu/index.html
 ```

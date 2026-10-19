@@ -9,7 +9,7 @@ resampled into the pre-fire chip's transform/shape. The result is placed by the
 2022 imagery's *own* georeferencing -- it is not aligned to the LiDAR or to the
 pre-fire NAIP, so it carries its own offset.
 
-    python baselines/fetch_postfire_naip.py NAIP_TAR CROWNS_JSON OUT_DIR --year 2022
+    uv run python baselines/fetch_postfire_naip.py NAIP_TAR CROWNS_JSON OUT_DIR --year 2022
 """
 import argparse, json, tarfile, urllib.request
 from pathlib import Path

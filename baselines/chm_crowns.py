@@ -14,9 +14,7 @@ Then, on the paired NAIP chip:
      to the NAIP grid) against NAIP NDVI over integer pixel shifts
   6. shift crowns by that offset and emit boxes in NAIP pixel coordinates
 
-Requires scipy<1.12 on this macOS (newer wheels fail to load).
-
-    python baselines/chm_crowns.py CHM_TAR NAIP_TAR OUT_DIR [--n 200] [--min-forest 0.3]
+    uv run python baselines/chm_crowns.py CHM_TAR NAIP_TAR OUT_DIR [--n 200] [--min-forest 0.3]
 """
 import argparse, io, json, re, tarfile
 from pathlib import Path

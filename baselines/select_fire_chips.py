@@ -8,7 +8,7 @@ Writes:
   OUT_DIR/fire_chips.json     [{key, lidar, naip, inside}] -- `inside` is True when
                               the 256 m chip lies entirely within the perimeter
 
-    python baselines/select_fire_chips.py NAIP_TAR OUT_DIR --name-like CZU \
+    uv run python baselines/select_fire_chips.py NAIP_TAR OUT_DIR --name-like CZU \
         [--layer https://.../2020_California_Fire_Perimeters_View/FeatureServer/0]
 """
 import argparse, json, re, tarfile, urllib.parse, urllib.request

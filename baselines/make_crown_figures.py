@@ -10,9 +10,7 @@ Chips for crowns_on_chm are picked from CROWNS_JSON (output of chm_crowns.py) at
 evenly spaced ranks of crown count. The hillshade crops are hard-coded keys from the
 forest sample of tar bin 10-411.
 
-Requires scipy<1.12 on this macOS.
-
-    python baselines/make_crown_figures.py CHM_TAR NAIP_TAR CROWNS_JSON OUT_DIR
+    uv run python baselines/make_crown_figures.py CHM_TAR NAIP_TAR CROWNS_JSON OUT_DIR
 """
 import json, sys, tarfile
 from pathlib import Path

@@ -11,9 +11,7 @@ zoom, pan and a crosshair. Each NAIP flight has its own positional error, so the
 crown labels on the pre- and post-fire panels are nudged independently (keys 1/2
 choose which), and both offsets are saved per chip and exported.
 
-Requires scipy<1.12 on this macOS.
-
-    python baselines/make_alignment_viewer.py CHM_TAR NAIP_TAR CROWNS_JSON OUT_DIR [POST_DIR]
+    uv run python baselines/make_alignment_viewer.py CHM_TAR NAIP_TAR CROWNS_JSON OUT_DIR [POST_DIR]
     open OUT_DIR/index.html
 
 POST_DIR is the output of fetch_postfire_naip.py ({key}_post.npy + postfire.json),

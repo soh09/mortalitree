@@ -1,0 +1,19 @@
+[project]
+name = "mortalitree"
+version = "0.1.0"
+description = "Tree detection and mortality mapping from NAIP imagery"
+requires-python = ">=3.10"
+# Core deps: enough to run everything in baselines/ (see baselines/REPRODUCE_LIDAR_CROWNS.md).
+dependencies = [
+    "numpy>=1.26",
+    "scipy>=1.11",
+    "scikit-image>=0.25",
+    "rasterio>=1.4",
+    "matplotlib>=3.10",
+    "pillow>=10.2",
+    "shapely>=2.1",
+    "pyproj>=3.7",
+]
+
+[tool.uv]
+package = false
