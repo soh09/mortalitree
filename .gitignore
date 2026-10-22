@@ -15,7 +15,7 @@ milliontrees/TreeBoxes_v0.13
 **/*/.png
 synthetic_nir_dev/NAIP/wandb
 .claude/
-*/__pycache__
+__pycache__/
 sodev/2019_*
 */.DS_Store
 so_images/
