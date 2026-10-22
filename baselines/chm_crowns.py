@@ -17,6 +17,7 @@ Then, on the paired NAIP chip:
     uv run python baselines/chm_crowns.py CHM_TAR NAIP_TAR OUT_DIR [--n 200] [--min-forest 0.3]
 """
 import argparse, io, json, re, tarfile
+from contextlib import contextmanager
 from pathlib import Path
 
 import numpy as np
@@ -88,7 +89,11 @@ def best_shift(a, b, max_px):
 
 
 def open_member(tf, name):
-    return MemoryFile(tf.extractfile(name).read()).open()
+@contextmanager
+    """Open a GeoTIFF inside a tar. The MemoryFile must outlive the dataset: GDAL reads
+    tiles lazily, and a freed buffer decodes as garbage (zlib "incorrect header check")."""
+    with MemoryFile(tf.extractfile(name).read()) as mf, mf.open() as ds:
+        yield ds
 
 
 NODATA = 65535   # no LiDAR returns, e.g. open water; must never be read as height

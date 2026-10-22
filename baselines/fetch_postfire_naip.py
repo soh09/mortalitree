@@ -11,13 +11,15 @@ pre-fire NAIP, so it carries its own offset.
 
     uv run python baselines/fetch_postfire_naip.py NAIP_TAR CROWNS_JSON OUT_DIR --year 2022
 """
-import argparse, json, tarfile, urllib.request
+import argparse, json, sys, tarfile, urllib.request
 from pathlib import Path
 
 import numpy as np
 import rasterio
-from rasterio.io import MemoryFile
 from rasterio.warp import reproject, Resampling, transform_bounds
+
+sys.path.insert(0, str(Path(__file__).parent))
+from chm_crowns import open_member
 
 STAC = "https://planetarycomputer.microsoft.com/api/stac/v1/search"
 SAS = "https://planetarycomputer.microsoft.com/api/sas/v1/token/naip"
@@ -41,7 +43,7 @@ def main():
 
     for i, r in enumerate(recs):
         k = r["key"]
-        with MemoryFile(ntf.extractfile(nn[k]).read()).open() as n:
+        with open_member(ntf, nn[k]) as n:
             tr, crs, H, W = n.transform, n.crs, n.height, n.width
         bounds = rasterio.transform.array_bounds(H, W, tr)
         bbox = transform_bounds(crs, "EPSG:4326", *bounds)

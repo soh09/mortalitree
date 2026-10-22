@@ -170,7 +170,10 @@ the browser, so export to keep them.
 - **Crowns are an unvalidated algorithm output.** Known errors: roofs and other tall
   structures (the CHM is really a surface model), the edges of water bodies, and
   over-split short, dense vegetation. No building mask is applied yet.
-- **A few chips in the release are corrupt** (zlib errors); `chm_crowns.py` skips them.
+- **zlib / `ZIPDecode` errors mean a reader bug, not bad data.** Every chip in both
+  `10-411` tars decodes. Earlier versions of the scripts freed each TIFF's in-memory buffer
+  while GDAL was still reading it, which corrupted random tiles. Always open tar members
+  through `chm_crowns.open_member`.
 - **Live services can drift.** The CAL FIRE perimeter layer can be edited, and when a
   chip straddles two NAIP tiles the post-fire mosaic depends on the order Planetary
   Computer returns them. Small differences are possible; check the counts above.

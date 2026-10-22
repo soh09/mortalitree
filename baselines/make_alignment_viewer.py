@@ -22,11 +22,10 @@ from pathlib import Path
 
 import numpy as np
 from PIL import Image
-from rasterio.io import MemoryFile
 from skimage.segmentation import find_boundaries
 
 sys.path.insert(0, str(Path(__file__).parent))
-from chm_crowns import crowns_from_chm, read_chm
+from chm_crowns import crowns_from_chm, open_member, read_chm
 
 UP = 2                                  # crown-outline raster at 0.5 m for thinner lines
 PINK = (232, 123, 164)
@@ -70,7 +69,7 @@ def main(chm_tar, naip_tar, crowns_json, out, post_dir=None):
     for i, r in enumerate(meta):
         k = r["key"]
         chm, nod, ct, ccrs = read_chm(ctf, cn[k])
-        with MemoryFile(ntf.extractfile(nn[k]).read()).open() as n:
+        with open_member(ntf, nn[k]) as n:
             naip = n.read()[:4]; nt = n.transform; ncrs = n.crs
         if ccrs != ncrs:
             print("  skip (CRS differs)", k); continue

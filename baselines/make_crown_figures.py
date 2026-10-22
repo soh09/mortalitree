@@ -22,11 +22,10 @@ import numpy as np
 from matplotlib.colors import LinearSegmentedColormap
 from matplotlib.lines import Line2D
 from matplotlib.patches import Patch
-from rasterio.io import MemoryFile
 from skimage.segmentation import find_boundaries
 
 sys.path.insert(0, str(Path(__file__).parent))
-from chm_crowns import crowns_from_chm, read_chm
+from chm_crowns import crowns_from_chm, open_member, read_chm
 
 INK, DIM, SURF = "#0b0b0b", "#52514e", "#fcfcfb"
 PINK = [0.91, 0.48, 0.64, 1.0]
@@ -92,7 +91,7 @@ def crowns_hillshade(ctf, ntf, cn, nn, out):
                              facecolor=SURF, layout="constrained")
     for row, (k, r0, c0, lab) in zip(axes, HILLSHADE_CROPS):
         chm, nod, ct, _ = read_chm(ctf, cn[k])
-        with MemoryFile(ntf.extractfile(nn[k]).read()).open() as n:
+        with open_member(ntf, nn[k]) as n:
             naip = n.read()[:4]; nt = n.transform; ndate = Path(nn[k]).stem.split("_")[-1]
         sm, seg, cr = crowns_from_chm(chm)
         win = (slice(r0, r0 + CROP), slice(c0, c0 + CROP))
