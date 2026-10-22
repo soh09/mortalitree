@@ -30,7 +30,8 @@ published paper has solved at tree level, and the crown segmentation itself. So'
 benchmark (§7.2) shows **segmentation is currently the bigger one**: in dense forest the
 watershed merges several trees into one crown. Tuning (§7.2.1) cut merging from 74% to 40%
 of labels and raised held-out F1 from 0.42 to 0.50; Dalponte and Silva region growing do
-not beat it. Against field stems the tuned watershed nearly matches human labels on recall
+not beat it. **But on 3DEP at CZU the tuned crowns looked too small by eye, so the original
+watershed stays the default for 3DEP labels.** Against field stems the tuned watershed nearly matches human labels on recall
 (0.72 vs 0.75) but merges about twice as often.
 
 ---
@@ -374,8 +375,12 @@ version can exceed 1 when boxes overlap); **merged** = share of stem-containing 
   mapped stems fall outside the benchmark images. The package's "> 1 survey" rule is
   dropped to keep SJER (20 plots, 68 stems); with it there are 44 plots and none in CA.
 
-**Decision for now:** use the global tuned watershed; if splitting by forest type, take
-only the conifer setting (radius 1). Caveats: the 34 val plots have now been used for four
+**Decision: keep the original watershed for 3DEP.** On the CZU chips (267 chips; 141,763
+tuned vs 125,019 original crowns) the tuned crowns looked **too small** against the trees
+in NAIP: the 65%-of-top trim and 5 m radius cap cut each crown down to its upper core.
+The NEON gain likely reflects how annotators box the visible crown on 10 cm RGB, which
+doesn't carry over. Any future tuning should be checked by eye on 3DEP, not only on the
+NEON boxes; a gentler trim (`rel` ≤ 0.45, no cap) is untested there. Caveats: the 34 val plots have now been used for four
 comparisons; confirm gains with other split seeds or leave-site-out before relying on them.
 Viewer: `make_neontree_viewer.py OUT current=… tuned=… dalponte=…` (labels vs up to several
 crown sets, linked RGB/CHM panels, per-plot review export).
@@ -450,7 +455,7 @@ Points instead of boxes remove the anchoring problem.
 
 ## 9. Open questions and next steps
 
-1. **Merging: partly fixed** (§7.2.1) — tuned watershed (Gaussian σ 0.5, trim to 65% of top, 10 m cap) is the default; Dalponte/Silva don't beat it. Still open: confirm with other split seeds / leave-site-out; adopt the conifer per-type setting only if it holds; find California conifer stems (TEAK/SOAP tower plots outside the benchmark images) to check counting there; try a 0.5 m CHM from the benchmark's point clouds. Then test whether training on these crowns helps DeepForest on NAIP before tuning further.
+1. **Merging: still open** (§7.2.1) — the NEON-tuned watershed (Gaussian σ 0.5, trim to 65% of top, 10 m cap) made crowns too small on 3DEP at CZU, so the original stays the default; Dalponte/Silva don't beat it on NEON either. Still open: confirm with other split seeds / leave-site-out; adopt the conifer per-type setting only if it holds; find California conifer stems (TEAK/SOAP tower plots outside the benchmark images) to check counting there; try a 0.5 m CHM from the benchmark's point clouds. Then test whether training on these crowns helps DeepForest on NAIP before tuning further.
 2. **3DEP pre-fire coverage for SCU, North Complex, Creek, Castle** — decides whether the LiDAR route works beyond CZU. USGS publishes project footprints and dates.
 3. **Measure registration** — save 10–20 hand offsets in the CZU viewer; check whether tall trees stay offset after short ones align (relief displacement). Less urgent until crowns are resolved individually.
 4. **NEON SOAP viewer** — NEON LiDAR crowns vs NAIP 2020/2022, NEON 10 cm as reference; check whether 2024 CA NAIP exists to match NEON 2024.
