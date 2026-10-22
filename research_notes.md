@@ -25,8 +25,10 @@ crown is ~12 px, so a couple of pixels of edge error fails IoU 0.5.
 **What changes the answer most.** Counting and point-style metrics, not IoU-0.5 F1.
 
 **Main open problem.** Getting more labels. The most promising route — LiDAR-derived
-crowns transferred to NAIP — runs into NAIP–LiDAR misregistration that no published
-paper has solved at tree level.
+crowns transferred to NAIP — has two problems: NAIP–LiDAR misregistration, which no
+published paper has solved at tree level, and the crown segmentation itself. So's NEON
+benchmark (§7.2) shows **segmentation is currently the bigger one**: in dense forest the
+watershed merges several trees into one crown.
 
 ---
 
@@ -205,7 +207,7 @@ NAIP → applied where no LiDAR exists.**
 | Product | What | Coverage / dates | Access | Notes |
 |---|---|---|---|---|
 | **USGS 3DEP** | National airborne LiDAR for elevation; QL2 ≥ 2 pulses/m² | ~all CONUS; one-off flights, often leaf-off | USGS, AWS (EPT) | No imagery. CZU flown Apr 2018 & Apr 2020. Other four fires **unchecked**. |
-| **Allred CHM–NAIP pairs** | 1 m CHM chips from 3DEP + paired NAIP (RGBN + mask) | CONUS, 2014–23 | `https://rangeland.ntsg.umt.edu/data/rap/chm-naip/`, CC BY 4.0 | Tars by UTM zone + 10 km northing (e.g. `10-411`). ~6.5 GB NAIP / 0.75 GB CHM per bin. Some chips corrupt. |
+| **Allred CHM–NAIP pairs** | 1 m CHM chips from 3DEP + paired NAIP (RGBN + mask) | CONUS, 2014–23 | `https://rangeland.ntsg.umt.edu/data/rap/chm-naip/`, CC BY 4.0 | Tars by UTM zone + 10 km northing (e.g. `10-411`). ~6.5 GB NAIP / 0.75 GB CHM per bin. (An earlier "some chips are corrupt" note was wrong — it was a bug in our tar reader, fixed in `d6e484b`; every chip decodes.) |
 | **NEON AOP** | LiDAR + 10 cm RGB + ~426-band hyperspectral, one aircraft | ~80 sites; CA: SJER, SOAP, TEAK. SOAP flown 2013, 2017–19, 2021, 2023, 2024, 2026 | NEON API (`DP3.30015.001` CHM, `DP3.30010.001` RGB) | Internally aligned; **not** aligned to NAIP. Leaf-on. |
 | NAIP-CHM | Predicted 0.6 m height | CONUS | Zenodo 20148054, GEE `projects/naip-chm/assets/conus-structure-model` | Predicted, 2022–23. |
 
@@ -231,7 +233,7 @@ NAIP → applied where no LiDAR exists.**
 | **Hemming-Schroeder SOAP/TEAK** | ~1M LiDAR polygons, dead/alive, incl. Creek Fire | ❌ to NAIP | Validation; hold out of training | Zenodo `10.5281/zenodo.7812035`; not opened |
 | Stovall SOAP/TEAK | 1.8M trees, dead/alive (contested) | ❌ | Tree locations reliable; dead labels disputed | figshare `10.6084/m9.figshare.7609193.v1` |
 | Cheng et al. | Dead trees only (sample of 2,546 in code release) | ✅ native | Dead-tree detector only | Full labels/weights not released |
-| NeonTreeEvaluation | ~6,000 crowns, 22 sites incl. TEAK, SJER | ✅ (to NEON) | Benchmark | Zenodo |
+| NeonTreeEvaluation | ~6,200 high-confidence evaluation crowns + ~21,500 training crowns, 22 sites incl. SJER, SOAP, TEAK; each plot ships its own 1 m CHM and 10 cm RGB, co-registered | ✅ (to NEON) | Benchmark for our segmentation | Zenodo 5914554 (v0.2.2); **used in §7.2** |
 | Yosemite Forest Dynamics Plot | Every stem ≥ 1 cm, 25.6 ha, Rim Fire | — | Pre/post counting validation | Access terms unchecked |
 | Open Forest Observatory | 150+ drone sites, stem-mapped plots, western US | ❌ | Downsample for extra data | Public STAC |
 | MillionTrees | Boxes 197k / polygons 760k / points 256k | ❌ | Pretraining pool | Only TreeBoxes downloaded |
@@ -255,13 +257,45 @@ aligned comparison and for validation; Ventura for real-NAIP pretraining. Settle
 4. Crowns: marker watershed on the CHM, restricted to > 3 m.
 5. Keep crowns with top > 5 m.
 6. **Still needed:** mask buildings (Microsoft footprints), drop crowns adjacent to no-data / water, reject long-thin or flat-topped regions (power lines, roofs).
-7. Transfer to NAIP (unsolved — see 7.2).
+7. Transfer to NAIP (unsolved — see §7.3).
 
 At CZU (bin `10-411`): 267 chips overlap the perimeter (221 inside), 125,019 crowns,
 median crown 8.3 m (vs 7.4 m in our hand labels). LiDAR Apr 2020 / NAIP May 2020 (190
 chips) or Apr 2018 / Aug 2018 (77). CZU spans bins 409–412; only 411 is downloaded.
+Given §7.2, the 125,019 is likely a **substantial undercount** of trees: many "crowns"
+are merged clusters, which also explains why they come out larger than hand labels.
 
-### 7.2 NAIP–LiDAR registration
+### 7.2 How good is the segmentation? (So's NEON benchmark)
+
+`baselines/watershed_eval/` — full write-up in `lidar_annotation_benchmarking.md`.
+Runs our unchanged `crowns_from_chm` on the 1 m CHM shipped with each NeonTreeEvaluation
+plot and scores it against the human crowns. NEON's RGB and LiDAR are already
+co-registered, so this isolates **segmentation error** from registration error.
+Protocol matches the benchmark paper: IoU ≥ 0.4, one-to-one, per image then averaged.
+
+| Run | Labels | Crowns found | P / R per image | Matched | Merged |
+|---|---|---|---|---|---|
+| evaluation, 5 m min height | 6,199 | 3,104 | **0.40 / 0.37** | 14% | **77%** |
+| evaluation, 3 m | 6,199 | 3,269 | 0.39 / 0.39 | 15% | 77% |
+| training tier, 5 m | 21,460 | 10,531 | 0.28 / 0.18 | 15% | 76% |
+| *DeepForest (paper)* | | | *0.66 / 0.79* | | |
+| *human–human agreement* | | | *~70–90%* | | |
+
+- **Merging dominates.** 77% of human crowns fall inside a watershed crown that swallowed
+  several trees; the watershed finds about half as many crowns as humans label.
+- **Driven by crown size:** < 10 m² match 2%, 10–25 m² 15%, 25–50 m² 31%, 50–100 m² 61%,
+  > 100 m² 76%.
+- **California:** SJER oak woodland 0.56 / 0.64 (52% matched); **TEAK mixed conifer — the
+  analogue for CZU — 0.30 / 0.25, 76% merged**; SOAP 0.17 / 0.06 (only 2 plots).
+- **No systematic shift:** median centre offset ≤ 0.1 m (≈ 1 m scatter). **Boxes too big:**
+  matched boxes are 1.44× the label area (≈ 1.2× per side).
+- Height threshold (3 vs 5 m) barely matters; edge-touching crowns are not the cause.
+- **Likely causes:** the 3×3 median smoothing fills the 1–2 m gaps between small crowns,
+  and the 4 m treetop window can't keep two tops 2–3 m apart. Next: an ablation of both.
+- Caveats: annotators draw the *visible* crown, not the 3D one; NEON's point density
+  (~5 pts/m²) and CHM processing differ from 3DEP.
+
+### 7.3 NAIP–LiDAR registration
 
 Sources of mismatch:
 
@@ -286,13 +320,13 @@ against NEON's aligned 10 cm imagery.
 offsets; 10–20 saved chips would give the first measured error distribution for this
 dataset.
 
-### 7.3 Post-fire imagery (implemented: `baselines/fetch_postfire_naip.py`)
+### 7.4 Post-fire imagery (implemented: `baselines/fetch_postfire_naip.py`)
 
 Reads each chip's footprint from Planetary Computer COGs and resamples onto the pre-fire
 chip grid. All 267 CZU chips covered by the 19 May 2022 flight (~21 months post-fire).
 The post-fire flight carries its own, independent offset.
 
-### 7.4 Human-in-the-loop annotation (design, not built)
+### 7.5 Human-in-the-loop annotation (design, not built)
 
 Model-proposed labels verified by people (Papadopoulos 2016). Risks specific to us:
 anchoring on loose boxes; the model never shows trees it missed (~38% at IoU 0.25 even at
@@ -312,6 +346,8 @@ Points instead of boxes remove the anchoring problem.
 | `dfft/viz_out/*.json` | sweep, min_size, NIR, learning-curve, counting results |
 | `baselines/veg_index.py`, `modal_veg_index.py`, `modal_veg_predict.py` | Non-ML baseline |
 | `baselines/chm_crowns.py`, `select_fire_chips.py`, `fetch_postfire_naip.py`, `make_alignment_viewer.py`, `make_crown_figures.py` | LiDAR crown + alignment pipeline — committed to branch `lidar-crowns`, with step-by-step `baselines/REPRODUCE_LIDAR_CROWNS.md` |
+| `baselines/watershed_eval/neontree_{fetch,watershed,eval}.py`, `lidar_annotation_benchmarking.md` | So's NeonTreeEvaluation benchmark of the segmentation (§7.2) — on `lidar-crowns` |
+| `pyproject.toml`, `uv.lock`, `.python-version` | Dependencies for `baselines/`, managed with `uv` (`uv run python …`) |
 | `baselines/alignment_viewer/`, `baselines/alignment_viewer_czu/` | Alignment viewers (30 MB / 75 MB, untracked) |
 | `single_tiles_flat/make_tile_viewer.py`, `stage_c_data/viewer/`, `readable/` | Tile viewer and readable JSON |
 | Modal volume `dfft-checkpoints` | `deepforest_finetuned.pt`, `deepforest_ft_ms{800,1000,1300}.pt`, `deepforest_ft_{3,4}ch.pt`, `deepforest_tuned_{baseline,reg_aug}.pt`, `predictions_all.json`, `metrics.json`, `sweep.json` |
@@ -319,6 +355,7 @@ Points instead of boxes remove the anchoring problem.
 
 **Environment gotchas.**
 - Local scipy ≥ 1.12 won't load on this macOS; pin `scipy<1.12`.
+- Reading GeoTIFFs from inside a tar: the `MemoryFile` must stay alive while the dataset is open, since GDAL reads tiles lazily. Use `chm_crowns.open_member` (a context manager since `d6e484b`); the earlier version silently decoded freed memory, which looked like corrupt chips.
 - Modal account has no payment method: GPU rejected, CPU containers get preempted (Lightning swallows SIGTERM as `SystemExit`).
 - The vendored `DeepForest/` repo does not match PyPI `deepforest==2.1.0` (no `train.optimizer` block; augmentations take `list[str]`).
 
@@ -326,11 +363,12 @@ Points instead of boxes remove the anchoring problem.
 
 ## 9. Open questions and next steps
 
-1. **3DEP pre-fire coverage for SCU, North Complex, Creek, Castle** — decides whether the LiDAR route works beyond CZU. USGS publishes project footprints and dates.
-2. **Measure registration** — save 10–20 hand offsets in the CZU viewer; check whether tall trees stay offset after short ones align (relief displacement).
-3. **NEON SOAP viewer** — NEON LiDAR crowns vs NAIP 2020/2022, NEON 10 cm as reference; check whether 2024 CA NAIP exists to match NEON 2024.
-4. **Fix crown filters** — buildings, water edges, power lines.
-5. **Train on points**, not boxes, with metre-scale tolerance.
-6. **Finish the anchor arm** and run NIR across 3–5 seeds — after adding checkpoint-resume (or fixing Modal billing).
-7. **Requests:** Dixon (crown polygons), Cheng (checkpoint + labels); PDFs for Hemming-Schroeder 2023, Li et al. 2023, Stovall supplementary.
-8. **Measure the human ceiling** — triple-annotate ~10 tiles.
+1. **Fix the merging first** (§7.2) — ablate the 3×3 median smoothing and the 4 m treetop window on the NeonTreeEvaluation plots; pick the setting where *merged* falls more than *fragments / false positives* rise, watching TEAK and the < 10 m² bin. Then tighten crown extents (boxes are ~1.2× too wide per side), e.g. a relative-height cutoff per crown.
+2. **3DEP pre-fire coverage for SCU, North Complex, Creek, Castle** — decides whether the LiDAR route works beyond CZU. USGS publishes project footprints and dates.
+3. **Measure registration** — save 10–20 hand offsets in the CZU viewer; check whether tall trees stay offset after short ones align (relief displacement). Less urgent until crowns are resolved individually.
+4. **NEON SOAP viewer** — NEON LiDAR crowns vs NAIP 2020/2022, NEON 10 cm as reference; check whether 2024 CA NAIP exists to match NEON 2024.
+5. **Fix crown filters** — buildings, water edges, power lines.
+6. **Train on points**, not boxes, with metre-scale tolerance.
+7. **Finish the anchor arm** and run NIR across 3–5 seeds — after adding checkpoint-resume (or fixing Modal billing).
+8. **Requests:** Dixon (crown polygons), Cheng (checkpoint + labels); PDFs for Hemming-Schroeder 2023, Li et al. 2023, Stovall supplementary.
+9. **Measure the human ceiling** — triple-annotate ~10 tiles.
