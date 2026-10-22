@@ -36,29 +36,30 @@ def disk(r):
     return x * x + y * y <= r * r
 
 
-def treetops(chm):
+def treetops(chm, min_top=5.0):
     """Variable-window local maxima; window diameter in metres = pixels at 1 m."""
     tops = np.zeros(chm.shape, bool)
     ws = np.where(chm < 32, 4.0, np.where(chm <= 80, chm / 8.0, 10.0))
     for d in np.unique(np.round(ws)):
         r = max(1, int(round(d / 2)))
         mx = ndi.maximum_filter(chm, footprint=disk(r), mode="nearest")
-        sel = (np.round(ws) == d) & (chm >= mx) & (chm > 5)
+        sel = (np.round(ws) == d) & (chm >= mx) & (chm > min_top)
         tops |= sel
     # collapse flat plateaus to one marker each
     lab, n = ndi.label(tops, structure=np.ones((3, 3)))
     return lab, n
 
 
-def crowns_from_chm(chm):
+def crowns_from_chm(chm, min_top=5.0):
+    """min_top: minimum treetop height (m) for a crown; 5 m = trees, not shrubs."""
     chm = ndi.median_filter(chm, size=3)
-    markers, n = treetops(chm)
+    markers, n = treetops(chm, min_top)
     if n == 0:
         return chm, np.zeros(chm.shape, int), []
     seg = watershed(-chm, markers, mask=chm > 3)
     keep = []
     for r in regionprops(seg, intensity_image=chm):
-        if r.area >= 1 and r.max_intensity > 5:
+        if r.area >= 1 and r.max_intensity > min_top:
             keep.append(r)
     return chm, seg, keep
 
@@ -88,8 +89,8 @@ def best_shift(a, b, max_px):
     return arg, best, zero
 
 
-def open_member(tf, name):
 @contextmanager
+def open_member(tf, name):
     """Open a GeoTIFF inside a tar. The MemoryFile must outlive the dataset: GDAL reads
     tiles lazily, and a freed buffer decodes as garbage (zlib "incorrect header check")."""
     with MemoryFile(tf.extractfile(name).read()) as mf, mf.open() as ds:
