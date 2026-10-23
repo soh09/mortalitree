@@ -53,8 +53,11 @@ def main():
     ap.add_argument("work"); ap.add_argument("--fires", nargs="+", default=list(C.FIRES))
     ap.add_argument("--local-only", action="store_true", help="use only CHM tars already in WORK/chm/")
     ap.add_argument("--delete-tars", action="store_true", help="delete each CHM tar after extracting its chips")
+    ap.add_argument("--tar-dir", help="where CHM tars go (default WORK/chm)")
+    ap.add_argument("--suffix", default="", help="write chips{SUFFIX}.json / coverage{SUFFIX}.json (parallel runs)")
     a = ap.parse_args()
     work = Path(a.work); work.mkdir(parents=True, exist_ok=True)
+    tar_dir = Path(a.tar_dir) if a.tar_dir else work / "chm"
     held_out = C.tile_footprints(("val", "test"))
 
     chips, coverage = [], {}
@@ -73,9 +76,9 @@ def main():
         rows, years, n_excl, n_late = [], Counter(), 0, 0
         for b in bins:
             name = f"{zone}-{b}"
-            if a.local_only and not (work / "chm" / f"{name}.tar").exists():
+            if a.local_only and not (tar_dir / f"{name}.tar").exists():
                 print(f"  skipping bin {name} (not downloaded)"); continue
-            tar = download(f"{C.BIN_URL}/chm/{zone}/{name}.tar", work / "chm" / f"{name}.tar")
+            tar = download(f"{C.BIN_URL}/chm/{zone}/{name}.tar", tar_dir / f"{name}.tar")
             tf = tarfile.open(tar)
             for m in tf.getmembers():
                 g = CHIP.match(Path(m.name).stem) if m.name.endswith(".tif") else None
@@ -107,9 +110,9 @@ def main():
                           "covered_km2": round(len(rows) * 0.256 ** 2, 1)}
         print(f"  {json.dumps(coverage[fire])}", flush=True)
         chips += rows
-    (work / "chips.json").write_text(json.dumps(chips))
-    (work / "coverage.json").write_text(json.dumps(coverage, indent=1))
-    print(f"{len(chips)} eligible chips -> {work/'chips.json'}")
+    (work / f"chips{a.suffix}.json").write_text(json.dumps(chips))
+    (work / f"coverage{a.suffix}.json").write_text(json.dumps(coverage, indent=1))
+    print(f"{len(chips)} eligible chips -> {work/f'chips{a.suffix}.json'}")
 
 
 if __name__ == "__main__":

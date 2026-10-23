@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Step 4: table of test results per arm, mean +/- sd over seeds.
 
-    python lidar_pretrain/summarize.py WORK
+    python lidar_pretrain/summarize.py WORK [RUNS_DIR]
 """
 import json, sys
 from collections import defaultdict
@@ -16,9 +16,9 @@ COLS = [("test_all_tiles", "iou0.4", "f1", "F1@0.4"), ("test_all_tiles", "iou0.5
         ("test_min5", "iou0.5", "f1", "F1@0.5 min5"), ("test_fixed_ref_min5", "iou0.5", "f1", "F1@0.5 ref")]
 
 
-def main(work):
+def main(work, runs="runs"):
     vals = defaultdict(lambda: defaultdict(list))
-    for f in sorted(Path(work, "runs").glob("seed*/*/metrics.json")):
+    for f in sorted(Path(work, runs).glob("seed*/*/metrics.json")):
         m = json.loads(f.read_text()); arm = m["arm"]
         for sec, iou, k, name in COLS:
             r = m["metrics"][sec]
@@ -31,4 +31,4 @@ def main(work):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1])
+    main(*sys.argv[1:3])

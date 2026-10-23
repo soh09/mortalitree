@@ -16,11 +16,16 @@ Reported on test: P/R/F1 at IoU 0.25/0.4/0.5, count MAE, for all 15 tiles and fo
 tiles with >= 5 crowns (the report's convention), plus a fixed reference setting
 (score 0.1, DeepForest's NMS 0.05).
 
-    python lidar_pretrain/train.py WORK --seed 0 [--arms A B C] [--pretrain-epochs 3]
+    python lidar_pretrain/train.py WORK --seed 0 [--arms A B C] [--pretrain-epochs 3] [--wandb-project NAME]
     python lidar_pretrain/summarize.py WORK
 
 Writes WORK/runs/seed{S}/{A,B,C}/metrics.json (+ predictions), and the pretrained
 checkpoint WORK/runs/seed{S}/pretrained.ckpt (reused by B and C, and on re-runs).
+
+With --wandb-project, each phase is a wandb run in group "seed{S}": "s{S}-A" (fine-tune),
+"s{S}-pretrain", "s{S}-B" (fine-tune after pretraining), "s{S}-C" (eval only). Curves:
+DeepForest's train/val loss and val box precision/recall (IoU 0.4) every validation;
+final test metrics go to each run's summary under test/... and val-selected/...
 """
 import argparse, json, time
 from pathlib import Path
@@ -38,9 +43,9 @@ NMSS = [0.05, 0.15, 0.3, 0.5]
 
 
 # ---------------- data ----------------
-def prep_labelled(work):
-    """Hand-labelled tiles -> PNG + DeepForest CSVs, exactly as dfft/modal_train._prep."""
-    img = work / "labelled" / "images"; img.mkdir(parents=True, exist_ok=True)
+def prep_labelled(lab):
+    """Hand-labelled tiles -> PNG + DeepForest CSVs in `lab`, exactly as dfft/modal_train._prep."""
+    img = lab / "images"; img.mkdir(parents=True, exist_ok=True)
     for tif in sorted((C.TILES / "tiles").glob("*.tif")):
         out = img / f"{tif.stem}.png"
         if not out.exists():
@@ -53,7 +58,7 @@ def prep_labelled(work):
             for cx, cy, w, h in it["boxes"]:
                 rows.append({"image_path": name, "xmin": max(0, int((cx - w / 2) * 256)), "ymin": max(0, int((cy - h / 2) * 256)),
                              "xmax": min(256, int((cx + w / 2) * 256)), "ymax": min(256, int((cy + h / 2) * 256)), "label": "Tree"})
-        pd.DataFrame(rows).to_csv(work / "labelled" / f"{split}.csv", index=False)
+        pd.DataFrame(rows).to_csv(lab / f"{split}.csv", index=False)
     return img
 
 
@@ -66,15 +71,36 @@ def load(ckpt=None):
     return m
 
 
-def fit(m, csv, root, val_csv, val_root, epochs, lr, batch, workers, out_dir, accelerator):
+def make_logger(out_dir, wandb_project, name, group, config):
+    out_dir.mkdir(parents=True, exist_ok=True)
+    if wandb_project:
+        from pytorch_lightning.loggers import WandbLogger
+        return WandbLogger(project=wandb_project, name=name, group=group, job_type=name.split("-")[-1],
+                           config=config, save_dir=str(out_dir))
+    from pytorch_lightning.loggers import CSVLogger
+    return CSVLogger(str(out_dir), name="log")
+
+
+def flatten(d, prefix=""):
+    out = {}
+    for k, v in d.items():
+        if isinstance(v, dict):
+            out.update(flatten(v, f"{prefix}{k}/"))
+        elif isinstance(v, (int, float)) and v is not None:
+            out[f"{prefix}{k}"] = v
+    return out
+
+
+def fit(m, csv, root, val_csv, val_root, epochs, lr, batch, workers, out_dir, accelerator, logger,
+        val_check_interval=1.0):
     m.config["train"]["csv_file"] = str(csv); m.config["train"]["root_dir"] = str(root)
     m.config["validation"]["csv_file"] = str(val_csv); m.config["validation"]["root_dir"] = str(val_root)
     m.config["train"]["epochs"] = epochs; m.config["train"]["lr"] = lr
     m.config["batch_size"] = batch; m.config["workers"] = workers
     m.config["accelerator"] = accelerator
-    from pytorch_lightning.loggers import CSVLogger
-    m.create_trainer(logger=CSVLogger(str(out_dir), name="log"), enable_checkpointing=False,
-                     default_root_dir=str(out_dir))
+    m.config["validation"]["val_accuracy_interval"] = 1      # box P/R on val at every validation
+    m.create_trainer(logger=logger, enable_checkpointing=False, default_root_dir=str(out_dir),
+                     log_every_n_steps=5, val_check_interval=val_check_interval)
     t = time.time(); m.trainer.fit(m)
     return round(time.time() - t, 1)
 
@@ -180,11 +206,17 @@ def main():
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--accelerator", default="auto")
     ap.add_argument("--max-pretrain-images", type=int, default=0, help="subsample (smoke tests)")
+    ap.add_argument("--wandb-project", help="log curves and final metrics to this wandb project")
+    ap.add_argument("--runs-dir", default="runs", help="results folder under WORK")
+    ap.add_argument("--wandb-group-prefix", default="", help="e.g. 'smoke-' to keep test runs apart")
+    ap.add_argument("--labelled-dir", help="where to write the hand-labelled PNGs/CSVs (default WORK/labelled)")
+    ap.add_argument("--pretrain-val-every", type=float, default=0.25,
+                    help="validate this fraction of a pretraining epoch (for smoother curves)")
     a = ap.parse_args()
     import pytorch_lightning as pl
 
-    work = Path(a.work); lab = work / "labelled"; prep_labelled(work)
-    run = work / "runs" / f"seed{a.seed}"; run.mkdir(parents=True, exist_ok=True)
+    work = Path(a.work); lab = Path(a.labelled_dir) if a.labelled_dir else work / "labelled"; prep_labelled(lab)
+    run = work / a.runs_dir / f"seed{a.seed}"; run.mkdir(parents=True, exist_ok=True)
     pre_csv = Path(a.pretrain_csv) if a.pretrain_csv else work / "pretrain" / "pretrain.csv"
     pre_root = pre_csv.parent / "images"
     if a.max_pretrain_images:
@@ -193,12 +225,27 @@ def main():
     ft = dict(csv=lab / "train.csv", root=lab / "images", val_csv=lab / "val.csv", val_root=lab / "images",
               epochs=a.finetune_epochs, lr=a.finetune_lr, batch=a.finetune_batch, workers=a.workers, accelerator=a.accelerator)
     pre_ckpt = run / "pretrained.ckpt"
+    group = f"{a.wandb_group_prefix}seed{a.seed}"
+    logger = lambda name, d: make_logger(d, a.wandb_project, f"{a.wandb_group_prefix}s{a.seed}-{name}", group, vars(a))
 
-    def finish(arm, m, info):
+    def finish(arm, m, info, lg=None):
         d = run / arm; d.mkdir(exist_ok=True)
         info["metrics"] = evaluate(m, lab, d)
         info["config"] = vars(a)
         (d / "metrics.json").write_text(json.dumps(info, indent=1))
+        if a.wandb_project:
+            import wandb
+            lg = lg or logger(arm, d)
+            run_ = lg.experiment
+            mt = info["metrics"]
+            run_.summary.update({**flatten(mt["test_all_tiles"], "test/"), **flatten(mt["test_min5"], "test_min5/"),
+                                 **flatten(mt["test_fixed_ref_min5"], "test_ref_min5/"),
+                                 **flatten(mt["selected_on_val"], "val-selected/"),
+                                 **{k: v for k, v in info.items() if isinstance(v, (int, float))}})
+            rows = [[i, mt["test_all_tiles"][f"iou{i}"]["precision"], mt["test_all_tiles"][f"iou{i}"]["recall"],
+                     mt["test_all_tiles"][f"iou{i}"]["f1"]] for i in IOUS]
+            run_.log({"test/by_iou": wandb.Table(columns=["iou", "precision", "recall", "f1"], data=rows)})
+            wandb.finish()
         t = info["metrics"]["test_all_tiles"]
         print(f"[seed {a.seed}] {arm}: test F1@0.4 {t['iou0.4']['f1']:.3f}  F1@0.5 {t['iou0.5']['f1']:.3f}  "
               f"MAE {t['count_mae']}  (val-selected score {info['metrics']['selected_on_val']['score']}, "
@@ -206,8 +253,9 @@ def main():
 
     if "A" in a.arms:
         pl.seed_everything(a.seed, workers=True)
-        m = load(); secs = fit(m, out_dir=run / "A", **ft)
-        finish("A", m, {"arm": "A", "finetune_seconds": secs})
+        lg = logger("A", run / "A")
+        m = load(); secs = fit(m, out_dir=run / "A", logger=lg, **ft)
+        finish("A", m, {"arm": "A", "finetune_seconds": secs}, lg)
     if {"B", "C"} & set(a.arms):
         n_img = pd.read_csv(pre_csv).image_path.nunique()
         if pre_ckpt.exists():
@@ -216,17 +264,22 @@ def main():
         else:
             pl.seed_everything(a.seed, workers=True)
             m = load()
+            lg = logger("pretrain", run / "pretrain")
             pre_secs = fit(m, pre_csv, pre_root, lab / "val.csv", lab / "images", a.pretrain_epochs, a.pretrain_lr,
-                           a.pretrain_batch, a.workers, run / "pretrain", a.accelerator)
+                           a.pretrain_batch, a.workers, run / "pretrain", a.accelerator, lg, a.pretrain_val_every)
             m.trainer.save_checkpoint(str(pre_ckpt))
             (run / "pretrained.json").write_text(json.dumps({"seconds": pre_secs, "images": n_img, "csv": str(pre_csv)}))
+            if a.wandb_project:
+                import wandb
+                lg.experiment.summary.update({"pretrain_images": n_img, "pretrain_seconds": pre_secs}); wandb.finish()
         info = {"pretrain_images": n_img, "pretrain_seconds": pre_secs}
         if "C" in a.arms:
             finish("C", load(pre_ckpt), {"arm": "C", **info})
         if "B" in a.arms:
             pl.seed_everything(a.seed, workers=True)
-            m = load(pre_ckpt); secs = fit(m, out_dir=run / "B", **ft)
-            finish("B", m, {"arm": "B", "finetune_seconds": secs, **info})
+            lg = logger("B", run / "B")
+            m = load(pre_ckpt); secs = fit(m, out_dir=run / "B", logger=lg, **ft)
+            finish("B", m, {"arm": "B", "finetune_seconds": secs, **info}, lg)
 
 
 if __name__ == "__main__":

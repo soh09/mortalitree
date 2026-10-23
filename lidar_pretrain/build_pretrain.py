@@ -18,6 +18,8 @@ since the automatic offset estimate did worse than random (REPRODUCE_LIDAR_CROWN
 Chips are skipped if > 5% of the CHM is no-data or < --min-forest of it is > 5 m.
 
     python lidar_pretrain/build_pretrain.py WORK [--max-chips 400] [--workers 8]
+    python lidar_pretrain/build_pretrain.py WORK --max-chips 0 --out pretrain_full --shard 3 --num-shards 8
+           (--max-chips 0 = every eligible chip; shards write WORK/OUT/shard{K}/, merged later)
 
 Writes WORK/pretrain/images/*.png, WORK/pretrain/pretrain.csv (DeepForest format,
 image_path relative to WORK/pretrain/images) and WORK/pretrain/chips_used.json.
@@ -77,12 +79,21 @@ def prefire_naip(tr, crs, alarm, lidar_year, max_gap):
             continue
         dst = np.zeros((4, N_PX, N_PX), np.uint8); filled = np.zeros((N_PX, N_PX), bool); dates = set()
         for it in by_year[year]:
-            with rasterio.open(it["assets"]["image"]["href"] + "?" + token()) as src:
-                if src.count < 4:
-                    continue
-                tmp = np.zeros((4, N_PX, N_PX), np.uint8)
-                reproject(rasterio.band(src, [1, 2, 3, 4]), tmp, src_transform=src.transform, src_crs=src.crs,
-                          dst_transform=tr, dst_crs=crs, resampling=Resampling.bilinear, src_nodata=0, dst_nodata=0)
+            for attempt in range(4):            # COG reads can fail transiently under load
+                try:
+                    with rasterio.open(it["assets"]["image"]["href"] + "?" + token()) as src:
+                        if src.count < 4:
+                            tmp = None; break
+                        tmp = np.zeros((4, N_PX, N_PX), np.uint8)
+                        reproject(rasterio.band(src, [1, 2, 3, 4]), tmp, src_transform=src.transform, src_crs=src.crs,
+                                  dst_transform=tr, dst_crs=crs, resampling=Resampling.bilinear, src_nodata=0, dst_nodata=0)
+                    break
+                except rasterio.errors.RasterioIOError:
+                    if attempt == 3:
+                        raise
+                    time.sleep(2 ** attempt)
+            if tmp is None:
+                continue
             got = tmp.any(0) & ~filled
             dst[:, got] = tmp[:, got]; filled |= got
             if got.any():
@@ -142,15 +153,23 @@ def process(chip, work, out_img, min_forest, max_gap):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("work")
-    ap.add_argument("--max-chips", type=int, default=400, help="per fire")
+    ap.add_argument("--max-chips", type=int, default=400, help="per fire; 0 = no cap")
+    ap.add_argument("--out", default="pretrain", help="output folder under WORK")
+    ap.add_argument("--shard", type=int, default=0); ap.add_argument("--num-shards", type=int, default=1)
+    ap.add_argument("--images-dir", help="write PNGs here instead of WORK/OUT[/shardK]/images (e.g. local disk)")
     ap.add_argument("--min-forest", type=float, default=0.1)
     ap.add_argument("--max-year-gap", type=int, default=2)
     ap.add_argument("--workers", type=int, default=8)
     ap.add_argument("--seed", type=int, default=0)
     a = ap.parse_args()
-    work = Path(a.work); out = work / "pretrain"; out_img = out / "images"; out_img.mkdir(parents=True, exist_ok=True)
+    work = Path(a.work)
+    out = work / a.out / (f"shard{a.shard}" if a.num_shards > 1 else "")
+    out_img = Path(a.images_dir) if a.images_dir else out / "images"
+    out.mkdir(parents=True, exist_ok=True); out_img.mkdir(parents=True, exist_ok=True)
     chips = json.loads((work / "chips.json").read_text())
     random.Random(a.seed).shuffle(chips)
+    chips = chips[a.shard::a.num_shards]
+    cap = a.max_chips or float("inf")
 
     log = out / "done.jsonl"
     done = [json.loads(l) for l in log.read_text().splitlines()] if log.exists() else []
@@ -158,7 +177,8 @@ def main():
     used = Counter(d["fire"] for d in done if "rows" in d and d["windows"])
     lock = threading.Lock()
     queue = [c for c in chips if c["key"] not in seen]
-    print(f"{len(chips)} eligible chips, {len(seen)} already processed; target {a.max_chips} per fire", flush=True)
+    print(f"{len(chips)} eligible chips (shard {a.shard}/{a.num_shards}), {len(seen)} already processed; "
+          f"target {a.max_chips or 'all'} per fire", flush=True)
 
     with ThreadPoolExecutor(a.workers) as pool, open(log, "a") as fh:
         pending = {}
@@ -166,7 +186,7 @@ def main():
 
         def submit():
             for c in it:
-                if used[c["fire"]] + sum(p["fire"] == c["fire"] for p in pending.values()) >= a.max_chips:
+                if used[c["fire"]] + sum(p["fire"] == c["fire"] for p in pending.values()) >= cap:
                     continue
                 pending[pool.submit(process, c, work, out_img, a.min_forest, a.max_year_gap)] = c
                 return True

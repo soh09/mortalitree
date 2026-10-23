@@ -31,7 +31,12 @@ benchmark (§7.2) shows **segmentation is currently the bigger one**: in dense f
 watershed merges several trees into one crown. Tuning (§7.2.1) cut merging from 74% to 40%
 of labels and raised held-out F1 from 0.42 to 0.50; Dalponte and Silva region growing do
 not beat it. **But on 3DEP at CZU the tuned crowns looked too small by eye, so the original
-watershed stays the default for 3DEP labels.** Against field stems the tuned watershed nearly matches human labels on recall
+watershed stays the default for 3DEP labels.**
+
+**LiDAR pretraining works, modestly** (§7.5): pretraining DeepForest on 3DEP crowns drawn
+on pre-fire NAIP, then fine-tuning as before, improves pre-fire test tiles in every seed
+(F1@0.4 0.315 → 0.339, count error −8%) but not post-fire tiles. 3DEP covers CZU, SCU and
+North Complex, not Creek or Castle. A run on all 14,240 eligible chips is in progress. Against field stems the tuned watershed nearly matches human labels on recall
 (0.72 vs 0.75) but merges about twice as often.
 
 ---
@@ -416,7 +421,82 @@ Reads each chip's footprint from Planetary Computer COGs and resamples onto the 
 chip grid. All 267 CZU chips covered by the 19 May 2022 flight (~21 months post-fire).
 The post-fire flight carries its own, independent offset.
 
-### 7.5 Human-in-the-loop annotation (design, not built)
+### 7.5 Does 3DEP LiDAR pretraining help DeepForest on NAIP? (`lidar_pretrain/`)
+
+Same recipe as Weinstein et al. 2019/2020, on our imagery: pretrain on LiDAR crowns drawn
+on real pre-fire NAIP, then fine-tune on our hand labels. Run on Modal (L4 GPUs, wandb
+project `mortalitree-lidar-pretrain`); code and run instructions in `lidar_pretrain/README.md`.
+
+**3DEP coverage of the five fires** (Allred CHM–NAIP pairs, LiDAR flown before the alarm
+date; chips within 1 km of a val/test tile excluded):
+
+| Fire | Bins | Chips with pre-fire LiDAR | Area covered | LiDAR years | Flown after the fire (excluded) |
+|---|---|---|---|---|---|
+| CZU | 10-409…412 | 790 (128 more near val/test) | 52 / 350 km² | 2018, 2020 | 0 |
+| SCU | 10-410…419 | 9,409 | 617 / 1,671 km² | 2018–2020 | 778 |
+| North Complex | 10-437…443 | 4,041 | 265 / 1,292 km² | 2018–2019 | 1,701 |
+| Creek | 11-409…416 | **0** | — | — | — |
+| Castle | 11-399…402 | **0** | — | — | — |
+
+Creek and Castle have no chips under their perimeters at all (checked by hand on bins
+11-412 and 11-402), so 3DEP pretraining covers the three zone-10 fires only. For Creek,
+NEON SOAP/TEAK LiDAR (Hemming-Schroeder crowns) is the alternative.
+
+**Setup.**
+- **Pretraining set:** up to 400 chips per fire (1,195 chips after dropping < 10% forest),
+  each cut into four 256 × 256 px windows → 4,775 images, 805,723 crown boxes (original
+  watershed, unshifted).
+- **Imagery:** pre-fire NAIP from Planetary Computer, the latest year before the fire
+  within 2 years of the LiDAR. All three fires got 2020 NAIP.
+- **Arms**, all starting from DeepForest's prebuilt NEON weights:
+  - **A** fine-tune on the 75 hand-labelled train tiles (15 epochs, lr 0.001, batch 4)
+  - **B** 3 epochs on the LiDAR set (lr 0.001, batch 8), then fine-tune as A
+  - **C** the LiDAR pretraining only
+- **Scoring:** score threshold and NMS chosen on val (best F1 at IoU 0.4), test scored once.
+  Seeds 0, 1, 2.
+- **Cost:** pretraining ~26 min per seed on an L4; fine-tuning ~2.5 min.
+
+**All 15 test tiles** (997 crowns), mean ± sd over 3 seeds:
+
+| Arm | F1@0.25 | F1@0.4 | F1@0.5 | Count MAE |
+|---|---|---|---|---|
+| A prebuilt → fine-tune (current) | 0.545 ± 0.010 | 0.368 ± 0.012 | 0.237 ± 0.005 | 18.0 ± 0.2 |
+| B prebuilt → LiDAR → fine-tune | **0.570** ± 0.006 | **0.386** ± 0.008 | **0.245** ± 0.006 | **16.7** ± 0.7 |
+| C prebuilt → LiDAR only | 0.479 ± 0.007 | 0.261 ± 0.008 | 0.143 ± 0.003 | 21.7 ± 0.3 |
+
+B − A per seed, F1@0.4: +0.015, +0.006, +0.034; MAE −0.8, −2.1, −1.1. A reproduces the
+§3.1 baseline (0.368 vs 0.361).
+
+**Split by imagery date** (`rescore_by_period.py`, thresholds as selected on all val tiles):
+
+| Pre-fire test (8 tiles, 758 crowns) | F1@0.25 | F1@0.4 | F1@0.5 | Count MAE |
+|---|---|---|---|---|
+| A | 0.515 ± 0.011 | 0.315 ± 0.013 | 0.188 ± 0.005 | 25.4 ± 0.6 |
+| **B** | **0.540** ± 0.006 | **0.339** ± 0.009 | **0.204** ± 0.006 | **23.3** ± 0.9 |
+| C | 0.468 ± 0.012 | 0.233 ± 0.013 | 0.120 ± 0.005 | 31.5 ± 1.1 |
+
+| Post-fire test (7 tiles, 239 crowns) | F1@0.25 | F1@0.4 | F1@0.5 | Count MAE |
+|---|---|---|---|---|
+| A | 0.643 ± 0.008 | 0.540 ± 0.011 | **0.397** ± 0.012 | 9.5 ± 1.0 |
+| B | **0.674** ± 0.006 | **0.547** ± 0.009 | 0.384 ± 0.005 | **9.1** ± 0.6 |
+| C | 0.513 ± 0.021 | 0.346 ± 0.009 | 0.213 ± 0.010 | 10.6 ± 0.6 |
+
+- **Pre-fire: B beats A in every seed on every metric** (12 of 12). F1@0.4 is +0.014 to
+  +0.037 and MAE −0.8 to −4.1; about 8% better on both. Re-selecting thresholds on
+  pre-fire val tiles only gives the same picture (A 0.312 → B 0.339; MAE 26.8 → 23.3).
+- **Post-fire: no gain.** F1@0.4 is within noise and F1@0.5 is lower in 2 of 3 seeds. That
+  is expected, since pretraining saw pre-fire imagery only. Post-fire counting would need
+  post-fire examples, e.g. pre-fire crowns on 2022 NAIP in areas that burned lightly.
+- **LiDAR labels alone (C) are weaker than hand labels:** 70% of A's F1@0.4 and 88% of its
+  F1@0.25, so they find trees but box them loosely (misregistration of several metres).
+- Caveat: 8 pre-fire test tiles; the evidence is consistency across seeds, not sample size.
+
+**Scaling up (running):** every eligible chip — 14,240 across CZU, SCU and North Complex,
+~12× the set above — built in 8 parallel shards; arms B and C retrained with the same
+settings (3 epochs ≈ 4 h per seed) into `runs_full/` (wandb groups `full-seed*`), and
+compared against the A runs above.
+
+### 7.6 Human-in-the-loop annotation (design, not built)
 
 Model-proposed labels verified by people (Papadopoulos 2016). Risks specific to us:
 anchoring on loose boxes; the model never shows trees it missed (~38% at IoU 0.25 even at
@@ -438,6 +518,8 @@ Points instead of boxes remove the anchoring problem.
 | `baselines/chm_crowns.py`, `select_fire_chips.py`, `fetch_postfire_naip.py`, `make_alignment_viewer.py`, `make_crown_figures.py` | LiDAR crown + alignment pipeline — committed to branch `lidar-crowns`, with step-by-step `baselines/REPRODUCE_LIDAR_CROWNS.md` |
 | `baselines/watershed_eval/neontree_{fetch,watershed,eval}.py`, `lidar_annotation_benchmarking.md` | So's NeonTreeEvaluation benchmark of the segmentation (§7.2) — on `lidar-crowns` |
 | `baselines/watershed_eval/{watershed_grid,dalponte_grid,forest_type_grid,neontree_stems,make_neontree_viewer}.py` | Tuning, Dalponte/Silva ports, per-forest-type selection, field-stem scoring, review viewer (§7.2.1) |
+| `lidar_pretrain/` | 3DEP pretraining experiment (§7.5): chip selection, pretraining-set build, training/eval arms, Modal app (`modal_app.py`, headless), summaries |
+| Modal volume `lidar-pretrain-work` | Extracted CHM chips, `chips.json`/`coverage.json`, `pretrain/` and `pretrain_full/` sets (PNG tars), `runs/` and `runs_full/` (metrics, raw predictions, checkpoints) |
 | `pyproject.toml`, `uv.lock`, `.python-version` | Dependencies for `baselines/`, managed with `uv` (`uv run python …`) |
 | `baselines/alignment_viewer/`, `baselines/alignment_viewer_czu/` | Alignment viewers (30 MB / 75 MB, untracked) |
 | `single_tiles_flat/make_tile_viewer.py`, `stage_c_data/viewer/`, `readable/` | Tile viewer and readable JSON |
@@ -456,7 +538,7 @@ Points instead of boxes remove the anchoring problem.
 ## 9. Open questions and next steps
 
 1. **Merging: still open** (§7.2.1) — the NEON-tuned watershed (Gaussian σ 0.5, trim to 65% of top, 10 m cap) made crowns too small on 3DEP at CZU, so the original stays the default; Dalponte/Silva don't beat it on NEON either. Still open: confirm with other split seeds / leave-site-out; adopt the conifer per-type setting only if it holds; find California conifer stems (TEAK/SOAP tower plots outside the benchmark images) to check counting there; try a 0.5 m CHM from the benchmark's point clouds. Then test whether training on these crowns helps DeepForest on NAIP before tuning further.
-2. **3DEP pre-fire coverage for SCU, North Complex, Creek, Castle** — decides whether the LiDAR route works beyond CZU. USGS publishes project footprints and dates.
+2. **3DEP pre-fire coverage: answered** (§7.5) — CZU, SCU, North Complex yes; Creek and Castle none. LiDAR pretraining helps on pre-fire tiles (+8% F1@0.4, −8% count error), not post-fire. Next: the full-scale run (in progress); post-fire pretraining examples; NEON LiDAR for Creek.
 3. **Measure registration** — save 10–20 hand offsets in the CZU viewer; check whether tall trees stay offset after short ones align (relief displacement). Less urgent until crowns are resolved individually.
 4. **NEON SOAP viewer** — NEON LiDAR crowns vs NAIP 2020/2022, NEON 10 cm as reference; check whether 2024 CA NAIP exists to match NEON 2024.
 5. **Fix crown filters** — buildings, water edges, power lines.
