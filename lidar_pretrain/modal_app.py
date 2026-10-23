@@ -14,6 +14,8 @@ Headless (nothing depends on the laptop staying connected):
     python lidar_pretrain/modal_app.py --stage train --smoke    # 1-epoch GPU check, own wandb group
     python lidar_pretrain/modal_app.py --profile full           # every eligible chip (8 build shards), arms B and C,
                                                                 # results in runs_full/, wandb groups full-seed*
+    python lidar_pretrain/modal_app.py --profile full2 --stage train   # same set, + grad clipping and
+                                                                # per-epoch checkpoints (resumable); runs_full2/
 
 Follow progress in the Modal dashboard (app `lidar-pretrain`), in wandb, or in
 /work/pipeline_status.json (`modal volume get lidar-pretrain-work pipeline_status.json -`).
@@ -155,7 +157,8 @@ def pack():
 
 
 @app.function(gpu="L4", cpu=8, memory=32768, timeout=20 * 3600, volumes={WORK: vol},
-              secrets=[modal.Secret.from_name("wandb")])
+              secrets=[modal.Secret.from_name("wandb")],
+              retries=modal.Retries(max_retries=2, initial_delay=30.0))   # resumes from per-epoch checkpoints
 def train(seed: int, smoke: bool = False, extra: str = "", pretrain_set: str = "pretrain", runs: str = "runs",
           arms: str = "A,B,C", group: str = ""):
     import tarfile
@@ -216,6 +219,9 @@ def make_status(runs):
 PROFILES = {   # named configurations; "full" = every eligible chip, compared against the 400-per-fire A arm
     "default": dict(pretrain_set="pretrain", runs="runs", arms="A,B,C", group="", baseline_runs=""),
     "full": dict(pretrain_set="pretrain_full", runs="runs_full", arms="B,C", group="full-", baseline_runs="runs"),
+    # full v2: same data and settings plus gradient clipping and per-epoch checkpoints (v1 seed 2 diverged)
+    "full2": dict(pretrain_set="pretrain_full", runs="runs_full2", arms="B,C", group="full2-", baseline_runs="runs",
+                  extra="--pretrain-grad-clip 10 --pretrain-ckpt-every-epoch"),
 }
 
 
@@ -249,7 +255,7 @@ def _stages(stage, seeds, max_chips, smoke, extra, profile="default", report=lam
         print(f"pretraining set: {len(used)} chips, {sum(d['windows'] for d in used)} images")
         report(build={"chips": len(used), "images": sum(d["windows"] for d in used)})
         report(pack=pack.remote())
-    if S & {"all", "build"} and profile != "default":
+    if S & {"all", "build"} and profile not in ("default", "full2"):
         n = 8
         shards = list(build_shard.map(range(n), kwargs={"num_shards": n, "out": P["pretrain_set"], "max_chips": 0}))
         print(json.dumps(shards))
@@ -260,8 +266,14 @@ def _stages(stage, seeds, max_chips, smoke, extra, profile="default", report=lam
     if S & {"all", "train"}:
         report(train="running")
         done = {}
-        kw = {"smoke": smoke, "extra": extra, **{k: P[k] for k in ("pretrain_set", "runs", "arms", "group")}}
-        for seed, res in zip(seeds.split(","), train.map([int(s) for s in seeds.split(",")], kwargs=kw)):
+        kw = {"smoke": smoke, "extra": " ".join(x for x in (P.get("extra", ""), extra) if x),
+              **{k: P[k] for k in ("pretrain_set", "runs", "arms", "group")}}
+        # one seed failing must not cancel the others
+        for seed, res in zip(seeds.split(","), train.map([int(s) for s in seeds.split(",")], kwargs=kw,
+                                                          return_exceptions=True)):
+            if isinstance(res, BaseException):
+                done[f"seed{seed}"] = {"error": f"{type(res).__name__}: {res}"[:300]}
+                print(f"seed {seed} failed: {res}", flush=True); report(train=done); continue
             done[f"seed{seed}"] = {k: {i: v[i]["f1"] for i in ("iou0.4", "iou0.5")} | {"mae": v["count_mae"]}
                                    for k, v in res.items()}
             print(f"seed {seed}: " + json.dumps(done[f"seed{seed}"]))

@@ -92,16 +92,31 @@ def flatten(d, prefix=""):
 
 
 def fit(m, csv, root, val_csv, val_root, epochs, lr, batch, workers, out_dir, accelerator, logger,
-        val_check_interval=1.0):
+        val_check_interval=1.0, grad_clip=0.0, ckpt_dir=None):
+    """grad_clip > 0 clips the gradient norm (DeepForest doesn't by default). With ckpt_dir, a
+    checkpoint is saved every epoch and training resumes from ckpt_dir/last.ckpt if present."""
     m.config["train"]["csv_file"] = str(csv); m.config["train"]["root_dir"] = str(root)
     m.config["validation"]["csv_file"] = str(val_csv); m.config["validation"]["root_dir"] = str(val_root)
     m.config["train"]["epochs"] = epochs; m.config["train"]["lr"] = lr
     m.config["batch_size"] = batch; m.config["workers"] = workers
     m.config["accelerator"] = accelerator
     m.config["validation"]["val_accuracy_interval"] = 1      # box P/R on val at every validation
-    m.create_trainer(logger=logger, enable_checkpointing=False, default_root_dir=str(out_dir),
-                     log_every_n_steps=5, val_check_interval=val_check_interval)
-    t = time.time(); m.trainer.fit(m)
+    extra, callbacks, resume = {}, None, None
+    if grad_clip:
+        extra["gradient_clip_val"] = grad_clip
+    if ckpt_dir:
+        from pytorch_lightning.callbacks import ModelCheckpoint
+        ckpt_dir = Path(ckpt_dir); ckpt_dir.mkdir(parents=True, exist_ok=True)
+        callbacks = [ModelCheckpoint(dirpath=str(ckpt_dir), filename="{epoch}", save_last=True,
+                                     save_top_k=-1, every_n_epochs=1)]
+        resume = str(ckpt_dir / "last.ckpt") if (ckpt_dir / "last.ckpt").exists() else None
+        if resume:
+            print(f"resuming from {resume}", flush=True)
+    else:
+        extra["enable_checkpointing"] = False
+    m.create_trainer(logger=logger, callbacks=callbacks, default_root_dir=str(out_dir),
+                     log_every_n_steps=5, val_check_interval=val_check_interval, **extra)
+    t = time.time(); m.trainer.fit(m, ckpt_path=resume)
     return round(time.time() - t, 1)
 
 
@@ -114,6 +129,9 @@ def collect(m, csv, root):
     m.config["score_thresh"] = 0.01; m.config["nms_thresh"] = 0.99
     gt = pd.read_csv(csv)
     preds = m.predict_file(csv_file=str(csv), root_dir=str(root))
+    if preds is None or len(preds) == 0 or "image_path" not in preds:     # e.g. a diverged model
+        print(f"WARNING: no predictions on {Path(csv).name}", flush=True)
+        return {img: (np.zeros((0, 4)), np.zeros(0)) for img in gt["image_path"].unique()}
     preds["image_path"] = preds["image_path"].apply(lambda p: Path(p).name)
     out = {}
     for img in gt["image_path"].unique():
@@ -200,6 +218,10 @@ def main():
     ap.add_argument("--pretrain-epochs", type=int, default=3)
     ap.add_argument("--pretrain-lr", type=float, default=0.001)
     ap.add_argument("--pretrain-batch", type=int, default=8)
+    ap.add_argument("--pretrain-grad-clip", type=float, default=0.0,
+                    help="clip gradient norm during pretraining (0 = off, DeepForest's default)")
+    ap.add_argument("--pretrain-ckpt-every-epoch", action="store_true",
+                    help="checkpoint each pretraining epoch to RUN/pretrain_ckpts and resume from it")
     ap.add_argument("--finetune-epochs", type=int, default=15)
     ap.add_argument("--finetune-lr", type=float, default=0.001)
     ap.add_argument("--finetune-batch", type=int, default=4)
@@ -266,7 +288,8 @@ def main():
             m = load()
             lg = logger("pretrain", run / "pretrain")
             pre_secs = fit(m, pre_csv, pre_root, lab / "val.csv", lab / "images", a.pretrain_epochs, a.pretrain_lr,
-                           a.pretrain_batch, a.workers, run / "pretrain", a.accelerator, lg, a.pretrain_val_every)
+                           a.pretrain_batch, a.workers, run / "pretrain", a.accelerator, lg, a.pretrain_val_every,
+                           a.pretrain_grad_clip, run / "pretrain_ckpts" if a.pretrain_ckpt_every_epoch else None)
             m.trainer.save_checkpoint(str(pre_ckpt))
             (run / "pretrained.json").write_text(json.dumps({"seconds": pre_secs, "images": n_img, "csv": str(pre_csv)}))
             if a.wandb_project:
