@@ -23,6 +23,12 @@ Chips are skipped if > 5% of the CHM is no-data or < --min-forest of it is > 5 m
 
 Writes WORK/pretrain/images/*.png, WORK/pretrain/pretrain.csv (DeepForest format,
 image_path relative to WORK/pretrain/images) and WORK/pretrain/chips_used.json.
+
+With --clay-dir DIR, each window is also written raw (no stretch) as a georeferenced
+4-band uint8 GeoTIFF, DIR/{fire}/{window}.tif, and WORK/OUT/labels_clay.csv lists its
+boxes in the layout clay's NeonPatchDataset reads (site, imgname, pixel xyxy, lat, lon,
+acquisition_yyyymm). Windows with more than MAX_CLAY_BOXES boxes are left out of it
+(DQ-DETR's largest dynamic query bin is 600).
 Resumable: finished chips are logged in WORK/pretrain/done.jsonl.
 """
 import argparse, json, random, threading, time, urllib.request
@@ -38,6 +44,7 @@ from PIL import Image
 from rasterio.warp import Resampling, reproject, transform_bounds
 
 import common as C
+MAX_CLAY_BOXES = 600
 from chm_crowns import NODATA, crowns_from_chm
 
 STAC = "https://planetarycomputer.microsoft.com/api/stac/v1/search"
@@ -111,7 +118,14 @@ def read_chip(path):
     return np.where(nod, 0, raw.astype(np.float32) / 100.0), nod, tr, crs
 
 
-def process(chip, work, out_img, min_forest, max_gap):
+def write_clay_tif(win, path, tr, crs):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with rasterio.open(path, "w", driver="GTiff", width=win.shape[2], height=win.shape[1], count=4,
+                       dtype="uint8", crs=crs, transform=tr, compress="deflate") as dst:
+        dst.write(win)
+
+
+def process(chip, work, out_img, min_forest, max_gap, clay_dir=None):
     chm, nod, c_tr, crs = read_chip(Path(work) / chip["chm"])
     if nod.mean() > 0.05:
         return {"key": chip["key"], "skip": "chm_nodata"}
@@ -128,7 +142,7 @@ def process(chip, work, out_img, min_forest, max_gap):
     b = np.array([r.bbox for r in crowns], float).reshape(-1, 4)          # y0, x0, y1, x1 in CHM px
     s = abs(c_tr.a) / C.NAIP_RES
     boxes = np.c_[b[:, 1] * s, b[:, 0] * s, b[:, 3] * s, b[:, 2] * s]       # xmin, ymin, xmax, ymax
-    rows, windows = [], 0
+    rows, clay_rows, windows = [], [], 0
     for oy in OFFSETS:
         for ox in OFFSETS:
             win = naip[:, oy:oy + C.TILE_PX, ox:ox + C.TILE_PX]
@@ -146,8 +160,19 @@ def process(chip, work, out_img, min_forest, max_gap):
             rows += [{"image_path": name, "xmin": int(x0), "ymin": int(y0), "xmax": int(x1), "ymax": int(y1),
                       "label": "Tree"} for x0, y0, x1, y1 in cl[keep]]
             windows += 1
+            if clay_dir is not None and keep.sum() <= MAX_CLAY_BOXES:
+                from pyproj import Transformer
+                wtr = tr * Affine.translation(ox, oy)
+                stem = name[:-4]
+                write_clay_tif(win, Path(clay_dir) / chip["fire"] / f"{stem}.tif", wtr, crs)
+                lon, lat = Transformer.from_crs(crs, 4326, always_xy=True).transform(
+                    *(wtr * (C.TILE_PX / 2, C.TILE_PX / 2)))
+                clay_rows += [{"site": chip["fire"], "imgname": stem, "xmin": round(float(x0), 1),
+                               "ymin": round(float(y0), 1), "xmax": round(float(x1), 1), "ymax": round(float(y1), 1),
+                               "lat": round(lat, 6), "lon": round(lon, 6), "acquisition_yyyymm": dates[0][:7]}
+                              for x0, y0, x1, y1 in cl[keep]]
     return {"key": chip["key"], "fire": chip["fire"], "lidar": chip["lidar"], "naip_year": year,
-            "naip_dates": dates, "crowns": len(crowns), "windows": windows, "rows": rows}
+            "naip_dates": dates, "crowns": len(crowns), "windows": windows, "rows": rows, "clay_rows": clay_rows}
 
 
 def main():
@@ -157,6 +182,7 @@ def main():
     ap.add_argument("--out", default="pretrain", help="output folder under WORK")
     ap.add_argument("--shard", type=int, default=0); ap.add_argument("--num-shards", type=int, default=1)
     ap.add_argument("--images-dir", help="write PNGs here instead of WORK/OUT[/shardK]/images (e.g. local disk)")
+    ap.add_argument("--clay-dir", help="also write raw 4-band GeoTIFF windows + labels_clay.csv for the Clay detector")
     ap.add_argument("--min-forest", type=float, default=0.1)
     ap.add_argument("--max-year-gap", type=int, default=2)
     ap.add_argument("--workers", type=int, default=8)
@@ -188,7 +214,7 @@ def main():
             for c in it:
                 if used[c["fire"]] + sum(p["fire"] == c["fire"] for p in pending.values()) >= cap:
                     continue
-                pending[pool.submit(process, c, work, out_img, a.min_forest, a.max_year_gap)] = c
+                pending[pool.submit(process, c, work, out_img, a.min_forest, a.max_year_gap, a.clay_dir)] = c
                 return True
             return False
 
@@ -214,7 +240,12 @@ def main():
     ok = [d for d in done if d.get("windows")]
     rows = [row for d in ok for row in d["rows"]]
     pd.DataFrame(rows).to_csv(out / "pretrain.csv", index=False)
-    (out / "chips_used.json").write_text(json.dumps([{k: v for k, v in d.items() if k != "rows"} for d in ok], indent=1))
+    if a.clay_dir:
+        crows = [row for d in ok for row in d.get("clay_rows", [])]
+        pd.DataFrame(crows).to_csv(out / "labels_clay.csv", index=False)
+        print(f"clay: {len({r['imgname'] for r in crows})} windows, {len(crows)} boxes -> {out/'labels_clay.csv'}")
+    (out / "chips_used.json").write_text(json.dumps([{k: v for k, v in d.items() if k not in ("rows", "clay_rows")}
+                                                    for d in ok], indent=1))
     skips = Counter(d["skip"].split(":")[0] for d in done if "skip" in d)
     by_fire = defaultdict(lambda: Counter())
     for d in ok:

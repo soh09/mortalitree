@@ -63,11 +63,12 @@ def main(work, *runs_dirs):
             for arm, g in d.groupby("arm"):
                 print(f"| {arm} | " + " | ".join(f"{g[c].mean():.3f} ± {g[c].std(ddof=0):.3f}"
                                                 for c in ("F1@0.25", "F1@0.4", "F1@0.5", "MAE")) + " |")
-            a = d[d.arm == "A"].set_index("seed")
-            for barm in sorted(x for x in d.arm.unique() if x.startswith("B")):
+            ref, pre = ("ClayA", "ClayB") if "ClayA" in set(d.arm) else ("A", "B")
+            a = d[d.arm == ref].set_index("seed")
+            for barm in sorted(x for x in d.arm.unique() if x.startswith(pre)):
                 b = d[d.arm == barm].set_index("seed")
                 diff = (b[["F1@0.25", "F1@0.4", "F1@0.5", "MAE"]] - a[["F1@0.25", "F1@0.4", "F1@0.5", "MAE"]]).dropna()
-                print(f"{barm} − A per seed: " + "; ".join(f"{s}: " + ", ".join(f"{c} {v:+.3f}" for c, v in r.items())
+                print(f"{barm} − {ref} per seed: " + "; ".join(f"{s}: " + ", ".join(f"{c} {v:+.3f}" for c, v in r.items())
                                                          for s, r in diff.iterrows()))
     print(f"\n-> {work/('rescore_by_period_' + '_'.join(runs_dirs) + '.csv')}")
 

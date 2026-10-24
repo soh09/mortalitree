@@ -10,7 +10,9 @@ from pathlib import Path
 import numpy as np
 
 NAMES = {"A": "prebuilt -> fine-tune (current)", "B": "prebuilt -> LiDAR pretrain -> fine-tune",
-         "C": "prebuilt -> LiDAR pretrain only"}
+         "C": "prebuilt -> LiDAR pretrain only",
+         "ClayA": "Clay DQ-DETR: Stage B -> Stage C (current)",
+         "ClayB": "Clay DQ-DETR: Stage B -> LiDAR stage -> Stage C"}
 COLS = [("test_all_tiles", "iou0.4", "f1", "F1@0.4"), ("test_all_tiles", "iou0.5", "f1", "F1@0.5"),
         ("test_all_tiles", "iou0.25", "f1", "F1@0.25"), ("test_all_tiles", None, "count_mae", "MAE"),
         ("test_min5", "iou0.5", "f1", "F1@0.5 min5"), ("test_fixed_ref_min5", "iou0.5", "f1", "F1@0.5 ref")]
@@ -27,7 +29,7 @@ def main(work, runs="runs"):
     print("|---" * (len(COLS) + 2) + "|")
     for arm in sorted(vals):
         cells = [f"{np.mean(v):.3f} ± {np.std(v):.3f}" if len(v) > 1 else f"{v[0]:.3f}" for v in vals[arm].values()]
-        print(f"| {arm} {NAMES[arm]} | " + " | ".join(cells) + f" | {len(next(iter(vals[arm].values())))} |")
+        print(f"| {arm} {NAMES.get(arm, '')} | " + " | ".join(cells) + f" | {len(next(iter(vals[arm].values())))} |")
 
 
 if __name__ == "__main__":

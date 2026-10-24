@@ -114,3 +114,30 @@ seed spread, LiDAR pretraining isn't worth scaling.
 - **The test set is small** (15 tiles, 997 crowns) and spatially clustered.
 - **Spatial separation.** No pretraining chip is within 1 km of a val/test tile.
   Chips may overlap *train* tiles, which A also trains on.
+
+## Clay arms (`clay_app.py`)
+
+The same question for the Clay v1.5 + DQ-DETR detector (`dq-detr-impl/`, untracked;
+found next to the repo or via `$DQDETR_DIR`, used unmodified):
+
+| Arm | Training |
+|---|---|
+| **ClayA** | existing Stage B checkpoint (`clay-checkpoints:/dq-detr_final.pt`, 4-band NEON) → Stage C on the 75 hand-labelled tiles |
+| **ClayB** | Stage B checkpoint → **LiDAR stage** (3DEP crowns on raw 4-band pre-fire NAIP; `stage_b_finetune`'s recipe: flat lr 5e-4, CGFE on, encoder frozen, 10 epochs) → Stage C as ClayA |
+
+- LiDAR windows: `build_pretrain.py --clay-dir` on the same 400-chips-per-fire set, written as
+  raw R,G,B,NIR GeoTIFFs + `labels_clay.csv` (the `mot`/`NeonPatchDataset` layout);
+  windows with > 600 boxes (DQ-DETR's largest query bin) are left out.
+- Stage C: `stage_c(model="dqdetr")` settings — 80 epochs, last 2 encoder blocks unfrozen
+  after 30, early stopping on val F1, best checkpoint kept; seeds set explicitly.
+- Scoring: as the DeepForest arms, plus "NMS 1.0" (none) in the val-selected grid.
+  The fixed reference row is Clay's own setting (conf 0.5, no NMS).
+
+```bash
+modal deploy lidar_pretrain/clay_app.py
+python lidar_pretrain/clay_app.py --stage build,train      # headless; status in pipeline_status_clay.json
+modal run lidar_pretrain/clay_app.py::train_arm --seed 0 --arm ClayB --smoke --data pretrain_clay_test
+```
+
+Results: `lidar-pretrain-work:/work/runs_clay/seed{S}/{ClayA,ClayB}/`, `summary_runs_clay.md`;
+wandb groups `clay-seed{S}`.
