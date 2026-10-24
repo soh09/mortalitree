@@ -23,6 +23,12 @@ predictions), wandb project mortalitree-lidar-pretrain, groups clay-seed{S}.
     modal deploy lidar_pretrain/clay_app.py
     python lidar_pretrain/clay_app.py --stage build,train      # headless; spawns `pipeline`
     python lidar_pretrain/clay_app.py --stage train --smoke     # 1-epoch check (runs_clay_smoke/)
+    python lidar_pretrain/clay_app.py --stage build_full,train --runs runs_clay_full \
+           --arms ClayA,ClayB_full10,ClayB_full1                # every eligible chip (8 build shards)
+
+Every Stage C checkpoint (each 5 epochs, best, final) is kept, slimmed to the weights that changed,
+under RUNS/seed{S}/{arm}/checkpoints/, with predictions on all 108 tiles in
+raw_predictions_all_ckpts.csv.gz -- revalidate.py re-selects epoch + thresholds for a new split.
 """
 import json, os, random, shutil, subprocess, sys, threading
 from pathlib import Path
@@ -54,7 +60,6 @@ WORK, CKPT, DATA = "/work", "/ckpt", "/data"
 CLAY_CKPT = f"{CKPT}/clay-v1.5.ckpt"
 STAGE_B = f"{CKPT}/dq-detr_final.pt"
 WANDB_PROJECT = "mortalitree-lidar-pretrain"
-ARMS = ("ClayA", "ClayB")
 
 image = (
     modal.Image.debian_slim(python_version="3.11")
@@ -115,6 +120,36 @@ def build(max_chips: int = 400, workers: int = 24, out: str = "pretrain_clay"):
             "by_fire": lab.groupby("site").imgname.nunique().to_dict()}
 
 
+@app.function(cpu=8, memory=16384, timeout=8 * 3600, volumes={WORK: work_vol})
+def build_shard(shard: int, num_shards: int, out: str = "pretrain_clay_full", max_chips: int = 0, workers: int = 16):
+    """One shard of every eligible chip (as the DeepForest full set), 4-band windows -> one tar per shard."""
+    import tarfile
+    work_vol.reload()
+    d = Path(WORK, out, f"shard{shard}")
+    if d.exists():
+        shutil.rmtree(d)
+    subprocess.run([sys.executable, "build_pretrain.py", WORK, "--max-chips", str(max_chips), "--workers", str(workers),
+                    "--out", out, "--shard", str(shard), "--num-shards", str(num_shards), "--images-dir", "/tmp/png",
+                    "--clay-dir", "/tmp/clay"], check=True, cwd="/repo/lidar_pretrain")
+    with tarfile.open("/tmp/clay_tiles.tar", "w") as tf:
+        tf.add("/tmp/clay", arcname="tiles")
+    shutil.copy("/tmp/clay_tiles.tar", Path(WORK, out, f"clay_tiles_shard{shard}.tar"))
+    work_vol.commit()
+    return {"shard": shard}
+
+
+@app.function(cpu=2, memory=16384, volumes={WORK: work_vol})
+def merge_shards(out: str, num_shards: int):
+    import pandas as pd
+    work_vol.reload()
+    root = Path(WORK, out)
+    lab = pd.concat([pd.read_csv(root / f"shard{k}" / "labels_clay.csv") for k in range(num_shards)])
+    lab.to_csv(root / "labels_clay.csv", index=False); work_vol.commit()
+    per = lab.groupby("imgname").size()
+    return {"windows": int(per.size), "boxes": int(len(lab)), "max_boxes": int(per.max()),
+            "mean_boxes": round(float(per.mean()), 1), "by_fire": lab.groupby("site").imgname.nunique().to_dict()}
+
+
 # ---------------- model ----------------
 def _cfg(name):
     import yaml
@@ -160,45 +195,66 @@ def _stage_json(split, root):
     p = Path(root) / f"{split}.json"; p.write_text(json.dumps(items)); return str(p)
 
 
+# arm -> (LiDAR set on the volume, LiDAR-stage epochs); ClayA has no LiDAR stage
+ARM_CFG = {"ClayA": None, "ClayB": ("pretrain_clay", 10),
+           "ClayB_full10": ("pretrain_clay_full", 10), "ClayB_full1": ("pretrain_clay_full", 1)}
+
+
 def lidar_stage(seed, out_dir, epochs, lr, smoke, data="pretrain_clay"):
-    """stage_b_finetune's recipe on the LiDAR windows; returns the final checkpoint path."""
+    """stage_b_finetune's recipe on the LiDAR windows; resumes from lidar_last.pt; returns lidar_final.pt."""
     import tarfile
     sys.path.insert(0, "/root")
     from src.data.neon_dataset import NeonPatchDataset
     from src.data.deepforest_dataset import deepforest_collate_fn
     from src.train.stage_b import run_stage_b
     src = Path(WORK, data)
-    local = Path("/tmp/lidar_clay")
+    local = Path("/tmp", data)
     if not local.exists():
-        with tarfile.open(_need(src / "clay_tiles.tar", "LiDAR 4-band tiles")) as tf:
-            tf.extractall(local)
-    labels = str(src / "labels_clay.csv")
+        tars = sorted(src.glob("clay_tiles*.tar"))
+        if not tars:
+            _need(src / "clay_tiles.tar", "LiDAR 4-band tiles")
+        for t in tars:
+            with tarfile.open(t) as tf:
+                tf.extractall(local)
+    labels = str(_need(src / "labels_clay.csv", "LiDAR labels"))
     if smoke:
         import pandas as pd
         d = pd.read_csv(labels); keep = d.imgname.drop_duplicates().iloc[:64]
         labels = "/tmp/labels_smoke.csv"; d[d.imgname.isin(keep)].to_csv(labels, index=False)
     ds = NeonPatchDataset(labels_csv=labels, patches_root=str(local / "tiles"), tile_size=256, augment=True)
+    print(f"[LiDAR stage] {len(ds)} windows from {data}, {epochs} epochs", flush=True)
     cfg = _cfg("stage_b"); t, l = cfg["training"], cfg["loss"]
     model = _model(cfg)
+    last = Path(out_dir) / "lidar_last.pt"
     run_stage_b(model=model, dataset=ds, collate_fn=deepforest_collate_fn, checkpoint_dir=str(out_dir),
                 total_epochs=epochs, batch_size=t["batch_size"], lr=lr, weight_decay=t["weight_decay"],
                 warmup_epochs=0, val_fraction=t["val_fraction"], lam_cls=l["lam_cls"], lam_l1=l["lam_l1"],
                 lam_giou=l["lam_giou"], lam_ccm=l.get("lam_ccm", 1.0), lam_enc=l.get("lam_enc", 1.0),
-                cgfe_start_epoch=0, viz_every=0, ckpt_every=1, init_weights_from=_need(STAGE_B, "Stage B checkpoint"),
+                cgfe_start_epoch=0, viz_every=0, ckpt_every=1,
+                init_weights_from=None if last.exists() else _need(STAGE_B, "Stage B checkpoint"),
+                resume_from=str(last) if last.exists() else None,
                 flat_lr=True, ckpt_prefix="lidar", device="cuda", num_workers=t["num_workers"],
                 on_checkpoint=work_vol.commit)
     return _need(Path(out_dir) / "lidar_final.pt", "LiDAR-stage checkpoint")
 
 
-def stage_c(init_ckpt, out_dir, smoke):
+def stage_c(init_ckpt, local_dir, smoke, ckpt_every=5):
+    """Stage C into a local folder (checkpoints are 1.2 GB before slimming).
+
+    Early stopping is OFF: dq-detr-impl stops after 20 epochs without a new best val F1 at a fixed
+    conf 0.5 / IoU 0.5, which for DQ-DETR is ~0-0.13 noise, so it fired at epochs 21-34 -- mostly
+    before the encoder unfreezes at epoch 30 -- while val loss was still falling. All 80 epochs run;
+    the checkpoint is chosen afterwards on val with the harness metric (see choose_and_score)."""
+    print("[Stage C] early stopping off: all epochs, checkpoint chosen on val afterwards", flush=True)
     sys.path.insert(0, "/root")
     from src.train.stage_c_multi import run_stage_c_multi
     cfg = _cfg("stage_c"); t, l, ev = cfg["training"], cfg["loss"], cfg.get("eval", {})
     model = _model(cfg)
-    js = {s: _stage_json(s, out_dir) for s in ("train", "val")}
+    base = {k: v.detach().clone() for k, v in model.state_dict().items() if k.startswith("encoder.")}
+    js = {s: _stage_json(s, local_dir) for s in ("train", "val")}
     epochs, frozen = (2, 1) if smoke else (t["total_epochs"], t["frozen_epochs"])
     run_stage_c_multi(model=model, is_dqdetr=True, ckpt_prefix="dqdetr", train_annotations_path=js["train"],
-                      val_annotations_path=js["val"], checkpoint_dir=str(out_dir),
+                      val_annotations_path=js["val"], checkpoint_dir=str(local_dir),
                       norm_stats_path="/root/configs/naip_normalization.yaml", total_epochs=epochs, frozen_epochs=frozen,
                       batch_size=t["batch_size"], neck_head_lr=t["neck_head_lr"], encoder_lr=t["encoder_lr"],
                       weight_decay=t["weight_decay"], warmup_epochs=t["warmup_epochs"],
@@ -206,36 +262,74 @@ def stage_c(init_ckpt, out_dir, smoke):
                       lam_giou=l["lam_giou"], lam_ccm=l.get("lam_ccm", 1.0), lam_enc=l.get("lam_enc", 1.0),
                       cgfe_start_epoch=0, device="cuda", num_workers=t["num_workers"], stage_b_checkpoint=init_ckpt,
                       viz_every=10, n_viz_tiles=5, eval_conf_thresh=ev.get("conf_thresh", 0.5),
-                      eval_iou_thresh=ev.get("iou_thresh", 0.5), ckpt_every=0, on_checkpoint=work_vol.commit)
-    return model, _need(Path(out_dir) / "dqdetr_stage_c_best.pt", "Stage C best checkpoint")
+                      eval_iou_thresh=ev.get("iou_thresh", 0.5), ckpt_every=ckpt_every, patience=10 ** 6,
+                      on_checkpoint=None)
+    _need(Path(local_dir) / "dqdetr_stage_c_best.pt", "Stage C best checkpoint")
+    return model, base
 
 
-def predict_and_score(model, ckpt, out_dir, arm, info):
-    """Raw predictions on val/test -> the DeepForest arms' scoring (train.py)."""
-    import numpy as np, pandas as pd, torch
+def slim(state, base):
+    """Drop encoder weights identical to the Clay v1.5 weights (frozen blocks); keep everything that changed.
+    Load later with model.load_state_dict(slim, strict=False) on a freshly built model."""
+    import torch
+    return {k: v for k, v in state.items() if k not in base or not torch.equal(v.cpu(), base[k].cpu())}
+
+
+def predict_all(model, tag):
+    """Raw predictions (score >= 0.01) on all 108 hand-labelled tiles -> DataFrame with a split column."""
+    import numpy as np, pandas as pd
     from torch.utils.data import DataLoader
-    sys.path.insert(0, "/root"); sys.path.insert(0, "/repo/lidar_pretrain")
+    sys.path.insert(0, "/root")
     from src.data.naip_dataset import NAIPTileDataset, naip_collate_fn
     from src.eval.inference import predict_tile
+    model.to("cuda").eval(); rows = []
+    for split in ("train", "val", "test"):
+        ds = NAIPTileDataset(_stage_json(split, "/tmp"), "/root/configs/naip_normalization.yaml", augment=False)
+        for batch in DataLoader(ds, batch_size=8, shuffle=False, collate_fn=naip_collate_fn):
+            bl, sl = predict_tile(model, batch, conf_thresh=0.01, device="cuda")
+            for path, b, sc in zip(batch["tile_paths"], bl, sl):
+                if not len(b):
+                    continue
+                xyxy = np.clip(np.c_[b[:, 0] - b[:, 2] / 2, b[:, 1] - b[:, 3] / 2,
+                                     b[:, 0] + b[:, 2] / 2, b[:, 1] + b[:, 3] / 2] * 256, 0, 256)
+                rows += [{"ckpt": tag, "split": split, "image_path": f"{Path(path).stem}.png", "xmin": x0, "ymin": y0,
+                          "xmax": x1, "ymax": y1, "score": float(s_)} for (x0, y0, x1, y1), s_ in zip(xyxy, sc)]
+    return pd.DataFrame(rows)
+
+
+def choose_and_score(allp, out_dir, arm, info):
+    """Pick the kept checkpoint whose val F1 (IoU 0.4, val-selected threshold/NMS) is highest, then score it."""
+    sys.path.insert(0, "/repo/lidar_pretrain")
+    import numpy as np
     import train as T
-    sd = torch.load(ckpt, map_location="cpu", weights_only=False)
-    model.load_state_dict(sd.get("model", sd), strict=False); model.to("cuda").eval()
+    lab = Path("/tmp/labelled"); T.prep_labelled(lab)
+    val_gt = T.gt_by_img(lab / "val.csv"); empty = (np.zeros((0, 4)), np.zeros(0)); per = {}
+    for tag, d in allp[allp.split == "val"].groupby("ckpt"):
+        raw = {i: (g[["xmin", "ymin", "xmax", "ymax"]].to_numpy(float), g.score.to_numpy(float))
+               for i, g in d.groupby("image_path")}
+        raw = {i: raw.get(i, empty) for i in val_gt}
+        per[tag] = max(T.score(raw, val_gt, st, nt, [0.4])["iou0.4"]["f1"] for st in T.SCORES for nt in T.NMSS + [1.0])
+    tag = max(per, key=per.get)
+    print(f"  checkpoint chosen on val: {tag} (val F1@0.4 {per[tag]:.3f}); all: "
+          + ", ".join(f"{k} {v:.3f}" for k, v in sorted(per.items())), flush=True)
+    return score_raw(allp[allp.ckpt == tag], out_dir, arm, {**info, "chosen_checkpoint": tag, "val_f1_by_checkpoint": per})
+
+
+def score_raw(df_all, out_dir, arm, info):
+    """The DeepForest arms' scoring (train.py) on one checkpoint's val/test predictions."""
+    import pandas as pd
+    sys.path.insert(0, "/repo/lidar_pretrain")
+    import train as T
     lab = Path("/tmp/labelled"); T.prep_labelled(lab)
     raw = {}
     for split in ("val", "test"):
-        ds = NAIPTileDataset(_stage_json(split, out_dir), "/root/configs/naip_normalization.yaml", augment=False)
-        rows, r = [], {}
-        for batch in DataLoader(ds, batch_size=8, shuffle=False, collate_fn=naip_collate_fn):
-            bl, sl = predict_tile(model, batch, conf_thresh=0.01, device="cuda")
-            for path, b, s in zip(batch["tile_paths"], bl, sl):
-                name = f"{Path(path).stem}.png"
-                xyxy = np.c_[b[:, 0] - b[:, 2] / 2, b[:, 1] - b[:, 3] / 2, b[:, 0] + b[:, 2] / 2, b[:, 1] + b[:, 3] / 2] * 256 \
-                    if len(b) else np.zeros((0, 4))
-                xyxy = np.clip(xyxy, 0, 256); r[name] = (xyxy, np.asarray(s, float))
-                rows += [{"image_path": name, "xmin": x0, "ymin": y0, "xmax": x1, "ymax": y1, "score": float(sc)}
-                         for (x0, y0, x1, y1), sc in zip(xyxy, s)]
-        raw[split] = r
-        pd.DataFrame(rows).to_csv(Path(out_dir) / f"raw_predictions_{split}.csv", index=False)
+        d = df_all[df_all.split == split]
+        d.drop(columns=["ckpt", "split"]).to_csv(Path(out_dir) / f"raw_predictions_{split}.csv", index=False)
+        imgs = pd.read_csv(lab / f"{split}.csv").image_path.unique()
+        raw[split] = {i: (g[["xmin", "ymin", "xmax", "ymax"]].to_numpy(float), g.score.to_numpy(float))
+                      for i, g in d.groupby("image_path")}
+        for i in imgs:
+            raw[split].setdefault(i, (__import__("numpy").zeros((0, 4)), __import__("numpy").zeros(0)))
     nmss = T.NMSS + [1.0]                      # 1.0 = no NMS (DETR's usual setting)
     val_gt = T.gt_by_img(lab / "val.csv")
     grid = [(st, nt, T.score(raw["val"], val_gt, st, nt, [0.4])["iou0.4"]["f1"]) for st in T.SCORES for nt in nmss]
@@ -250,36 +344,66 @@ def predict_and_score(model, ckpt, out_dir, arm, info):
     return rec
 
 
+def keep_checkpoints(model, base, local_dir, out_dir):
+    """Every Stage C checkpoint (epochNNN, best, final): slimmed copy on the volume + predictions on all
+    108 tiles, so best-epoch and threshold selection can be redone for any new val/test split (revalidate.py)."""
+    import pandas as pd, torch
+    ck = Path(out_dir) / "checkpoints"; ck.mkdir(parents=True, exist_ok=True)
+    preds, meta = [], {}
+    for f in sorted(Path(local_dir).glob("dqdetr_stage_c_*.pt")):
+        tag = f.stem.replace("dqdetr_stage_c_", "")
+        sd = torch.load(f, map_location="cpu", weights_only=False)
+        state = sd.get("model", sd); meta[tag] = {"epoch": sd.get("epoch"), "val_f1_conf0.5": sd.get("val_f1")}
+        model.load_state_dict(state, strict=False)
+        preds.append(predict_all(model, tag))
+        torch.save({"epoch": sd.get("epoch"), "val_f1": sd.get("val_f1"), "model": slim(state, base),
+                    "note": "slimmed: frozen Clay encoder weights omitted; load with strict=False on a fresh model"},
+                   ck / f.name)
+        print(f"  kept {f.name} (epoch {sd.get('epoch')}) + predictions", flush=True)
+    allp = pd.concat(preds); allp.to_csv(Path(out_dir) / "raw_predictions_all_ckpts.csv.gz", index=False)
+    (Path(out_dir) / "checkpoints.json").write_text(json.dumps(meta, indent=1))
+    work_vol.commit()
+    return allp
+
+
 @app.function(**GPU)
-def train_arm(seed: int, arm: str, smoke: bool = False, lidar_epochs: int = 10, lidar_lr: float = 5e-4,
-              runs: str = "runs_clay", data: str = "pretrain_clay"):
+def train_arm(seed: int, arm: str, smoke: bool = False, lidar_lr: float = 5e-4, runs: str = "runs_clay",
+              data: str = "", reuse_lidar: str = ""):
     import wandb
-    assert arm in ARMS
+    assert arm in ARM_CFG, arm
     work_vol.reload()
     if smoke:
         runs = runs + "_smoke"
     out = Path(WORK, runs, f"seed{seed}", arm); out.mkdir(parents=True, exist_ok=True)
     stop = threading.Event(); threading.Thread(target=committer, args=(stop,), daemon=True).start()
-    group = f"{'smoke-' if smoke else ''}clay-seed{seed}"
-    cfg = {"seed": seed, "arm": arm, "stage_b": STAGE_B, "lidar_epochs": lidar_epochs, "lidar_lr": lidar_lr,
-           "smoke": smoke, "data": data}
+    group = f"{'smoke-' if smoke else ''}{runs.replace('runs_', '')}-seed{seed}"
+    lidar = ARM_CFG[arm]
+    if lidar and data:                                    # override (smoke tests)
+        lidar = (data, lidar[1])
+    cfg = {"seed": seed, "arm": arm, "stage_b": STAGE_B, "lidar": lidar, "lidar_lr": lidar_lr, "smoke": smoke}
+    short = group.replace("-seed", "-s")
     try:
         _need(CLAY_CKPT, "Clay v1.5 encoder"); _need(STAGE_B, "Stage B checkpoint")
         init = STAGE_B
-        if arm == "ClayB":
-            lid = Path(WORK, runs, f"seed{seed}", "lidar_stage")
+        if lidar:
+            lid = Path(WORK, runs, f"seed{seed}", f"lidar_{arm}")
             done = lid / "lidar_final.pt"
+            if reuse_lidar:                                  # e.g. "runs_clay/seed{seed}/lidar_stage"
+                done = Path(WORK, reuse_lidar.format(seed=seed), "lidar_final.pt")
+                _need(done, "LiDAR-stage checkpoint to reuse")
             if done.exists():
                 init = str(done); print(f"reusing {done}")
             else:
                 _seed(seed)
-                _wandb(f"{group.replace('-seed', '-s')}-lidar", group, cfg)
-                init = str(lidar_stage(seed, lid, 1 if smoke else lidar_epochs, lidar_lr, smoke, data))
+                _wandb(f"{short}-{arm}-lidar", group, cfg)
+                init = str(lidar_stage(seed, lid, 1 if smoke else lidar[1], lidar_lr, smoke, lidar[0]))
                 wandb.finish()
         _seed(seed)
-        run = _wandb(f"{group.replace('-seed', '-s')}-{arm}-stageC", group, cfg)
-        model, best = stage_c(init, out, smoke)
-        rec = predict_and_score(model, best, out, arm, {"init_checkpoint": init, "seed": seed})
+        run = _wandb(f"{short}-{arm}-stageC", group, cfg)
+        local = Path("/tmp/stagec"); shutil.rmtree(local, ignore_errors=True); local.mkdir()
+        model, base = stage_c(init, local, smoke)
+        allp = keep_checkpoints(model, base, local, out)
+        rec = choose_and_score(allp, out, arm, {"init_checkpoint": init, "seed": seed})
         m = rec["metrics"]
         run.summary.update({f"test/{k}/{kk}": vv for k, v in m["test_all_tiles"].items() if isinstance(v, dict)
                             for kk, vv in v.items()})
@@ -290,6 +414,22 @@ def train_arm(seed: int, arm: str, smoke: bool = False, lidar_epochs: int = 10, 
                {"mae": m["test_all_tiles"]["count_mae"], "val": m["selected_on_val"]}
     finally:
         stop.set(); work_vol.commit()
+
+
+@app.function(cpu=8, memory=16384, timeout=3 * 3600, volumes={WORK: work_vol})
+def revalidate(runs: str = "runs_clay", val: str = "", test: str = ""):
+    """revalidate.py on the volume. val / test: comma-separated tile names (default: current split).
+        modal run lidar_pretrain/clay_app.py::revalidate --runs runs_clay_full --val a,b,c --test d,e,f"""
+    work_vol.reload()
+    args = [sys.executable, "revalidate.py", WORK, runs]
+    for flag, names in (("--val", val), ("--test", test)):
+        if names:
+            f = Path(f"/tmp/{flag[2:]}.json"); f.write_text(json.dumps([n.strip() for n in names.split(",") if n.strip()]))
+            args += [flag, str(f)]
+    r = subprocess.run(args, capture_output=True, text=True, cwd="/repo/lidar_pretrain")
+    work_vol.commit()
+    print(r.stdout[-6000:], r.stderr[-3000:])
+    return r.stdout
 
 
 @app.function(cpu=4, memory=8192, volumes={WORK: work_vol})
@@ -303,32 +443,43 @@ def summary(runs: str = "runs_clay"):
     return text + a.stderr[-1500:] + b.stderr[-1500:]
 
 
+STATUS = "pipeline_status_runs_clay.json"
+
+
 def _status(**kw):
-    p = Path(WORK, "pipeline_status_clay.json")
+    p = Path(WORK, STATUS)
     cur = json.loads(p.read_text()) if p.exists() else {}
     cur.update(kw); p.write_text(json.dumps(cur, indent=1)); work_vol.commit()
     print("status:", json.dumps(kw), flush=True)
 
 
 @app.function(cpu=1, timeout=24 * 3600, volumes={WORK: work_vol})
-def pipeline(stage: str = "build,train", seeds: str = "0,1,2", smoke: bool = False):
+def pipeline(stage: str = "build,train", seeds: str = "0,1,2", smoke: bool = False, arms: str = "ClayA,ClayB",
+             runs: str = "runs_clay", reuse_lidar: str = ""):
     import datetime
     now = lambda: datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds")
     S = set(stage.split(","))
-    _status(started=now(), stage=stage, seeds=seeds, smoke=smoke, state="running", build=None, train=None,
-            summary=None, error=None)
+    global STATUS
+    STATUS = f"pipeline_status_{runs}.json"
+    _status(started=now(), stage=stage, seeds=seeds, smoke=smoke, arms=arms, runs=runs, state="running", build=None,
+            train=None, summary=None, error=None)
     try:
         if "build" in S:
             _status(build=build.remote())
+        if "build_full" in S:
+            n = 8
+            list(build_shard.map(range(n), kwargs={"num_shards": n}))
+            _status(build=merge_shards.remote("pretrain_clay_full", n))
         if "train" in S:
-            jobs = [(int(s), arm) for s in seeds.split(",") for arm in ARMS]
+            jobs = [(int(s), arm) for s in seeds.split(",") for arm in arms.split(",")]
             done = {}
-            for (s, arm), res in zip(jobs, train_arm.starmap(jobs, kwargs={"smoke": smoke}, return_exceptions=True)):
+            for (s, arm), res in zip(jobs, train_arm.starmap(jobs, kwargs={"smoke": smoke, "runs": runs, "reuse_lidar": reuse_lidar},
+                                                             return_exceptions=True)):
                 done[f"seed{s}/{arm}"] = {"error": f"{type(res).__name__}: {res}"[:300]} \
                     if isinstance(res, BaseException) else res
                 _status(train=done)
         if S & {"train", "summary"} and not smoke:
-            _status(summary=summary.remote())
+            _status(summary=summary.remote(runs))
         _status(state="done", finished=now())
     except Exception as e:
         _status(state="failed", error=f"{type(e).__name__}: {e}"[:500], finished=now())
@@ -340,6 +491,11 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser(description="spawn the Clay pipeline on the deployed app and exit")
     ap.add_argument("--stage", default="build,train"); ap.add_argument("--seeds", default="0,1,2")
     ap.add_argument("--smoke", action="store_true")
+    ap.add_argument("--arms", default="ClayA,ClayB", help=f"comma list of {list(ARM_CFG)}")
+    ap.add_argument("--runs", default="runs_clay")
+    ap.add_argument("--reuse-lidar", default="", help='e.g. "runs_clay/seed{seed}/lidar_stage"')
     a = ap.parse_args()
-    call = modal.Function.from_name("lidar-clay", "pipeline").spawn(a.stage, a.seeds, a.smoke)
-    print(f"spawned clay pipeline (stage={a.stage}, seeds={a.seeds}, smoke={a.smoke}): call {call.object_id}")
+    call = modal.Function.from_name("lidar-clay", "pipeline").spawn(a.stage, a.seeds, a.smoke, a.arms, a.runs,
+                                                                    a.reuse_lidar)
+    print(f"spawned clay pipeline (stage={a.stage}, arms={a.arms}, runs={a.runs}, seeds={a.seeds}, smoke={a.smoke}): "
+          f"call {call.object_id}")

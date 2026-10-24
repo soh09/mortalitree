@@ -252,6 +252,8 @@ def main():
 
     def finish(arm, m, info, lg=None):
         d = run / arm; d.mkdir(exist_ok=True)
+        if arm in ("A", "B"):              # keep the fine-tuned model, e.g. to predict on new tiles later
+            m.trainer.save_checkpoint(str(d / "model.ckpt"))
         info["metrics"] = evaluate(m, lab, d)
         info["config"] = vars(a)
         (d / "metrics.json").write_text(json.dumps(info, indent=1))
