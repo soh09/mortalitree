@@ -15,8 +15,10 @@ the PDF before relying on a *partial* entry's methods.
 **Goal.** Count individual trees in 4-band NAIP (0.6 m) before and after California
 wildfires, to estimate post-fire tree mortality.
 
-**Best current model.** DeepForest (RetinaNet, RGB only) fine-tuned on 75 hand-labelled
-NAIP tiles.
+**Best current model.** DeepForest (RetinaNet, RGB only), pretrained on 3DEP LiDAR crowns
+drawn on pre-fire NAIP (4,775 images), then fine-tuned on the 75 hand-labelled NAIP tiles:
+test F1@0.4 0.386, count MAE 16.7 (§3.7, §7.5). Clay DQ-DETR is well behind (F1@0.4 ≈ 0.31,
+MAE ≈ 36), though those Clay numbers come from runs hurt by an early-stopping bug and are being redone.
 
 **The core finding.** The model *finds* trees reasonably well but *boxes* them poorly.
 Box extent, not detection, is the bottleneck — and much of that is geometric: median
@@ -33,11 +35,15 @@ of labels and raised held-out F1 from 0.42 to 0.50; Dalponte and Silva region gr
 not beat it. **But on 3DEP at CZU the tuned crowns looked too small by eye, so the original
 watershed stays the default for 3DEP labels.**
 
-**LiDAR pretraining works, modestly** (§7.5): pretraining DeepForest on 3DEP crowns drawn
-on pre-fire NAIP, then fine-tuning as before, improves pre-fire test tiles in every seed
-(F1@0.4 0.315 → 0.339, count error −8%) but not post-fire tiles. 3DEP covers CZU, SCU and
-North Complex, not Creek or Castle. A run on all 14,240 eligible chips is in progress. Against field stems the tuned watershed nearly matches human labels on recall
-(0.72 vs 0.75) but merges about twice as often.
+Against field stems the tuned watershed nearly matches human labels on recall (0.72 vs 0.75)
+but merges about twice as often.
+
+**LiDAR pretraining works, modestly** (§7.5, comparison in §3.7): pretraining DeepForest on 3DEP
+crowns drawn on pre-fire NAIP, then fine-tuning as before, improves pre-fire test tiles in every
+seed (F1@0.4 0.315 → 0.339, count error −8%) but not post-fire tiles. **10× more LiDAR data
+adds nothing** (45,788 images: F1@0.4 0.380). For Clay the LiDAR stage helps more (all 3 seeds;
+count error 52 → 36) but Clay stays well below DeepForest. 3DEP covers CZU, SCU and North
+Complex, not Creek or Castle.
 
 ---
 
@@ -149,14 +155,80 @@ DeepForest saturates around 40 tiles. **Caveat:** this measures DeepForest's cei
 nothing about Clay's from-scratch DETR head. Our 5,200 crowns already exceed DeepForest's
 own 2,848 hand labels; we're short on **scenes**, not crowns.
 
+### 3.7 All models on one test set
+
+**Protocol** (`lidar_pretrain/`, "harness"): the 15 test tiles (997 crowns; 8 pre-fire, 7
+post-fire); score threshold and NMS chosen on the 18 val tiles (best F1 at IoU 0.4, NMS grid
+incl. none), test scored once; one-to-one greedy matching; count MAE = mean |predicted −
+true| crowns per tile. Mean ± sd over 3 seeds. Rows marked † come from earlier scripts with
+other conventions (fixed thresholds, IoU 0.5) and are only roughly comparable.
+
+| Model | Labels it learned from | F1@0.25 | F1@0.4 | F1@0.5 | Count MAE |
+|---|---|---|---|---|---|
+| Veg-index + watershed † (non-ML, §3.4) | — | — | — | 0.115 | 43.4 |
+| DeepForest prebuilt, no fine-tuning † (F1@0.4/0.5 from §3.1; F1@0.25, MAE = per-tile means from §3.5) | NEON | 0.404 | 0.220 | 0.125 | 25.4 |
+| **DF-A**: DeepForest fine-tuned | NEON → hand | 0.545 ± 0.010 | 0.368 ± 0.012 | 0.237 ± 0.005 | 18.0 ± 0.2 |
+| **DF-B**: + LiDAR pretraining (4,775 images) | NEON → LiDAR → hand | 0.570 ± 0.006 | **0.386** ± 0.008 | **0.245** ± 0.006 | **16.7** ± 0.7 |
+| DF-B full: + LiDAR pretraining (45,788 images) | NEON → LiDAR → hand | **0.577** ± 0.010 | 0.380 ± 0.005 | 0.245 ± 0.002 | 17.5 ± 1.9 |
+| DF-C: LiDAR pretraining only (4,775) | NEON → LiDAR | 0.479 ± 0.007 | 0.261 ± 0.008 | 0.143 ± 0.003 | 21.7 ± 0.3 |
+| DF-C full: LiDAR only (45,788) | NEON → LiDAR | 0.488 ± 0.009 | 0.262 ± 0.002 | 0.138 ± 0.003 | 21.2 ± 0.5 |
+| Clay DQ-DETR, report † (conf 0.5, §3.6) | NEON → hand | — | — | 0.153 | — |
+| **Clay-A**: Stage B → Stage C ‡ | NEON → hand | 0.415 ± 0.096 | 0.257 ± 0.074 | 0.154 ± 0.053 | 52.4 ± 15.4 |
+| **Clay-B**: + LiDAR stage (4,772 4-band) ‡ | NEON → LiDAR → hand | 0.484 ± 0.026 | 0.308 ± 0.020 | 0.195 ± 0.019 | 35.7 ± 2.5 |
+
+‡ Stage C stopped early (epochs 21–34 of 80) and kept noise-chosen early checkpoints (§7.5.1);
+re-runs with the fix (`runs_clay_v2`, `runs_clay_full`) are in progress.
+
+**By imagery date** (same thresholds as above):
+
+| Pre-fire test (8 tiles, 758 crowns) | F1@0.25 | F1@0.4 | F1@0.5 | Count MAE |
+|---|---|---|---|---|
+| DF-A | 0.515 ± 0.011 | 0.315 ± 0.013 | 0.188 ± 0.005 | 25.4 ± 0.6 |
+| DF-B (4,775) | 0.540 ± 0.006 | **0.339** ± 0.009 | **0.204** ± 0.006 | **23.3** ± 0.9 |
+| DF-B full (45,788) | **0.549** ± 0.008 | 0.329 ± 0.005 | 0.201 ± 0.002 | 26.1 ± 3.2 |
+| DF-C (4,775) | 0.468 ± 0.012 | 0.233 ± 0.013 | 0.120 ± 0.005 | 31.5 ± 1.1 |
+| DF-C full | 0.486 ± 0.009 | 0.240 ± 0.003 | 0.119 ± 0.000 | 32.5 ± 0.6 |
+| Clay-A ‡ | 0.405 ± 0.086 | 0.240 ± 0.066 | 0.142 ± 0.048 | 83.3 ± 23.3 |
+| Clay-B ‡ | 0.489 ± 0.011 | 0.299 ± 0.009 | 0.184 ± 0.013 | 50.1 ± 5.2 |
+
+| Post-fire test (7 tiles, 239 crowns) | F1@0.25 | F1@0.4 | F1@0.5 | Count MAE |
+|---|---|---|---|---|
+| DF-A | 0.643 ± 0.008 | 0.540 ± 0.011 | **0.397** ± 0.012 | 9.5 ± 1.0 |
+| DF-B (4,775) | 0.674 ± 0.006 | 0.547 ± 0.009 | 0.384 ± 0.005 | 9.1 ± 0.6 |
+| DF-B full (45,788) | 0.672 ± 0.014 | **0.556** ± 0.024 | 0.394 ± 0.011 | **7.7** ± 1.4 |
+| DF-C (4,775) | 0.513 ± 0.021 | 0.346 ± 0.009 | 0.213 ± 0.010 | 10.6 ± 0.6 |
+| DF-C full | 0.497 ± 0.012 | 0.344 ± 0.003 | 0.208 ± 0.011 | 8.2 ± 0.4 |
+| Clay-A ‡ | 0.456 ± 0.146 | 0.336 ± 0.104 | 0.213 ± 0.070 | 17.1 ± 6.4 |
+| Clay-B ‡ | 0.465 ± 0.090 | 0.346 ± 0.082 | 0.247 ± 0.062 | 19.2 ± 4.8 |
+
+**Robustness (swapped split):** choosing thresholds on the 15 test tiles and scoring the 18 val
+tiles instead (`revalidate.py`), DF-B still beats DF-A: F1@0.4 0.349 ± 0.020 vs 0.317 ± 0.004
+(count MAE 32.7 vs 32.5).
+
+**Takeaways.**
+- **Best model: DF-B (DeepForest + 4,775 LiDAR images).** +0.018 F1@0.4 and −7% count error over
+  DF-A overall; the gain is all on pre-fire tiles (every seed, every metric), none post-fire.
+- **More LiDAR data doesn't help DeepForest** (DF-B full ≈ DF-B; pre-fire counting worse and noisier).
+  The gain saturates at a few thousand images; label quality (misregistration, box density), not
+  label count, is the likely limit. The full run also had 10× the steps, so data and steps are confounded.
+- **LiDAR labels alone (DF-C) are weaker than hand labels**: ~70% of DF-A's F1@0.4, 88% at IoU 0.25 —
+  they find trees but box them loosely.
+- **Clay benefits more from the LiDAR stage than DeepForest** (Clay-B > Clay-A in every seed; count
+  error 52 → 36; 4× smaller seed spread), but **stays well behind DeepForest** (0.308 vs 0.386 F1@0.4;
+  counting about 2× worse, mostly over-counting on dense pre-fire tiles). Pending the fixed re-runs.
+- **Post-fire tiles score higher for every model** (fewer, sparser crowns) and no LiDAR variant helps
+  there: pretraining saw pre-fire imagery only.
+
 ### 3.6 Clay / foundation-model experiments (from the report)
 
 Best: DQ-DETR fine-tuned, F1 0.153. Clay encoder is **frozen** — trainable params are
 ~3.2M (neck + head) vs ~32M for fine-tuned DeepForest. Likely limits: from-scratch DETR
 head with no detection prior, ~80 epochs vs DETR's 500 (quartering run killed at epoch
 43), and Experiment C (deep supervision) never run. Focal loss (Experiment B) exists in
-`dq-detr-impl` only, bundled with other changes. GPU is blocked on Modal, so no Clay
-reruns yet.
+`dq-detr-impl` only, bundled with other changes. Modal GPUs work again (October 2026); Clay
+has since been re-run in the shared harness with and without a LiDAR stage (§7.5.1, §3.7).
+That rerun also found Stage C's early stopping misfiring (fixed conf-0.5 val F1 is noise
+for DQ-DETR), so the report's Clay numbers are early checkpoints too.
 
 ---
 
@@ -491,10 +563,47 @@ B − A per seed, F1@0.4: +0.015, +0.006, +0.034; MAE −0.8, −2.1, −1.1. A 
   F1@0.25, so they find trees but box them loosely (misregistration of several metres).
 - Caveat: 8 pre-fire test tiles; the evidence is consistency across seeds, not sample size.
 
-**Scaling up (running):** every eligible chip — 14,240 across CZU, SCU and North Complex,
-~12× the set above — built in 8 parallel shards; arms B and C retrained with the same
-settings (3 epochs ≈ 4 h per seed) into `runs_full/` (wandb groups `full-seed*`), and
-compared against the A runs above.
+**Scaling up: no further gain.** Every eligible chip (11,457 after the forest filter → 45,788
+images, 7.5 M boxes, ~10× the set above), same settings (3 epochs ≈ 3.8 h per seed on an L4),
+arms B and C, compared against the A runs above (`runs_full2/`, wandb `full2-seed*`):
+B full F1@0.4 0.380 ± 0.005 vs B 0.386; pre-fire 0.329 vs 0.339, count MAE 26.1 ± 3.2 vs 23.3;
+post-fire count MAE 7.7 vs 9.1 (7 tiles). C is unchanged (0.262 vs 0.261). Tables in §3.7.
+- The first full-scale attempt (`runs_full/`) diverged for seed 2 (train loss → 26,768, val recall 0
+  after 3.8 h; lr 0.001, ~17 k steps on very dense boxes, no gradient clipping) and its crash
+  cancelled the other seeds. `full2` adds gradient clipping (norm 10) during pretraining,
+  per-validation checkpoints with resume, and per-seed failure isolation.
+- During long pretraining val recall on the hand-labelled tiles drifts down (0.42 → ~0.31) while
+  precision rises: the model learns LiDAR-style boxes, which fine-tuning then has to undo.
+
+#### 7.5.1 The same for Clay DQ-DETR (`lidar_pretrain/clay_app.py`)
+
+- **Stage B** (existing checkpoint `clay-checkpoints:/dq-detr_final.pt`, from `dq-detr-impl`):
+  4-band NEON patches (RGB downsampled to 0.6 m; **NIR = mean of 18 hyperspectral bands 837–917 nm**),
+  DeepForest-predicted boxes with NDVI ≥ 0.6, 70 epochs, frozen Clay v1.5 encoder. Every Stage B
+  run in wandb `clay-tree-detector` used `data_source=neon`; none used RGB-only data.
+- **LiDAR stage** (Clay-B only): the same 400-chips-per-fire LiDAR crowns, but on **raw 4-band
+  pre-fire NAIP** (4,772 windows, 803,592 boxes, ≤ 555 per window, under DQ-DETR's 600 queries);
+  `stage_b_finetune`'s recipe: flat lr 5e-4, counting module on, encoder frozen, 10 epochs
+  (~56 min per seed on an A10G). Curves (wandb `clay-s*-lidar`): smooth, no divergence; LiDAR-val
+  loss 3.1–3.2 → 2.9, mostly flat after ~5 epochs; LiDAR-val recall stays ~0.25.
+- **Stage C** (both arms): `stage_c(model="dqdetr")` settings — 80 epochs, last 2 encoder blocks
+  unfrozen after 30.
+- **Early-stopping bug (dq-detr-impl Stage C).** It stops after 20 epochs without a new best val F1
+  at a *fixed* conf 0.5 / IoU 0.5. For DQ-DETR that F1 is 0.00–0.13 noise, so the "best" epoch was
+  1, 3, 4, 4, 6 or 14 and runs stopped at 21–34 — mostly **before the encoder unfreezes** — while
+  val loss was still falling (Clay-A 5.7 → 2.8, Clay-B 4.3 → 2.5). Clay-A seed 2's poor result is its
+  epoch-1 checkpoint. Both arms suffered equally, so A vs B is fair, but both are understated.
+  Fix (`b2b7179`): no early stopping; checkpoints every 5 epochs + best + final, chosen afterwards
+  on val with the harness metric. Re-runs: `runs_clay_v2` (small set, reusing the LiDAR-stage
+  checkpoints, which the bug did not affect) and `runs_clay_full` (full 4-band set, 45,751 windows:
+  ClayB_full10 = 10 LiDAR epochs, ClayB_full1 = 1 epoch, i.e. the small run's step count, to
+  separate data from steps).
+- The existing `stage_b_finetune` entrypoint silently trains from scratch: it mounts the checkpoint
+  volume at `/checkpoints/150`, so its default checkpoint path doesn't exist and it only warns.
+  `clay_app.py` mounts the volume at its root and fails loudly on any missing checkpoint.
+- **Re-validation:** every kept checkpoint is slimmed (frozen encoder weights dropped: 37–140 MB
+  instead of 1.2 GB) and stored with predictions on all 108 tiles; `revalidate.py` re-chooses
+  checkpoint and thresholds for a new val/test split on CPU and refuses training tiles.
 
 ### 7.6 Human-in-the-loop annotation (design, not built)
 
@@ -519,7 +628,10 @@ Points instead of boxes remove the anchoring problem.
 | `baselines/watershed_eval/neontree_{fetch,watershed,eval}.py`, `lidar_annotation_benchmarking.md` | So's NeonTreeEvaluation benchmark of the segmentation (§7.2) — on `lidar-crowns` |
 | `baselines/watershed_eval/{watershed_grid,dalponte_grid,forest_type_grid,neontree_stems,make_neontree_viewer}.py` | Tuning, Dalponte/Silva ports, per-forest-type selection, field-stem scoring, review viewer (§7.2.1) |
 | `lidar_pretrain/` | 3DEP pretraining experiment (§7.5): chip selection, pretraining-set build, training/eval arms, Modal app (`modal_app.py`, headless), summaries |
-| Modal volume `lidar-pretrain-work` | Extracted CHM chips, `chips.json`/`coverage.json`, `pretrain/` and `pretrain_full/` sets (PNG tars), `runs/` and `runs_full/` (metrics, raw predictions, checkpoints) |
+| `lidar_pretrain/clay_app.py` | Clay DQ-DETR arms with/without a LiDAR stage (§7.5.1); uses the untracked `dq-detr-impl/` unmodified |
+| `lidar_pretrain/{rescore_by_period,revalidate,export_viewer_preds}.py` | Pre/post-fire split; re-validation for a new split (CPU); tile-viewer overlays (best-on-val seed) |
+| `single_tiles_flat/stage_c_data/viewer/` | Tile viewer; overlays for DeepForest + LiDAR and Clay + LiDAR (`predictions_extra_*.json`, keys 7, 8) |
+| Modal volume `lidar-pretrain-work` | Extracted CHM chips, `chips.json`/`coverage.json`, `pretrain/` + `pretrain_full/` (RGB PNG tars), `pretrain_clay/` + `pretrain_clay_full/` (4-band GeoTIFF tars + `labels_clay.csv`), `runs/`, `runs_full2/`, `runs_clay*/` (metrics, raw predictions, checkpoints), `summary_*.md`, `pipeline_status_*.json` |
 | `pyproject.toml`, `uv.lock`, `.python-version` | Dependencies for `baselines/`, managed with `uv` (`uv run python …`) |
 | `baselines/alignment_viewer/`, `baselines/alignment_viewer_czu/` | Alignment viewers (30 MB / 75 MB, untracked) |
 | `single_tiles_flat/make_tile_viewer.py`, `stage_c_data/viewer/`, `readable/` | Tile viewer and readable JSON |
@@ -538,7 +650,7 @@ Points instead of boxes remove the anchoring problem.
 ## 9. Open questions and next steps
 
 1. **Merging: still open** (§7.2.1) — the NEON-tuned watershed (Gaussian σ 0.5, trim to 65% of top, 10 m cap) made crowns too small on 3DEP at CZU, so the original stays the default; Dalponte/Silva don't beat it on NEON either. Still open: confirm with other split seeds / leave-site-out; adopt the conifer per-type setting only if it holds; find California conifer stems (TEAK/SOAP tower plots outside the benchmark images) to check counting there; try a 0.5 m CHM from the benchmark's point clouds. Then test whether training on these crowns helps DeepForest on NAIP before tuning further.
-2. **3DEP pre-fire coverage: answered** (§7.5) — CZU, SCU, North Complex yes; Creek and Castle none. LiDAR pretraining helps on pre-fire tiles (+8% F1@0.4, −8% count error), not post-fire. Next: the full-scale run (in progress); post-fire pretraining examples; NEON LiDAR for Creek.
+2. **3DEP pre-fire coverage: answered** (§7.5) — CZU, SCU, North Complex yes; Creek and Castle none. LiDAR pretraining helps on pre-fire tiles (+8% F1@0.4, −8% count error), not post-fire; 10× more LiDAR data adds nothing for DeepForest (§3.7). Next: post-fire pretraining examples (pre-fire crowns on 2022 NAIP where burns were light); better labels rather than more (registration offsets, SAM-tightened boxes); NEON LiDAR for Creek; finish the fixed Clay re-runs.
 3. **Measure registration** — save 10–20 hand offsets in the CZU viewer; check whether tall trees stay offset after short ones align (relief displacement). Less urgent until crowns are resolved individually.
 4. **NEON SOAP viewer** — NEON LiDAR crowns vs NAIP 2020/2022, NEON 10 cm as reference; check whether 2024 CA NAIP exists to match NEON 2024.
 5. **Fix crown filters** — buildings, water edges, power lines.
