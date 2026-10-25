@@ -17,8 +17,8 @@ wildfires, to estimate post-fire tree mortality.
 
 **Best current model.** DeepForest (RetinaNet, RGB only), pretrained on 3DEP LiDAR crowns
 drawn on pre-fire NAIP (4,775 images), then fine-tuned on the 75 hand-labelled NAIP tiles:
-test F1@0.4 0.386, count MAE 16.7 (§3.7, §7.5). Clay DQ-DETR is well behind (F1@0.4 ≈ 0.31,
-MAE ≈ 36), though those Clay numbers come from runs hurt by an early-stopping bug and are being redone.
+test F1@0.4 0.386, count MAE 16.7 (§3.7, §7.5). Clay DQ-DETR + LiDAR stage is next (F1@0.4 0.363,
+MAE ≈ 30) — about level with fine-tuned DeepForest on boxes, clearly worse at counting.
 
 **The core finding.** The model *finds* trees reasonably well but *boxes* them poorly.
 Box extent, not detection, is the bottleneck — and much of that is geometric: median
@@ -41,8 +41,8 @@ but merges about twice as often.
 **LiDAR pretraining works, modestly** (§7.5, comparison in §3.7): pretraining DeepForest on 3DEP
 crowns drawn on pre-fire NAIP, then fine-tuning as before, improves pre-fire test tiles in every
 seed (F1@0.4 0.315 → 0.339, count error −8%) but not post-fire tiles. **10× more LiDAR data
-adds nothing** (45,788 images: F1@0.4 0.380). For Clay the LiDAR stage helps more (all 3 seeds;
-count error 52 → 36) but Clay stays well below DeepForest. 3DEP covers CZU, SCU and North
+adds nothing** (45,788 images: F1@0.4 0.380). For Clay the LiDAR stage helps by a similar amount
+(F1@0.4 0.340 → 0.363, count MAE 33.8 → 29.8), mostly on post-fire tiles. 3DEP covers CZU, SCU and North
 Complex, not Creek or Castle.
 
 ---
@@ -173,11 +173,15 @@ other conventions (fixed thresholds, IoU 0.5) and are only roughly comparable.
 | DF-C: LiDAR pretraining only (4,775) | NEON → LiDAR | 0.479 ± 0.007 | 0.261 ± 0.008 | 0.143 ± 0.003 | 21.7 ± 0.3 |
 | DF-C full: LiDAR only (45,788) | NEON → LiDAR | 0.488 ± 0.009 | 0.262 ± 0.002 | 0.138 ± 0.003 | 21.2 ± 0.5 |
 | Clay DQ-DETR, report † (conf 0.5, §3.6) | NEON → hand | — | — | 0.153 | — |
-| **Clay-A**: Stage B → Stage C ‡ | NEON → hand | 0.415 ± 0.096 | 0.257 ± 0.074 | 0.154 ± 0.053 | 52.4 ± 15.4 |
-| **Clay-B**: + LiDAR stage (4,772 4-band) ‡ | NEON → LiDAR → hand | 0.484 ± 0.026 | 0.308 ± 0.020 | 0.195 ± 0.019 | 35.7 ± 2.5 |
+| **Clay-A**: Stage B → Stage C | NEON → hand | 0.503 ± 0.022 | 0.340 ± 0.012 | 0.218 ± 0.007 | 33.8 ± 5.7 |
+| **Clay-B**: + LiDAR stage (4,772 4-band, encoder frozen) | NEON → LiDAR → hand | 0.527 ± 0.010 | 0.363 ± 0.011 | 0.233 ± 0.007 | 29.8 ± 0.4 |
+| *Clay-A, early-stopped ‡* | NEON → hand | *0.415 ± 0.096* | *0.257 ± 0.074* | *0.154 ± 0.053* | *52.4 ± 15.4* |
+| *Clay-B, early-stopped ‡* | NEON → LiDAR → hand | *0.484 ± 0.026* | *0.308 ± 0.020* | *0.195 ± 0.019* | *35.7 ± 2.5* |
 
-‡ Stage C stopped early (epochs 21–34 of 80) and kept noise-chosen early checkpoints (§7.5.1);
-re-runs with the fix (`runs_clay_v2`, `runs_clay_full`) are in progress.
+Clay rows are `runs_clay_v2` (Stage C runs all 80 epochs; checkpoint chosen on val). ‡ The first
+runs (`runs_clay`): Stage C stopped early (epochs 21–34) on a noise metric and kept early
+checkpoints (§7.5.1) — fixing that alone moved Clay-A from 0.257 to 0.340. Full-set Clay
+(`runs_clay_full`) is still running.
 
 **By imagery date** (same thresholds as above):
 
@@ -188,8 +192,8 @@ re-runs with the fix (`runs_clay_v2`, `runs_clay_full`) are in progress.
 | DF-B full (45,788) | **0.549** ± 0.008 | 0.329 ± 0.005 | 0.201 ± 0.002 | 26.1 ± 3.2 |
 | DF-C (4,775) | 0.468 ± 0.012 | 0.233 ± 0.013 | 0.120 ± 0.005 | 31.5 ± 1.1 |
 | DF-C full | 0.486 ± 0.009 | 0.240 ± 0.003 | 0.119 ± 0.000 | 32.5 ± 0.6 |
-| Clay-A ‡ | 0.405 ± 0.086 | 0.240 ± 0.066 | 0.142 ± 0.048 | 83.3 ± 23.3 |
-| Clay-B ‡ | 0.489 ± 0.011 | 0.299 ± 0.009 | 0.184 ± 0.013 | 50.1 ± 5.2 |
+| Clay-A | 0.494 ± 0.014 | 0.323 ± 0.012 | 0.199 ± 0.009 | 48.7 ± 5.0 |
+| Clay-B | 0.510 ± 0.003 | 0.335 ± 0.008 | 0.209 ± 0.007 | 45.8 ± 3.6 |
 
 | Post-fire test (7 tiles, 239 crowns) | F1@0.25 | F1@0.4 | F1@0.5 | Count MAE |
 |---|---|---|---|---|
@@ -198,8 +202,8 @@ re-runs with the fix (`runs_clay_v2`, `runs_clay_full`) are in progress.
 | DF-B full (45,788) | 0.672 ± 0.014 | **0.556** ± 0.024 | 0.394 ± 0.011 | **7.7** ± 1.4 |
 | DF-C (4,775) | 0.513 ± 0.021 | 0.346 ± 0.009 | 0.213 ± 0.010 | 10.6 ± 0.6 |
 | DF-C full | 0.497 ± 0.012 | 0.344 ± 0.003 | 0.208 ± 0.011 | 8.2 ± 0.4 |
-| Clay-A ‡ | 0.456 ± 0.146 | 0.336 ± 0.104 | 0.213 ± 0.070 | 17.1 ± 6.4 |
-| Clay-B ‡ | 0.465 ± 0.090 | 0.346 ± 0.082 | 0.247 ± 0.062 | 19.2 ± 4.8 |
+| Clay-A | 0.538 ± 0.055 | 0.405 ± 0.032 | 0.289 ± 0.026 | 16.7 ± 6.4 |
+| Clay-B | 0.596 ± 0.039 | 0.479 ± 0.029 | 0.332 ± 0.029 | 11.6 ± 3.9 |
 
 **Robustness (swapped split):** choosing thresholds on the 15 test tiles and scoring the 18 val
 tiles instead (`revalidate.py`), DF-B still beats DF-A: F1@0.4 0.349 ± 0.020 vs 0.317 ± 0.004
@@ -213,11 +217,14 @@ tiles instead (`revalidate.py`), DF-B still beats DF-A: F1@0.4 0.349 ± 0.020 vs
   label count, is the likely limit. The full run also had 10× the steps, so data and steps are confounded.
 - **LiDAR labels alone (DF-C) are weaker than hand labels**: ~70% of DF-A's F1@0.4, 88% at IoU 0.25 —
   they find trees but box them loosely.
-- **Clay benefits more from the LiDAR stage than DeepForest** (Clay-B > Clay-A in every seed; count
-  error 52 → 36; 4× smaller seed spread), but **stays well behind DeepForest** (0.308 vs 0.386 F1@0.4;
-  counting about 2× worse, mostly over-counting on dense pre-fire tiles). Pending the fixed re-runs.
-- **Post-fire tiles score higher for every model** (fewer, sparser crowns) and no LiDAR variant helps
-  there: pretraining saw pre-fire imagery only.
+- **Clay, once Stage C trains properly, roughly matches fine-tuned DeepForest on box F1**
+  (Clay-B 0.363 vs DF-A 0.368; DF-B 0.386) **but counts worse** (MAE 29.8 vs 16.7–18.0; pre-fire
+  45.8 vs 23.3–25.4). The LiDAR stage helps Clay by about as much as it helps DeepForest
+  (+0.023 F1@0.4; per seed +0.004/+0.017/+0.047) and makes it far more consistent (MAE sd 5.7 → 0.4).
+- **Where the LiDAR gain lands differs by model.** DeepForest gains only on pre-fire tiles; Clay gains
+  mostly on **post-fire** tiles (F1@0.4 0.405 → 0.479, MAE 16.7 → 11.6), and little pre-fire.
+  Clay sees NIR, which may carry over to burned scenes better than RGB; 7 post-fire tiles, so tentative.
+- **Post-fire tiles score higher for every model** (fewer, sparser crowns).
 
 ### 3.6 Clay / foundation-model experiments (from the report)
 
@@ -595,7 +602,8 @@ post-fire count MAE 7.7 vs 9.1 (7 tiles). C is unchanged (0.262 vs 0.261). Table
   epoch-1 checkpoint. Both arms suffered equally, so A vs B is fair, but both are understated.
   Fix (`b2b7179`): no early stopping; checkpoints every 5 epochs + best + final, chosen afterwards
   on val with the harness metric. Re-runs: `runs_clay_v2` (small set, reusing the LiDAR-stage
-  checkpoints, which the bug did not affect) and `runs_clay_full` (full 4-band set, 45,751 windows:
+  checkpoints, which the bug did not affect; **done**: Clay-A 0.257 → 0.340, Clay-B 0.308 → 0.363
+  F1@0.4, see §3.7) and `runs_clay_full` (full 4-band set, 45,751 windows:
   ClayB_full10 = 10 LiDAR epochs, ClayB_full1 = 1 epoch, i.e. the small run's step count, to
   separate data from steps).
 - The existing `stage_b_finetune` entrypoint silently trains from scratch: it mounts the checkpoint
